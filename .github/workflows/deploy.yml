@@ -31,10 +31,8 @@ jobs:
 
       - name: Build
         run: npm run build
-        # env:
-        #   VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-        # Uncomment above once Google OAuth is wired up (Phase 2) and the
-        # secret is added under repo Settings > Secrets and variables > Actions.
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
       - uses: actions/configure-pages@v4
 

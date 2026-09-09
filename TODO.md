@@ -61,15 +61,34 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
       [rhunt927.github.io/keystone](https://rhunt927.github.io/keystone)
 - [x] `npm run build` and `npm run lint` both verified clean
 
-## Phase 2 — Auth + Drive + DB Wiring
+## Phase 2 — Auth + Drive + DB Wiring (in progress — pick up here ▶)
 
-- [ ] Google Cloud project + OAuth consent screen + OAuth Client ID
-      (authorized origins: `localhost:5173` + `rhunt927.github.io`)
-- [ ] `useAuth` — Google Identity Services login/logout, session persistence
-      (sessionStorage token, localStorage profile) — same pattern as before
-- [ ] `useGoogleDrive` — download/upload `keystone.db` from the `keystone` Drive folder
-- [ ] `useDatabase` — sql.js wrapper for running queries against the downloaded db in
-      the browser; apply `db/schema.sql` on first run / verify schema_version
+- [x] Google Cloud project **"Keystone"** created (`keystone-508114`) — separate from
+      the old "Claude Finance" project used by hunt-garcia-tracker
+- [x] Google Drive API enabled
+- [x] OAuth consent screen configured — External, app name "Keystone", support/dev
+      contact `rghunt@gmail.com`, scope `.../auth/drive.file` added, test user
+      `rghunt@gmail.com` added, status: Testing
+- [x] OAuth Client ID created ("Keystone Web") — authorized origins `localhost:5173`
+      + `https://rhunt927.github.io` — Client ID stored in local `.env`
+      (gitignored) and as the `VITE_GOOGLE_CLIENT_ID` GitHub Actions secret
+- [x] `useAuth` — Google Identity Services login/logout, session persistence
+      (localStorage token+profile, `ks_` key prefix) — mirrors hunt-garcia-tracker,
+      scoped to `drive.file` only (least-privilege, no verification review needed)
+- [x] `useGoogleDrive` — download/upload `keystone.db` from the `keystone` Drive folder
+- [x] `useDatabase` — sql.js wrapper; applies `db/schema.sql` directly (via `?raw`
+      import) so the schema file is the single source of truth for both this and the
+      standalone DB build
+- [x] `LoginScreen` + `App.jsx` wired end to end; build footer (git SHA + date) now
+      shown on every screen — loading, login, and main — per explicit request, so it's
+      always possible to confirm which build is running
+- [x] `npm run build` verified clean with the real Client ID baked in
+- [ ] **← NEXT: smoke-test locally** — `npm run dev`, open
+      <http://localhost:5173/keystone/>, click "Sign in with Google", confirm the
+      OAuth popup + consent works, and confirm the Domains list renders (proves the
+      Drive round-trip against the `keystone.db` already seeded in Drive)
+- [ ] Once local login is confirmed working, push to `main` and verify the same flow
+      on the live `rhunt927.github.io/keystone` deploy
 - [ ] Confirm read/write round-trips correctly to the same `keystone.db` this Mac
       already seeded (so Drive Desktop's local copy and the app's live copy agree)
 
