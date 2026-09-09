@@ -172,9 +172,34 @@ both localhost and the live deploy.
       writing it in — exactly the app's core discipline, applied to itself.
 - [x] Deployed live — Rosa Parks now shows its real 1956 photo with Ken Burns +
       narration: Domains → History → Rosa Parks → 4 sourced, narrated cards
-- [ ] Voice quality is whatever the OS/browser provides (robotic vs. Paladin's
-      produced voiceovers) — acceptable tradeoff for zero cost; revisit only if a
-      paid TTS service is ever approved
+- [x] Voice quality is whatever the OS/browser provides (robotic vs. Paladin's
+      produced voiceovers) — acceptable tradeoff for zero cost. User can now pick
+      a better installed voice via the dropdown (see above) rather than being
+      stuck with the auto-picked one.
+- [x] **Narration speed control** — 0.5x–2x slider, persisted. Restarting a whole
+      card just to change speed felt bad, so this resumes from the current
+      sentence instead (see next item) rather than the top of the card.
+- [x] **Sentence-level pause/resume** — narration is chunked into sentences
+      (`src/lib/sentences.js`, shared with the image matching below). Pause/Resume
+      continues from the current sentence rather than restarting the card.
+      Deliberately doesn't use the Web Speech API's native `pause()`/`resume()` —
+      that's known to be unreliable in Safari/WebKit, especially on iOS, and this
+      app targets Apple devices specifically.
+- [x] **Live per-sentence image matching** — a single per-card image couldn't
+      reflect multiple distinct things stated within one card (explicit example:
+      a card mentioning a statue/bust dedicated at the Capitol needs a photo of
+      *that*, not whatever image the card started with). `useSentenceImage.js`
+      now live-searches Wikimedia Commons (free, cross-origin via `origin=*`) for
+      each sentence as narration reaches it, using proper nouns + a fixed list of
+      memorial/object nouns (statue, bust, medal, stamp, etc.) extracted from
+      that sentence, combined with the topic name. Falls back to the card's
+      stored image while searching or if nothing usable comes back. This is a
+      **live runtime dependency**, unlike the rest of the app which only reads
+      the Drive-stored `keystone.db` — narrating a card now also calls Commons'
+      search API in the browser each time. Still free, no key, but worth noting
+      as a new kind of dependency the earlier phases didn't have. Match quality
+      depends on Commons' own search relevance and how well-illustrated the
+      topic is there — not guaranteed perfect for every sentence on every topic.
 - [ ] "Deep dive" expansion per topic
 - [ ] Quiz component (uses quiz_questions/quiz_options)
 - [ ] Path view — themed sequences of topics
