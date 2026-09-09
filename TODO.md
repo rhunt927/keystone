@@ -123,13 +123,25 @@ both localhost and the live deploy.
 
 - [x] Topic picker / home screen — domain click → topic list (title + one-line
       summary), `TopicList.jsx`
-- [x] Lesson card viewer — `LessonViewer.jsx`, shows headline/body per card
-      (not swipeable yet — plain scroll list for now, per brief's "few minutes each")
+- [x] Lesson card viewer — `LessonViewer.jsx`, reworked into a one-card-at-a-time
+      story flow (was a plain scroll list): Play/Stop narration, Prev/Next buttons,
+      touch-swipe on mobile, progress dots, fade-in per card
 - [x] Source attribution shown inline on each card, not buried — a linked
       "Source: {publisher}" line under every card's text
-- [x] Deployed live — Rosa Parks is now actually readable end to end:
-      Domains → History → Rosa Parks → 4 sourced cards
-- [ ] Swipeable card transitions (currently a plain scroll list)
+- [x] **Narrated, animated cards** (explicit request — "more like Paladin") —
+      `Narrator.jsx` + `useSpeech.js`. An original illustrated avatar per domain
+      (History = pillar badge, Science = flask, Current Events = speech bubble,
+      Arts & Culture = palette) with an animated talking mouth + occasional blink,
+      **never a rendering of the real person/topic being taught** (guardrail).
+      Narration uses the browser's free built-in Web Speech API — zero cost, no
+      key — and can only ever speak the actual sourced card text, never invented
+      dialogue, satisfying both the no-spend constraint and the no-fabrication
+      guardrail at the same time.
+- [x] Deployed live — Rosa Parks is now actually readable *and narrated* end to
+      end: Domains → History → Rosa Parks → 4 sourced, narrated cards
+- [ ] Voice quality is whatever the OS/browser provides (robotic vs. Paladin's
+      produced voiceovers) — acceptable tradeoff for zero cost; revisit only if a
+      paid TTS service is ever approved
 - [ ] "Deep dive" expansion per topic
 - [ ] Quiz component (uses quiz_questions/quiz_options)
 - [ ] Path view — themed sequences of topics
