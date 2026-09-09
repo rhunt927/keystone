@@ -12,10 +12,24 @@ function gitShortSha() {
   }
 }
 
+// Hardcode Central time rather than the build machine's local time — CI runners
+// (GitHub Actions) default to UTC, which made the footer show a confusing
+// 5-6 hour offset from the actual build time.
+function buildTimestamp() {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Chicago',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hour12: false,
+    }).formatToParts(new Date()).map(p => [p.type, p.value])
+  )
+  return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}`
+}
+
 export default defineConfig({
   base: '/keystone/',
   define: {
-    __BUILD_ID__: JSON.stringify(`${gitShortSha()}-${new Date().toISOString().slice(0, 16).replace('T', ' ')}`),
+    __BUILD_ID__: JSON.stringify(`${gitShortSha()}-${buildTimestamp()}`),
   },
   plugins: [
     react(),
