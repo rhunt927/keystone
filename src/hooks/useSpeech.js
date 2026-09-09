@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 const VOICE_STORAGE_KEY = 'ks_voice_uri'
+const RATE_STORAGE_KEY = 'ks_speech_rate'
+const DEFAULT_RATE = 1
 
 // Apple doesn't expose Siri's actual voice model to web apps — no public API
 // lets a website request "the Siri voice" by name. What IS available via the
@@ -25,7 +27,13 @@ export function useSpeech() {
   const [storedVoiceURI, setStoredVoiceURI] = useState(() => {
     try { return localStorage.getItem(VOICE_STORAGE_KEY) } catch { return null }
   })
+  const [rate, setRateState] = useState(() => {
+    try { return Number(localStorage.getItem(RATE_STORAGE_KEY)) || DEFAULT_RATE } catch { return DEFAULT_RATE }
+  })
   const voiceRef = useRef(null)
+  // Kept in sync exclusively via setRate (below) — a plain render-time write
+  // like `rateRef.current = rate` is itself an anti-pattern React now flags.
+  const rateRef = useRef(rate)
   const supported = typeof window !== 'undefined' && 'speechSynthesis' in window
 
   useEffect(() => {
@@ -54,11 +62,18 @@ export function useSpeech() {
     try { localStorage.setItem(VOICE_STORAGE_KEY, voiceURI) } catch { /* ignore */ }
   }, [])
 
+  const setRate = useCallback(value => {
+    rateRef.current = value // sync immediately — a caller may speak() in the same tick
+    setRateState(value)
+    try { localStorage.setItem(RATE_STORAGE_KEY, String(value)) } catch { /* ignore */ }
+  }, [])
+
   const speak = useCallback(text => {
     if (!supported || !text) return
     window.speechSynthesis.cancel() // stop any previous utterance first
     const utterance = new SpeechSynthesisUtterance(text)
     if (voiceRef.current) utterance.voice = voiceRef.current
+    utterance.rate = rateRef.current
     utterance.onstart = () => setSpeaking(true)
     utterance.onend = () => setSpeaking(false)
     utterance.onerror = () => setSpeaking(false)
@@ -80,5 +95,7 @@ export function useSpeech() {
     voices,
     selectedVoiceURI: effectiveVoice?.voiceURI ?? '',
     selectVoice,
+    rate,
+    setRate,
   }
 }

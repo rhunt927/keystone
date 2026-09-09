@@ -19,7 +19,7 @@ function Equalizer({ active }) {
 export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const [index, setIndex] = useState(0)
   const [showText, setShowText] = useState(false)
-  const { speak, stop, speaking, supported, voices, selectedVoiceURI, selectVoice } = useSpeech()
+  const { speak, stop, speaking, supported, voices, selectedVoiceURI, selectVoice, rate, setRate } = useSpeech()
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
 
@@ -33,13 +33,24 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     setIndex(Math.max(0, Math.min(cards.length - 1, next)))
   }
 
+  function speakCurrentCard() {
+    if (!card) return
+    speak([card.headline, card.body].filter(Boolean).join('. '))
+  }
+
   function handlePlayPause() {
     if (speaking) {
       stop()
       return
     }
-    if (!card) return
-    speak([card.headline, card.body].filter(Boolean).join('. '))
+    speakCurrentCard()
+  }
+
+  function handleRateChange(value) {
+    setRate(value)
+    // The Web Speech API can't change rate mid-utterance — restart the current
+    // card at the new rate so the change actually takes effect right away.
+    if (speaking) speakCurrentCard()
   }
 
   function onTouchStart(e) {
@@ -169,7 +180,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
           </div>
 
           {voices.length > 0 && (
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-2">
               <select
                 value={selectedVoiceURI || ''}
                 onChange={e => selectVoice(e.target.value)}
@@ -183,6 +194,21 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
                     </option>
                   ))}
               </select>
+
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] opacity-60">Speed</span>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2"
+                  step="0.1"
+                  value={rate}
+                  onChange={e => handleRateChange(Number(e.target.value))}
+                  className="w-28 accent-[#6B4226]"
+                  aria-label="Narration speed"
+                />
+                <span className="text-[11px] opacity-60 w-8 tabular-nums">{rate.toFixed(1)}x</span>
+              </div>
             </div>
           )}
         </div>
