@@ -251,6 +251,25 @@ both localhost and the live deploy.
       runner (which defaults to UTC). Same underlying behavior exists in
       hunt-garcia-tracker (identical `toISOString()` call), just hadn't been
       noticed there.
+- [ ] **← NEXT: per-sentence images aren't actually changing correctly
+      (2026-09-09, unconfirmed root cause)** — user reports the live
+      per-sentence Commons image swap (`useSentenceImage.js`, added same
+      session) isn't behaving right; not yet diagnosed. Start here next time.
+      Things to check first:
+      - Is `sentenceIndex` from `useSpeech` actually advancing per sentence, or
+        stuck/skipping? (`utterance.onstart` in `speakFrom` is what drives it)
+      - Is the `origin=*` cross-origin request to Commons actually succeeding
+        from the deployed `rhunt927.github.io` origin, or silently failing/CORS
+        — open Safari's Web Inspector console/network tab on the live site
+        while a card narrates and check for fetch errors
+      - Is `extractQuery()`'s keyword extraction producing a reasonable query
+        per sentence, or garbage that returns no/irrelevant Commons results
+        (log the query + result to check)
+      - Is the per-sentence cache in `useSentenceImage` keying correctly, or
+        could sentences with identical/near-identical text collide
+      - Double check the `speaking ? sentences[sentenceIndex] : null` gating in
+        `LessonViewer.jsx` — confirm `activeSentence` is actually changing value
+        as playback progresses, not stuck on the first sentence
 
 ---
 
