@@ -1,26 +1,25 @@
 @import "tailwindcss";
 
-@keyframes narrator-talk {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(2.4); }
-}
-.narrator-mouth--speaking {
-  animation: narrator-talk 0.28s ease-in-out infinite;
-}
-
-@keyframes narrator-blink {
-  0%, 94%, 100% { transform: scaleY(1); }
-  97% { transform: scaleY(0.1); }
-}
-.narrator-eyes {
-  transform-origin: center;
-  animation: narrator-blink 4.5s ease-in-out infinite;
-}
-
 @keyframes card-in {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .card-in {
   animation: card-in 0.22s ease-out;
+}
+
+@keyframes ken-burns {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.12) translate(-1.5%, -1.5%); }
+}
+.ken-burns {
+  animation: ken-burns 6s ease-out forwards;
+}
+
+@keyframes eq-bounce {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+.eq-bar {
+  animation: eq-bounce 0.6s ease-in-out infinite;
 }

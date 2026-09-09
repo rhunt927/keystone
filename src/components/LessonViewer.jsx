@@ -1,11 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSpeech } from '../hooks/useSpeech'
-import { Narrator } from './Narrator'
+import { narratorFor } from '../lib/narrators'
+
+function Equalizer({ active }) {
+  return (
+    <div className="flex items-end gap-0.5 h-4">
+      {[0, 1, 2, 3].map(i => (
+        <span
+          key={i}
+          className={`w-1 rounded-full bg-[#F1E4CF] ${active ? 'eq-bar' : ''}`}
+          style={active ? { animationDelay: `${i * 0.12}s` } : { height: '4px' }}
+        />
+      ))}
+    </div>
+  )
+}
 
 export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const [index, setIndex] = useState(0)
-  const { speak, stop, speaking, supported } = useSpeech()
+  const [showText, setShowText] = useState(false)
+  const { speak, stop, speaking, supported, voiceName } = useSpeech()
   const touchStartX = useRef(null)
+  const { accent } = narratorFor(domain?.slug)
 
   const card = cards[index]
 
@@ -47,30 +63,63 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
       {cards.length === 0 ? (
         <p className="text-sm opacity-70">No cards yet for this lesson.</p>
       ) : (
-        <div onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="space-y-4">
-          <div className="flex justify-center">
-            <Narrator domainSlug={domain?.slug} speaking={speaking} />
-          </div>
-
-          <article key={card.id} className="card-in rounded-xl bg-white/50 px-4 py-4 space-y-2 min-h-[9rem]">
-            {card.headline && <h2 className="font-medium">{card.headline}</h2>}
-            <p className="text-sm leading-relaxed">{card.body}</p>
-            {card.sources.length > 0 && (
-              <div className="pt-1 border-t border-black/10 text-xs opacity-70 space-x-2">
-                {card.sources.map(s => (
-                  <a
-                    key={s.url}
-                    href={s.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline hover:opacity-100"
-                  >
-                    Source: {s.publisher || s.title}
-                  </a>
-                ))}
+        <div onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="space-y-3">
+          <div key={card.id} className="card-in relative rounded-xl overflow-hidden aspect-[4/5] bg-black/10">
+            {card.image_url ? (
+              <img
+                src={card.image_url}
+                alt={card.headline || topic.title}
+                className={`w-full h-full object-cover ${speaking ? 'ken-burns' : ''}`}
+              />
+            ) : (
+              <div
+                className="w-full h-full flex items-center justify-center text-center px-6 text-sm opacity-60"
+                style={{ background: `${accent}33` }}
+              >
+                {topic.title}
               </div>
             )}
-          </article>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent" />
+
+            <div className="absolute top-3 right-3">
+              <Equalizer active={speaking} />
+            </div>
+
+            {card.image_url && (
+              <a
+                href={card.image_source_url || card.image_url}
+                target="_blank"
+                rel="noreferrer"
+                className="absolute bottom-2 right-2 text-[10px] text-white/70 hover:text-white underline"
+              >
+                Photo: {card.image_attribution || 'Wikimedia Commons'}
+              </a>
+            )}
+
+            {showText && (
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white space-y-1">
+                {card.headline && <h2 className="font-medium">{card.headline}</h2>}
+                <p className="text-sm leading-relaxed">{card.body}</p>
+              </div>
+            )}
+          </div>
+
+          {card.sources.length > 0 && (
+            <div className="text-xs opacity-70 space-x-2 text-center">
+              {card.sources.map(s => (
+                <a
+                  key={s.url}
+                  href={s.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline hover:opacity-100"
+                >
+                  Source: {s.publisher || s.title}
+                </a>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center justify-center gap-3">
             <button
@@ -89,6 +138,15 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
                 {speaking ? '⏸ Stop' : '▶ Play'}
               </button>
             )}
+            <button
+              onClick={() => setShowText(s => !s)}
+              aria-pressed={showText}
+              className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                showText ? 'bg-[#6B4226] text-[#F1E4CF]' : 'bg-white/40 hover:bg-white/60'
+              }`}
+            >
+              Aa
+            </button>
             <button
               onClick={() => goTo(index + 1)}
               disabled={index === cards.length - 1}
@@ -109,6 +167,8 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
               />
             ))}
           </div>
+
+          {voiceName && <p className="text-center text-[10px] opacity-40">Voice: {voiceName}</p>}
         </div>
       )}
     </div>

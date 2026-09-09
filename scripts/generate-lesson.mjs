@@ -63,6 +63,38 @@ async function fetchWikipedia(title) {
   }
 }
 
+function stripHtml(html) {
+  const text = (html || '').replace(/<[^>]+>/g, '').trim()
+  // Commons' "Creator" template often renders the name twice (once visible,
+  // once for embedded schema.org microdata) — collapse an exact doubled string.
+  const half = text.slice(0, text.length / 2)
+  return text.length % 2 === 0 && half + half === text ? half : text
+}
+
+// Real, attributed photo/art (Wikimedia Commons) — the guardrail's preferred
+// alternative to AI-generated imagery of real people. Free, no key.
+async function fetchTopicImage(title) {
+  const pageData = await fetchJson(
+    `https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&piprop=name&format=json&titles=${encodeURIComponent(title)}`
+  )
+  const fileName = Object.values(pageData.query.pages)[0]?.pageimage
+  if (!fileName) return null
+
+  const commonsData = await fetchJson(
+    `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent('File:' + fileName)}&prop=imageinfo&iiprop=extmetadata%7Curl&format=json`
+  )
+  const info = Object.values(commonsData.query.pages)[0]?.imageinfo?.[0]
+  if (!info?.url) return null
+
+  const meta = info.extmetadata || {}
+  return {
+    url: info.url,
+    sourceUrl: info.descriptionurl || info.url,
+    attribution: stripHtml(meta.Artist?.value) || stripHtml(meta.Credit?.value) || 'Wikimedia Commons',
+    license: stripHtml(meta.LicenseShortName?.value) || null,
+  }
+}
+
 async function main() {
   const [, , topicArg, domainSlug = 'history'] = process.argv
   if (!topicArg) {
@@ -125,10 +157,36 @@ async function main() {
   )
   const sourceId = db.exec('SELECT id FROM sources WHERE url = ?', [pageUrl])[0].values[0][0]
 
+  let imageId = null
+  try {
+    const image = await fetchTopicImage(title)
+    if (image) {
+      const existing = db.exec('SELECT id FROM images WHERE url = ?', [image.url])[0]
+      if (existing) {
+        imageId = existing.values[0][0]
+        db.run('UPDATE images SET attribution = ?, license = ? WHERE id = ?', [
+          image.attribution, image.license, imageId,
+        ])
+      } else {
+        db.run(
+          `INSERT INTO images (url, alt_text, attribution, source_url, license, is_photo, depicts_named_real_person, created_at)
+           VALUES (?, ?, ?, ?, ?, 1, 0, ?)`,
+          [image.url, title, image.attribution, image.sourceUrl, image.license, now]
+        )
+        imageId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
+      }
+      console.log(`Retrieved image: ${image.url} (${image.attribution})`)
+    } else {
+      console.log('No image found on Commons for this topic — cards will show without one')
+    }
+  } catch (e) {
+    console.warn(`Image fetch failed, continuing without one: ${e.message}`)
+  }
+
   paragraphs.forEach((body, i) => {
     db.run(
-      "INSERT INTO cards (lesson_id, position, card_type, body, created_at) VALUES (?, ?, 'text', ?, ?)",
-      [lessonId, i, body, now]
+      "INSERT INTO cards (lesson_id, position, card_type, body, image_id, created_at) VALUES (?, ?, 'text', ?, ?, ?)",
+      [lessonId, i, body, imageId, now]
     )
     const cardId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
     db.run('INSERT OR IGNORE INTO card_sources (card_id, source_id) VALUES (?, ?)', [cardId, sourceId])

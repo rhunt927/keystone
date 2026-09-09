@@ -83,7 +83,12 @@ function App() {
     )[0]
     const rawCards = lesson
       ? query(
-          'SELECT id, position, card_type, headline, body FROM cards WHERE lesson_id = ? ORDER BY position',
+          `SELECT c.id, c.position, c.card_type, c.headline, c.body,
+                  i.url AS image_url, i.attribution AS image_attribution, i.source_url AS image_source_url
+           FROM cards c
+           LEFT JOIN images i ON i.id = c.image_id
+           WHERE c.lesson_id = ?
+           ORDER BY c.position`,
           [lesson.id]
         )
       : []
