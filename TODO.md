@@ -92,11 +92,12 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
       sepia glow; app's PWA icon set regenerated to match (was showing stale icons
       after the SVG update, since the app only reads from `public/icons/`, not
       `images/icons/` directly)
-- [ ] **← NEXT: push to `main` and verify the same login/Domains flow on the live**
-      `rhunt927.github.io/keystone` deploy (confirms the `https://rhunt927.github.io`
-      authorized origin works, not just `localhost:5173`)
-- [ ] Confirm read/write round-trips correctly to the same `keystone.db` this Mac
-      already seeded (so Drive Desktop's local copy and the app's live copy agree)
+- [x] **Verified live** on `rhunt927.github.io/keystone` in Safari — same
+      sign-in → Domains flow, build ID matched the latest push, confirming the
+      `https://rhunt927.github.io` authorized origin works correctly
+
+**Phase 2 complete.** Auth, Drive sync, and SQLite are all working end to end, on
+both localhost and the live deploy.
 
 ## Phase 3 — Search-Grounding Pipeline (core differentiator — build standalone first)
 
