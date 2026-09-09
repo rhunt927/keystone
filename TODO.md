@@ -166,6 +166,15 @@ both localhost and the live deploy.
       duplicate folder. Requires a one-time sign-out/in to re-consent under the new
       scope. Fine to use in Testing status for solo use; would need Google
       verification review if ever published beyond that.
+      **Re-tested and confirmed fixed** — signed out/in again on the corrected
+      build, only one `keystone` folder exists in Drive now.
+- [x] **Build footer showed UTC, read as a confusing wrong time — fixed (2026-09-09)**
+      `toISOString()` is always UTC; hardcoded `America/Chicago` via
+      `Intl.DateTimeFormat` in `vite.config.js` so the footer always shows local
+      time regardless of whether the build ran locally or on a GitHub Actions
+      runner (which defaults to UTC). Same underlying behavior exists in
+      hunt-garcia-tracker (identical `toISOString()` call), just hadn't been
+      noticed there.
 
 ---
 
