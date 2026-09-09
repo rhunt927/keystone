@@ -119,11 +119,17 @@ both localhost and the live deploy.
 - [ ] Wire this into the UI as an on-demand action (vs. only a manual script) —
       deferred until Phase 4 has something to trigger it from
 
-## Phase 4 — Core UI
+## Phase 4 — Core UI (in progress)
 
-- [ ] Topic picker / home screen (browse by domain)
-- [ ] Lesson card viewer — short-form swipeable cards, a few minutes per lesson
-- [ ] Source attribution shown inline on each card (not buried in fine print)
+- [x] Topic picker / home screen — domain click → topic list (title + one-line
+      summary), `TopicList.jsx`
+- [x] Lesson card viewer — `LessonViewer.jsx`, shows headline/body per card
+      (not swipeable yet — plain scroll list for now, per brief's "few minutes each")
+- [x] Source attribution shown inline on each card, not buried — a linked
+      "Source: {publisher}" line under every card's text
+- [x] Deployed live — Rosa Parks is now actually readable end to end:
+      Domains → History → Rosa Parks → 4 sourced cards
+- [ ] Swipeable card transitions (currently a plain scroll list)
 - [ ] "Deep dive" expansion per topic
 - [ ] Quiz component (uses quiz_questions/quiz_options)
 - [ ] Path view — themed sequences of topics
