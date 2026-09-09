@@ -1,10 +1,15 @@
 import { useState, useEffect, useCallback } from 'react'
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
-// drive.file only: the app can only see files/folders it creates or that the
-// user explicitly opens via a picker — least-privilege, no Drive verification
-// review needed for solo/test-user use.
-const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file profile email'
+// Full `drive` scope (not just drive.file): drive.file only grants visibility
+// into files/folders the app itself created, or that the user explicitly opened
+// via a picker — it can never discover a pre-existing file by name search. Our
+// keystone.db was authored directly on disk before any login ever happened, so
+// under drive.file the app couldn't find it and silently created a duplicate
+// empty one instead (see 2026-09-09 incident). Full `drive` removes that
+// discovery restriction. Fine to use in Testing status for solo/test-user use;
+// would need Google verification review if ever published beyond that.
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive profile email'
 
 // localStorage: token and profile both persist until explicit sign-out
 function loadSession() {

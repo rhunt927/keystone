@@ -149,7 +149,23 @@ both localhost and the live deploy.
 
 ## Known Issues
 
-_(none yet)_
+- [x] **Duplicate "keystone (1)" Drive folder — fixed (2026-09-09)**
+      First login created a second, empty `keystone (1)` folder in Drive instead of
+      finding the real one. Root cause: `drive.file` OAuth scope only lets an app see
+      files/folders it created itself or that the user explicitly opened via a
+      picker — it can never discover a pre-existing file by name search. Our
+      `keystone.db` was authored directly on disk (via `sqlite3`/the standalone
+      script) before any login ever happened, so the app was structurally blind to
+      it, searched for a "keystone" folder, found nothing, and created a duplicate.
+      Confirmed via direct DB inspection that the real folder's `keystone.db` (with
+      the Rosa Parks topic) was untouched — the decoy was schema-only, no data lost.
+      Fix: widened `useAuth.js`'s `DRIVE_SCOPE` to full `.../auth/drive` (added via
+      Google Cloud Console → Data Access → Manually add scopes — the checkbox-based
+      picker didn't reliably persist the selection through Update+Save, pasting the
+      scope URL directly into the manual-add box did), and deleted the stray
+      duplicate folder. Requires a one-time sign-out/in to re-consent under the new
+      scope. Fine to use in Testing status for solo use; would need Google
+      verification review if ever published beyond that.
 
 ---
 
