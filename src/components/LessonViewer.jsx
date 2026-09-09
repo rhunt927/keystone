@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSpeech } from '../hooks/useSpeech'
+import { useSentenceImage } from '../hooks/useSentenceImage'
+import { splitSentences } from '../lib/sentences'
 import { narratorFor } from '../lib/narrators'
 
 function Equalizer({ active }) {
@@ -19,11 +21,27 @@ function Equalizer({ active }) {
 export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const [index, setIndex] = useState(0)
   const [showText, setShowText] = useState(false)
-  const { speak, stop, speaking, supported, voices, selectedVoiceURI, selectVoice, rate, setRate } = useSpeech()
+  const {
+    speak, resume, pause, stop, speaking, sentenceIndex, canResume,
+    supported, voices, selectedVoiceURI, selectVoice, rate, setRate,
+  } = useSpeech()
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
 
   const card = cards[index]
+  const narrationText = useMemo(
+    () => [card?.headline, card?.body].filter(Boolean).join('. '),
+    [card]
+  )
+  const sentences = useMemo(() => splitSentences(narrationText), [narrationText])
+
+  const fallbackImage = card?.image_url
+    ? { url: card.image_url, source_url: card.image_source_url, attribution: card.image_attribution }
+    : null
+  // Only search per-sentence while actually playing this card's narration —
+  // otherwise just show the card's own stored image (e.g. before pressing Play).
+  const activeSentence = speaking ? sentences[sentenceIndex] : null
+  const displayedImage = useSentenceImage(topic.title, activeSentence, fallbackImage)
 
   // Stop any narration in flight whenever the card changes or the viewer unmounts.
   useEffect(() => stop, [index, stop])
@@ -33,24 +51,22 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     setIndex(Math.max(0, Math.min(cards.length - 1, next)))
   }
 
-  function speakCurrentCard() {
-    if (!card) return
-    speak([card.headline, card.body].filter(Boolean).join('. '))
-  }
-
   function handlePlayPause() {
     if (speaking) {
-      stop()
-      return
+      pause()
+    } else if (canResume) {
+      resume()
+    } else {
+      speak(narrationText)
     }
-    speakCurrentCard()
   }
 
   function handleRateChange(value) {
     setRate(value)
-    // The Web Speech API can't change rate mid-utterance — restart the current
-    // card at the new rate so the change actually takes effect right away.
-    if (speaking) speakCurrentCard()
+    // The Web Speech API can't change an utterance's rate mid-sentence —
+    // resume() re-speaks from the current sentence (not the whole card) at
+    // the new rate, so a change doesn't throw away narration progress.
+    if (speaking) resume()
   }
 
   function onTouchStart(e) {
@@ -75,10 +91,13 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
         <p className="text-sm opacity-70">No cards yet for this lesson.</p>
       ) : (
         <div onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="space-y-3">
-          <div key={card.id} className="card-in relative rounded-xl overflow-hidden aspect-[4/5] bg-black/10">
-            {card.image_url ? (
+          <div
+            key={`${card.id}-${displayedImage?.url ?? 'none'}`}
+            className="card-in relative rounded-xl overflow-hidden aspect-[4/5] bg-black/10"
+          >
+            {displayedImage ? (
               <img
-                src={card.image_url}
+                src={displayedImage.url}
                 alt={card.headline || topic.title}
                 className={`w-full h-full object-cover ${speaking ? 'ken-burns' : ''}`}
               />
@@ -97,14 +116,14 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
               <Equalizer active={speaking} />
             </div>
 
-            {card.image_url && (
+            {displayedImage && (
               <a
-                href={card.image_source_url || card.image_url}
+                href={displayedImage.source_url || displayedImage.url}
                 target="_blank"
                 rel="noreferrer"
                 className="absolute bottom-2 right-2 text-[10px] text-white/70 hover:text-white underline"
               >
-                Photo: {card.image_attribution || 'Wikimedia Commons'}
+                Photo: {displayedImage.attribution || 'Wikimedia Commons'}
               </a>
             )}
 
@@ -146,7 +165,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
                 onClick={handlePlayPause}
                 className="px-5 py-2 rounded-lg bg-[#6B4226] hover:bg-[#59371f] text-[#F1E4CF] font-medium transition-colors"
               >
-                {speaking ? '⏸ Stop' : '▶ Play'}
+                {speaking ? '⏸ Pause' : canResume ? '▶ Resume' : '▶ Play'}
               </button>
             )}
             <button
