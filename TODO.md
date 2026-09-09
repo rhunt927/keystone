@@ -26,23 +26,18 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
 
 ---
 
-## Decisions Needed (blocking Phase 3)
+## Decisions Made
 
-- [ ] **Search/grounding source** — brief's core mechanic needs a live retrieval step.
-      Options, weighed against the "spend no money" constraint:
-      - Wikipedia/Wikimedia REST API — **free**, no key, good encyclopedic coverage,
-        pairs naturally with Wikimedia Commons for real attributed images
-      - Claude API with web search tool — broader coverage, best synthesis quality,
-        but **costs money per call** (token + search fees) — conflicts with no-spend
-        unless tightly capped/rate-limited
-      - Mix: Wikipedia/Wikimedia as the default free path, something paid as an
-        optional later upgrade
-      - **Recommendation to discuss:** start Wikipedia/Wikimedia-only (free, and
-        Wikipedia citations are themselves inspectable sources) and prove the
-        "topic in → sourced summary out" pipeline before considering anything paid
-- [ ] **Image sourcing** — if going Wikipedia-first, Wikimedia Commons gives real,
-      licensed, attributed photos/art for free, satisfying the no-AI-photorealism
-      guardrail out of the box
+- [x] **Search/grounding source: Wikipedia/Wikimedia REST + Action APIs.** Free, no
+      key, satisfies the no-spend constraint.
+- [x] **No model rewrite step.** Wikipedia's own lead-section prose is used
+      **verbatim**, chunked into cards — not summarized/rewritten by a model. Zero
+      cost, and nothing to hallucinate since the content *is* the cited source
+      word-for-word. Revisit only if a more narrative voice is wanted later (would
+      then cost money — the open question from before still applies if so).
+- [ ] **Image sourcing** — still open. Wikimedia Commons gives real, licensed,
+      attributed photos/art for free, satisfying the no-AI-photorealism guardrail —
+      not yet wired into the generation script (text-only proof so far)
 
 ---
 
@@ -101,15 +96,28 @@ both localhost and the live deploy.
 
 ## Phase 3 — Search-Grounding Pipeline (core differentiator — build standalone first)
 
-- [ ] Prove out "topic in → sourced summary out" as a standalone script/page *before*
-      wiring it into the UI (per brief's Next Steps)
-- [ ] Topic → live retrieval call (source TBD above) → model writes short-form content
-      **only** from retrieved material, never unaided memory
-- [ ] Every generated fact/card carries a resolvable source URL
-- [ ] Write results into `topics`, `lessons`, `cards`, `sources`, `card_sources`,
-      `search_cache` (cache so a topic isn't re-searched/re-generated on every view)
-- [ ] Enforce guardrails in the generation step: no fabricated quotes/dialogue unless
-      sourced, no photorealistic AI imagery of named real people
+- [x] **Standalone script built**: `scripts/generate-lesson.mjs` — fetches a
+      Wikipedia page (REST summary + Action API lead extract), chunks it into cards
+      (verbatim, capped at 6), writes `topics`/`lessons`/`cards`/`sources`/
+      `card_sources`/`search_cache` directly to `keystone.db` in Drive via sql.js
+      (same lib the app uses). Idempotent re-run (upserts topic/source, replaces the
+      lesson's cards). Run via `npm run generate -- "<Wikipedia title>" [domainSlug]`
+- [x] **Proof run: "Rosa Parks"** (the exact motivating example from the brief) —
+      4 cards written, correctly covering Claudette Colvin's earlier precedent, the
+      deliberate legal-test-case strategy, and *Browder v. Gayle* — the real nuance
+      Paladin's dramatized version reportedly missed. Verified in the DB directly.
+- [x] Every card carries a resolvable source URL (enforced in code — script refuses
+      to write if no source URL comes back)
+- [x] Results written into `topics`, `lessons`, `cards`, `sources`, `card_sources`,
+      `search_cache` — cache means re-running the same topic updates rather than
+      re-fetching blindly, and `search_cache` keeps the raw retrieval for audit
+- [x] Guardrail: no fabricated quotes/dialogue — moot by construction, since text is
+      verbatim Wikipedia prose, never model-rewritten
+- [ ] Image sourcing (Wikimedia Commons + attribution) — not yet wired in
+- [ ] Decide: is verbatim Wikipedia prose the final voice, or does this need a
+      distinct "keystone" editorial voice later (would reintroduce a cost decision)
+- [ ] Wire this into the UI as an on-demand action (vs. only a manual script) —
+      deferred until Phase 4 has something to trigger it from
 
 ## Phase 4 — Core UI
 
