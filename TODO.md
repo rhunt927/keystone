@@ -128,17 +128,27 @@ both localhost and the live deploy.
       touch-swipe on mobile, progress dots, fade-in per card
 - [x] Source attribution shown inline on each card, not buried — a linked
       "Source: {publisher}" line under every card's text
-- [x] **Narrated, animated cards** (explicit request — "more like Paladin") —
-      `Narrator.jsx` + `useSpeech.js`. An original illustrated avatar per domain
-      (History = pillar badge, Science = flask, Current Events = speech bubble,
-      Arts & Culture = palette) with an animated talking mouth + occasional blink,
-      **never a rendering of the real person/topic being taught** (guardrail).
-      Narration uses the browser's free built-in Web Speech API — zero cost, no
-      key — and can only ever speak the actual sourced card text, never invented
-      dialogue, satisfying both the no-spend constraint and the no-fabrication
-      guardrail at the same time.
-- [x] Deployed live — Rosa Parks is now actually readable *and narrated* end to
-      end: Domains → History → Rosa Parks → 4 sourced, narrated cards
+- [x] **Narrated cards, v1** (explicit request — "more like Paladin") — original
+      illustrated per-domain avatar + flapping-mouth animation. Feedback: "the
+      animation leaves a lot to desire... not show the words, come up with
+      something better." Superseded by v2 below.
+- [x] **Narrated cards, v2 (current)** — real, attributed photo per topic (fetched
+      live from Wikimedia Commons via `generate-lesson.mjs`, stored in the
+      `images` table, linked from every card's `image_id`) shown full-bleed with a
+      Ken Burns pan/zoom while narrating, plus a minimal audio-equalizer
+      indicator — documentary style instead of a cartoon avatar. Body text hidden
+      by default (an "Aa" toggle reveals captions on demand). `Narrator.jsx`
+      removed. **Still never a rendering of the real person** — it's an actual
+      historical photo, exactly what the guardrail prefers.
+      Narration itself unchanged: free Web Speech API, can only speak the actual
+      sourced card text, never invented dialogue.
+- [x] **Apple voice selection** — `useSpeech.js` scans for a literally
+      Siri-named voice (some newer OS versions expose one; not guaranteed — Apple
+      doesn't expose Siri's actual voice model to web apps) and falls back to the
+      best Enhanced/Premium quality Apple voice, then any en-US voice. Picked
+      voice name shown in a small label in the UI so it's visible what's playing.
+- [x] Deployed live — Rosa Parks now shows its real 1956 photo with Ken Burns +
+      narration: Domains → History → Rosa Parks → 4 sourced, narrated cards
 - [ ] Voice quality is whatever the OS/browser provides (robotic vs. Paladin's
       produced voiceovers) — acceptable tradeoff for zero cost; revisit only if a
       paid TTS service is ever approved
@@ -202,3 +212,12 @@ both localhost and the live deploy.
       whether other Google accounts ever need access to this Drive file/OAuth client)
 - [ ] History-only content at launch, or seed a topic or two in every domain to
       exercise the generic schema right away?
+- [ ] **Product framing, stated explicitly (2026-09-09): "something to replace my
+      doom scrolling and learn something instead."** Implies a continuous
+      auto-advancing feed across topics (open app, content just plays,
+      swipe/scroll for more — like a feed, not a click-through menu), not the
+      current Domains → Topics → Lesson navigation tree. Deliberately not built
+      yet — with only one topic (Rosa Parks) in the DB, a feed would just replay
+      the same thing. Needs: (1) more topics generated across domains, (2) a
+      decision on whether Domains/Topics browsing stays as a secondary "browse"
+      mode alongside a primary feed, or gets replaced entirely.
