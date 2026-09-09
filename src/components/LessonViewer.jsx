@@ -19,7 +19,7 @@ function Equalizer({ active }) {
 export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const [index, setIndex] = useState(0)
   const [showText, setShowText] = useState(false)
-  const { speak, stop, speaking, supported, voiceName } = useSpeech()
+  const { speak, stop, speaking, supported, voices, selectedVoiceURI, selectVoice } = useSpeech()
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
 
@@ -168,7 +168,23 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             ))}
           </div>
 
-          {voiceName && <p className="text-center text-[10px] opacity-40">Voice: {voiceName}</p>}
+          {voices.length > 0 && (
+            <div className="flex justify-center">
+              <select
+                value={selectedVoiceURI || ''}
+                onChange={e => selectVoice(e.target.value)}
+                className="text-[11px] bg-transparent opacity-60 hover:opacity-100 max-w-full"
+              >
+                {voices
+                  .filter(v => v.lang?.startsWith('en'))
+                  .map(v => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name} ({v.lang})
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
         </div>
       )}
     </div>
