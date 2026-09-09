@@ -61,7 +61,7 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
       [rhunt927.github.io/keystone](https://rhunt927.github.io/keystone)
 - [x] `npm run build` and `npm run lint` both verified clean
 
-## Phase 2 — Auth + Drive + DB Wiring (in progress — pick up here ▶)
+## Phase 2 — Auth + Drive + DB Wiring ✅
 
 - [x] Google Cloud project **"Keystone"** created (`keystone-508114`) — separate from
       the old "Claude Finance" project used by hunt-garcia-tracker
@@ -83,12 +83,18 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
       shown on every screen — loading, login, and main — per explicit request, so it's
       always possible to confirm which build is running
 - [x] `npm run build` verified clean with the real Client ID baked in
-- [ ] **← NEXT: smoke-test locally** — `npm run dev`, open
-      <http://localhost:5173/keystone/>, click "Sign in with Google", confirm the
-      OAuth popup + consent works, and confirm the Domains list renders (proves the
-      Drive round-trip against the `keystone.db` already seeded in Drive)
-- [ ] Once local login is confirmed working, push to `main` and verify the same flow
-      on the live `rhunt927.github.io/keystone` deploy
+- [x] **Local smoke test passed** — signed in as Richard Hunt, consent screen showed
+      the correct minimal `drive.file` scope, and the Domains list (History, Science,
+      Current Events, Arts & Culture) rendered — confirms the full round-trip: OAuth
+      login → Drive download of the real `keystone.db` → sql.js read → render. Not a
+      fresh empty DB — the actual file already seeded in Drive.
+- [x] Branding refresh — key now doubles as a lowercase "k" with diamond keyhole,
+      sepia glow; app's PWA icon set regenerated to match (was showing stale icons
+      after the SVG update, since the app only reads from `public/icons/`, not
+      `images/icons/` directly)
+- [ ] **← NEXT: push to `main` and verify the same login/Domains flow on the live**
+      `rhunt927.github.io/keystone` deploy (confirms the `https://rhunt927.github.io`
+      authorized origin works, not just `localhost:5173`)
 - [ ] Confirm read/write round-trips correctly to the same `keystone.db` this Mac
       already seeded (so Drive Desktop's local copy and the app's live copy agree)
 
