@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+@keyframes narrator-talk {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(2.4); }
+}
+.narrator-mouth--speaking {
+  animation: narrator-talk 0.28s ease-in-out infinite;
+}
+
+@keyframes narrator-blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  97% { transform: scaleY(0.1); }
+}
+.narrator-eyes {
+  transform-origin: center;
+  animation: narrator-blink 4.5s ease-in-out infinite;
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card-in {
+  animation: card-in 0.22s ease-out;
+}

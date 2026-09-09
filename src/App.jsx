@@ -99,6 +99,7 @@ function App() {
     body = (
       <LessonViewer
         topic={view.topic}
+        domain={view.domain}
         lessonTitle={lesson?.title}
         cards={cards}
         onBack={() => setView({ screen: 'topics', domain: view.domain })}
