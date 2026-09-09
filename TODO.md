@@ -142,11 +142,34 @@ both localhost and the live deploy.
       historical photo, exactly what the guardrail prefers.
       Narration itself unchanged: free Web Speech API, can only speak the actual
       sourced card text, never invented dialogue.
-- [x] **Apple voice selection** — `useSpeech.js` scans for a literally
-      Siri-named voice (some newer OS versions expose one; not guaranteed — Apple
-      doesn't expose Siri's actual voice model to web apps) and falls back to the
-      best Enhanced/Premium quality Apple voice, then any en-US voice. Picked
-      voice name shown in a small label in the UI so it's visible what's playing.
+- [x] **Apple voice selection + picker** — `useSpeech.js` auto-picks a literally
+      Siri-named voice if the OS exposes one (not guaranteed — Apple doesn't
+      expose Siri's actual voice model to *any* web app on *any* browser, ever),
+      else the best Enhanced/Premium quality Apple voice, else any en-US voice —
+      **and** a dropdown lets the user override it with any voice the OS
+      reports, persisted to localStorage. Default was landing on macOS's classic
+      "Samantha" system voice since nothing better was installed; better voices
+      (Ava/Zoe/Nathan Premium, etc.) are a free download under Settings/System
+      Settings → Accessibility → Spoken Content.
+- [x] **Per-topic content quality pass** — two real bugs found and fixed testing
+      against Rosa Parks:
+      1. Paragraph selection took only each section's *first* paragraph and
+         missed later, more interesting material (a verified real fact — Mike
+         Ilitch quietly paying Rosa Parks's rent for a decade — was the 3rd
+         paragraph in the "1990s" section, never reached). Now spreads across
+         the whole article, guarantees a "later life/legacy/death" section gets
+         a slot when one exists, and takes each section's *last* paragraph
+         (chronological sections tend to open with a date-and-event sentence
+         and save the more human aside for the end).
+      2. Image matching now maps each section to the images that literally
+         appear inside it (via a raw wikitext scan — `prop=images` does not
+         return images in reading order, which had paired an Obama 2012 photo
+         with the intro card). Every card gets first claim on its own section's
+         image before any card can borrow a neighbor's, fixing an early card
+         from greedily stealing a later card's exact-match photo.
+      Both required actually verifying the Ilitch claim via live web search
+      (CBS News, NBC News, Fox 2 Detroit, NBC Sports) before trusting it and
+      writing it in — exactly the app's core discipline, applied to itself.
 - [x] Deployed live — Rosa Parks now shows its real 1956 photo with Ken Burns +
       narration: Domains → History → Rosa Parks → 4 sourced, narrated cards
 - [ ] Voice quality is whatever the OS/browser provides (robotic vs. Paladin's
