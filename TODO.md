@@ -46,16 +46,20 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
 
 ---
 
-## Phase 1 — App Scaffold
+## Phase 1 — App Scaffold ✅
 
-- [ ] Scaffold Vite + React + Tailwind CSS v4 project in this repo (mirror
+- [x] Scaffold Vite + React + Tailwind CSS v4 project in this repo (mirrors
       hunt-garcia-tracker's setup: `@vitejs/plugin-react`, `@tailwindcss/vite`,
       `vite-plugin-pwa`, ESLint config)
-- [ ] `vite.config.js` — set `base: '/keystone/'`, build-ID footer (git SHA + timestamp)
-- [ ] PWA manifest — app name/short name, theme color, `display: 'standalone'`
-- [ ] Generate full icon set from `images/icons/keystone-icon.svg`: 64×64, 192×192,
-      512×512, maskable 512×512, apple-touch-icon (180×120 variants already exist,
-      full PWA set still needed — `@vite-pwa/assets-generator` can do this like before)
+- [x] `vite.config.js` — `base: '/keystone/'`, build-ID footer (git SHA + timestamp)
+- [x] PWA manifest — name "Keystone", brand theme color `#6B4226`, `display: 'standalone'`
+- [x] Full icon set generated from `images/icons/keystone-icon.svg` via
+      `@vite-pwa/assets-generator` (64×64, 192×192, 512×512, maskable 512×512,
+      apple-touch-icon, favicon)
+- [x] GitHub Actions deploy workflow (`.github/workflows/deploy.yml`) + GitHub Pages
+      (Actions source) enabled — confirmed **live** at
+      [rhunt927.github.io/keystone](https://rhunt927.github.io/keystone)
+- [x] `npm run build` and `npm run lint` both verified clean
 
 ## Phase 2 — Auth + Drive + DB Wiring
 
