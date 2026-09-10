@@ -225,8 +225,13 @@ both localhost and the live deploy.
       progress bar (tap to jump to a beat), pause-resumes-mid-sentence. Voice &
       speed and transcript moved behind toggles. `useSpeech` reworked with an
       onDone callback and a generation guard against stale Safari onend events;
-      `prime()` unlocks iOS speech from the Play tap. Timer-based auto-advance
+      `prime()` unlocks iOS speech from the Play tap and the first `speak()`
+      runs synchronously in that tap (a post-render speak is blocked on iOS —
+      this caused a no-audio regression, now fixed). Timer-based auto-advance
       fallback when speech synthesis is unavailable.
+- [x] Dropped the per-beat headline labels from the player — too flashcard-y,
+      and the narrator was speaking them as sentence fragments. Still in the DB,
+      just unused in the viewer.
 - [ ] **← NEXT: re-author Rosa Parks as a grounded narrative** — it's still the
       old verbatim version live. Same treatment: `db/lessons/rosa-parks.json`,
       hand-written arc from the cited sources (include the Ilitch rent fact),
