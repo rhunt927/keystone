@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs the-renaissance",
+  "topic": {
+    "slug": "the-renaissance",
+    "title": "The Renaissance",
+    "domain": "arts-culture",
+    "one_line_summary": "How a few Italian cities, looking backward to ancient Rome, invented the visual language Western art would use for the next 400 years",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-ren",
+      "url": "https://en.wikipedia.org/wiki/Renaissance",
+      "title": "Renaissance — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-art",
+      "url": "https://en.wikipedia.org/wiki/Renaissance_art",
+      "title": "Renaissance art — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-persp",
+      "url": "https://en.wikipedia.org/wiki/Perspective_(graphical)",
+      "title": "Perspective (graphical) — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-print",
+      "url": "https://en.wikipedia.org/wiki/Printing_press",
+      "title": "Printing press — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Rebirth",
+      "body": "The word means 'rebirth.' Beginning around 1400 in Italy, and lasting roughly two centuries, educated Europeans became convinced they were recovering something lost — the art, architecture and learning of ancient Greece and Rome, which they felt had lain buried through a thousand medieval years. Out of that conviction came a change in how pictures were made that still shapes what we expect a painting to look like.",
+      "source_ids": ["wp-ren", "wp-art"],
+      "image_file": "File:The School of Athens by Raphael (Vatican).jpg"
+    },
+    {
+      "headline": "Why Florence",
+      "body": "It started in Florence for concrete reasons. The city was rich from banking and the wool trade. It was a republic full of competing families who advertised their status by commissioning art. Roman ruins and Latin texts were close at hand. And after Constantinople fell to the Ottomans in 1453, Greek scholars fled west carrying manuscripts that Western Europe had not read in centuries.",
+      "source_ids": ["wp-ren"],
+      "image_file": "File:Ponte San Niccolò and the Florence skyline from the east, November 2025.jpg"
+    },
+    {
+      "headline": "The window",
+      "body": "The technical breakthrough was linear perspective. Around 1420 the architect Filippo Brunelleschi worked out the geometry of how parallel lines appear to converge on a single point, and the scholar Leon Battista Alberti wrote the rules down. Suddenly a flat panel could hold a convincing, measurable three-dimensional space — a painting became a window. Masaccio's fresco of the Trinity, with its painted architecture receding into the wall, was one of the first to use it fully.",
+      "source_ids": ["wp-persp", "wp-art"],
+      "image_file": "File:Masaccio - Trinity - Santa Maria Novella.jpg"
+    },
+    {
+      "headline": "Oil, and the North",
+      "body": "The Renaissance was not only Italian. In the Netherlands, Jan van Eyck and his contemporaries brought oil paint to a new level — building up thin transparent layers to get depth of color, soft light and almost microscopic detail that tempera paint could never manage. The Arnolfini Portrait, with its convex mirror reflecting the whole room, shows what the new medium could do. Italian painters soon adopted it too.",
+      "source_ids": ["wp-art"],
+      "image_file": "File:Van Eyck - Arnolfini Portrait.jpg"
+    },
+    {
+      "headline": "The three",
+      "body": "The peak, the High Renaissance, was brief — roughly 1495 to 1520 — and dominated by three men working in Florence and Rome. Leonardo da Vinci, painter of the Mona Lisa and Last Supper, who filled notebooks with anatomy and machines. Michelangelo, who carved the David and then spent four years on his back painting the ceiling of the Sistine Chapel. And Raphael, whose School of Athens gathered the philosophers of antiquity into one serene, perfectly composed hall.",
+      "source_ids": ["wp-art", "wp-ren"],
+      "image_file": "File:Michelangelo - Creation of Adam (cropped).jpg"
+    },
+    {
+      "headline": "Building like the Romans",
+      "body": "Architects went back to the ancient handbook too. They revived the column orders, the round arch, the dome and strict mathematical proportion from the Roman writer Vitruvius. Brunelleschi crowned Florence's cathedral with the largest dome built since antiquity. Bramante distilled the style into the tiny, perfect Tempietto in Rome and began the rebuilding of St Peter's. Palladio's symmetrical villas would later be copied everywhere from England to Virginia.",
+      "source_ids": ["wp-ren", "wp-art"],
+      "image_file": "File:Tempietto di Bramante02783.jpg"
+    },
+    {
+      "headline": "The press",
+      "body": "Around 1450, in Mainz, Johannes Gutenberg combined movable metal type, oil-based ink and a wine press into a machine that could print books quickly and cheaply. Within fifty years, presses across Europe had produced millions of volumes. Classical texts, new scholarship, and eventually Martin Luther's attacks on the Church could now spread across the continent in weeks instead of generations. It is hard to separate the Renaissance from the printing press that carried it.",
+      "source_ids": ["wp-print", "wp-ren"],
+      "image_file": "File:Gutenberg Bible, Lenox Copy, New York Public Library, 2009. Pic 01.jpg"
+    },
+    {
+      "headline": "What it left",
+      "body": "The Italian golden age faded after 1520 — the sack of Rome in 1527, religious war, and the shift of trade and wealth toward the Atlantic all played a part. But the Renaissance had permanently changed things: the idea of the artist as an individual genius rather than an anonymous craftsman, and a toolkit of perspective, anatomy and classical form that would be the foundation of Western art until the modern movements broke with it four centuries later.",
+      "source_ids": ["wp-ren", "wp-art"],
+      "image_file": "File:Da Vinci Vitruve Luc Viatour.jpg"
+    }
+  ]
+}

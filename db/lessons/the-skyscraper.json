@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs the-skyscraper",
+  "topic": {
+    "slug": "the-skyscraper",
+    "title": "The Skyscraper",
+    "domain": "arts-culture",
+    "one_line_summary": "Two inventions in the 1880s removed the height limit on buildings — and cities have been racing upward ever since",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-sky",
+      "url": "https://en.wikipedia.org/wiki/Skyscraper",
+      "title": "Skyscraper — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-hist",
+      "url": "https://en.wikipedia.org/wiki/History_of_the_skyscraper",
+      "title": "History of the skyscraper — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-elev",
+      "url": "https://en.wikipedia.org/wiki/Elevator",
+      "title": "Elevator — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-khan",
+      "url": "https://en.wikipedia.org/wiki/Fazlur_Rahman_Khan",
+      "title": "Fazlur Rahman Khan — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The old ceiling",
+      "body": "For almost all of history, ordinary buildings topped out at five or six stories. The reason was physical: to hold up a tall masonry building, the walls at the base had to be so thick there was barely any usable room left inside. Chicago's Monadnock Building pushed brick to sixteen stories in 1891 with walls six feet thick at the ground. That was the wall. Two inventions had already broken through it.",
+      "source_ids": ["wp-sky", "wp-hist"],
+      "image_file": "File:Home Insurance Building.JPG"
+    },
+    {
+      "headline": "The elevator and the frame",
+      "body": "The first was the safety elevator. In 1853 Elisha Otis demonstrated a brake that locked the car in place if the hoisting rope failed — which is what made it acceptable to put people in one. The second was the steel skeleton frame: instead of the walls carrying the load, a riveted steel cage carries everything, and the exterior becomes a thin 'curtain' just hung on the frame. Height was no longer a wall problem.",
+      "source_ids": ["wp-elev", "wp-sky"],
+      "image_file": "File:Elisha OTIS 1854.jpg"
+    },
+    {
+      "headline": "Chicago invents it",
+      "body": "After the great fire of 1871, Chicago rebuilt in a hurry and on expensive land. The Home Insurance Building of 1885, by William Le Baron Jenney, is usually credited as the first skyscraper — the first tall building carried by a metal frame. The architects who followed, the 'Chicago School' led by Louis Sullivan, argued a tall building should look tall and honest about its structure. Sullivan's summary: form follows function.",
+      "source_ids": ["wp-hist", "wp-sky"],
+      "image_file": "File:Louis Sullivan - Wainwright Building, Seventh + Chestnut Streets, Saint Louis, St. Louis City County, MO.jpg"
+    },
+    {
+      "headline": "New York goes higher",
+      "body": "In Manhattan, where land was scarcer and money deeper, the frame was used to go higher still. The wedge-shaped Flatiron Building rose in 1902. The Woolworth Building of 1913 — a Gothic tower nicknamed the Cathedral of Commerce — reached 792 feet and stayed the world's tallest for seventeen years.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:View of Woolworth Building fixed crop.jpg"
+    },
+    {
+      "headline": "The race of 1930",
+      "body": "Then came a genuine sprint. The Chrysler Building's architect had a 125-foot spire assembled in secret inside the building and hoisted into place in minutes, snatching the record from a rival tower downtown. Months later, in 1931, the Empire State Building beat it anyway at 1,454 feet — built, astonishingly, in just 410 days. It held the title of world's tallest for forty years.",
+      "source_ids": ["wp-hist", "wp-sky"],
+      "image_file": "File:Raising the Mast Empire State Building by Lewis W Hine.jpeg"
+    },
+    {
+      "headline": "The glass box",
+      "body": "After the Second World War the look changed completely. Mies van der Rohe's Seagram Building of 1958 — a sheer bronze-and-glass slab set back behind an open plaza — defined the International Style. For the next thirty years, the default office tower almost anywhere in the world was a rectangular glass box descended from it.",
+      "source_ids": ["wp-hist", "wp-sky"],
+      "image_file": "File:Seagrambuilding.JPG"
+    },
+    {
+      "headline": "The tube",
+      "body": "The next real leap was structural. In 1960s Chicago, the engineer Fazlur Rahman Khan worked out that treating a tall building as a hollow 'tube' — putting the stiffness in the exterior walls — used far less steel per floor and made real height economical again. His systems produced the John Hancock Center and the Sears Tower, which at 1,450 feet was the world's tallest for about 25 years.",
+      "source_ids": ["wp-khan", "wp-hist"],
+      "image_file": "File:Willis Tower Sears Tower, Chicago 1978.jpg"
+    },
+    {
+      "headline": "The record leaves America",
+      "body": "In 1998 the title moved abroad for the first time in a century, to the Petronas Towers in Kuala Lumpur, then to Taipei 101, and in 2010 to the Burj Khalifa in Dubai — 2,717 feet, more than half a mile high. The skyscraper is now less an American office solution than a way for a city or a country to announce that it has arrived. The tallest ones today are mostly in Asia and the Persian Gulf.",
+      "source_ids": ["wp-sky", "wp-hist"],
+      "image_file": "File:Burj Khalifa (16260269606).jpg"
+    }
+  ]
+}

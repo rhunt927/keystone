@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs classical-music-eras",
+  "topic": {
+    "slug": "classical-music-eras",
+    "title": "The Eras of Classical Music",
+    "domain": "arts-culture",
+    "one_line_summary": "A thousand years of written European music, from a single line of monks' chant to the collapse of tonality — in six eras",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-cm",
+      "url": "https://en.wikipedia.org/wiki/Classical_music",
+      "title": "Classical music — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-hist",
+      "url": "https://en.wikipedia.org/wiki/History_of_music",
+      "title": "History of music — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-common",
+      "url": "https://en.wikipedia.org/wiki/Common_practice_period",
+      "title": "Common practice period — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-notation",
+      "url": "https://en.wikipedia.org/wiki/Musical_notation",
+      "title": "Musical notation — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Music you can keep",
+      "body": "What we call classical music is really one long tradition — about a thousand years of European music that was written down. That last part is the key. Beginning in medieval monasteries, monks developed a way to notate pitch and rhythm on a page, so a piece could be performed precisely, centuries later, by people who had never heard it. Everything that follows is built on that idea.",
+      "source_ids": ["wp-notation", "wp-hist"],
+      "image_file": "File:CBSO Youth Orchestra in Symphony Hall - geograph.org.uk - 7422392.jpg"
+    },
+    {
+      "headline": "Medieval",
+      "body": "For centuries, church music was plainchant: a single unadorned melodic line, sung in unison, with no harmony and no fixed beat. Then, around the cathedral of Notre-Dame in Paris in the 1100s and 1200s, composers began layering independent melodic lines on top of each other — polyphony. Music stopped being a line and became a structure, several voices moving at once.",
+      "source_ids": ["wp-hist", "wp-cm"],
+      "image_file": "File:Perotin - Alleluia nativitas.jpg"
+    },
+    {
+      "headline": "Renaissance",
+      "body": "From about 1400 to 1600, that polyphony was refined into something smooth and balanced — interweaving vocal lines for the church, by composers like Josquin des Prez and Palestrina, and playful secular madrigals for the home. Printed music, new in this era, carried it across Europe faster than any generation before could have imagined.",
+      "source_ids": ["wp-hist", "wp-cm"],
+      "image_file": "File:Giovanni Pierluigi da Palestrina.jpg"
+    },
+    {
+      "headline": "Baroque",
+      "body": "Around 1600 in Florence, a group of scholars trying to revive Greek drama invented opera. The Baroque era that followed, to 1750, was an explosion of instrumental music: the orchestra took shape, the major and minor key system settled into place, and counterpoint grew dizzyingly ornate. It is the age of Vivaldi, Handel, and above all Johann Sebastian Bach — and it is generally said to end with Bach's death in 1750.",
+      "source_ids": ["wp-common", "wp-hist"],
+      "image_file": "File:Johann Sebastian Bach.jpg"
+    },
+    {
+      "headline": "Classical",
+      "body": "The next generation reacted against Baroque density with clarity and elegance. Melodies became singable and clear-cut, and a flexible template called sonata form organized long movements around a journey away from a home key and back. The symphony and the string quartet were standardized here, largely in Vienna, by Haydn and Mozart — and then a young pianist named Beethoven.",
+      "source_ids": ["wp-cm", "wp-hist"],
+      "image_file": "File:Barbara Krafft - Porträt Wolfgang Amadeus Mozart (1819).jpg"
+    },
+    {
+      "headline": "Romantic",
+      "body": "Beethoven's later works blew the classical frame open, and the 19th century ran with it: bigger orchestras, raw emotion, folk and national identity, and the touring virtuoso as a kind of rock star — Liszt, Paganini. Schubert, Brahms, Tchaikovsky and Mahler expanded the language, while Richard Wagner's operas stretched harmony so far that the old sense of a stable key began to dissolve.",
+      "source_ids": ["wp-cm", "wp-common"],
+      "image_file": "File:Joseph Karl Stieler's Beethoven mit dem Manuskript der Missa solemnis.jpg"
+    },
+    {
+      "headline": "Modern",
+      "body": "Around 1900 the shared rulebook broke. Debussy blurred the keys; Stravinsky's Rite of Spring in 1913 caused a near-riot with its pounding irregular rhythms; and Arnold Schoenberg abandoned a tonal center entirely, first freely and then through a strict 12-tone method. Later composers went further still — into music governed by chance, into the hypnotic repetition of minimalism, and into pure electronics.",
+      "source_ids": ["wp-common", "wp-cm"],
+      "image_file": "File:Igor Stravinsky LOC 32392u.jpg"
+    },
+    {
+      "headline": "Why it lasts",
+      "body": "Notation is why a Bach fugue can outlive everyone who ever knew him and still be played exactly. The forms this tradition worked out — the symphony, the concerto, the sonata — and the orchestra it assembled are still the backbone of film scores, video-game soundtracks and much popular music. And the tradition is not closed: composers are still adding to it.",
+      "source_ids": ["wp-cm", "wp-notation"],
+      "image_file": "File:National Youth Orchestra in Symphony Hall, Birmingham - geograph.org.uk - 8116539.jpg"
+    }
+  ]
+}

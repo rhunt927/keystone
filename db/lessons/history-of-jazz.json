@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs history-of-jazz",
+  "topic": {
+    "slug": "history-of-jazz",
+    "title": "A History of Jazz",
+    "domain": "arts-culture",
+    "one_line_summary": "From the streets of New Orleans to the concert hall — a century of an American art form built on improvisation",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-jazz",
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "title": "Jazz — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-hist",
+      "url": "https://en.wikipedia.org/wiki/History_of_jazz",
+      "title": "History of jazz — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-bebop",
+      "url": "https://en.wikipedia.org/wiki/Bebop",
+      "title": "Bebop — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-armstrong",
+      "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
+      "title": "Louis Armstrong — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Made in New Orleans",
+      "body": "Jazz came together in New Orleans in the first years of the 20th century, out of an unusual collision: the blues, the syncopation of ragtime, the brass of marching bands, church music, and Caribbean rhythm. From the start its defining idea was improvisation — musicians inventing their parts in the moment. It is often called the first art form born in the United States.",
+      "source_ids": ["wp-jazz", "wp-hist"],
+      "image_file": "File:Congo Square New Orleans.jpg"
+    },
+    {
+      "headline": "The city that could make it",
+      "body": "No other American city had New Orleans's mix — African, French, Spanish, Haitian and Creole, layered together in one port. In Congo Square, enslaved people had for generations been allowed to gather and drum on Sundays, keeping African music alive. Brass bands played for funerals and parades. The first great figure, cornetist Buddy Bolden, was playing a loud, blues-soaked style around 1900. He never made a record.",
+      "source_ids": ["wp-hist", "wp-jazz"],
+      "image_file": "File:Buddy Bolden 001.png"
+    },
+    {
+      "headline": "On record, and on the move",
+      "body": "The first jazz record was cut in 1917, by a white New Orleans group called the Original Dixieland Jass Band, and it was a national hit. As Black families left the South in the Great Migration, the music traveled with them — up the river to Chicago, on to New York and Kansas City. Prohibition filled those cities with speakeasies that needed bands.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:Original Dixieland Jazz Band from Talking Machine World, January 15, 1921.jpg"
+    },
+    {
+      "headline": "Armstrong changes the shape",
+      "body": "Then a trumpeter from New Orleans rewrote the rules. On his Hot Five and Hot Seven recordings of the mid-1920s, Louis Armstrong stepped out of the collective front line and played extended solos of such invention that the soloist, not the ensemble, became the center of jazz. He also more or less invented scat singing and set the relaxed, swinging rhythmic feel the whole music would run on.",
+      "source_ids": ["wp-armstrong", "wp-hist"],
+      "image_file": "File:Louis Armstrong restored.jpg"
+    },
+    {
+      "headline": "The Swing Era",
+      "body": "For about a decade, from the mid-1930s, jazz simply was American pop music. Big bands filled dance halls and the radio — Benny Goodman was crowned the King of Swing, Count Basie's band swung hardest, and Duke Ellington used his orchestra as an instrument to compose a body of work now treated as a national treasure. Billie Holiday and Ella Fitzgerald became stars in front of those bands.",
+      "source_ids": ["wp-hist", "wp-jazz"],
+      "image_file": "File:Duke Ellington at the Hurricane Club 1943.jpg"
+    },
+    {
+      "headline": "Bebop breaks away",
+      "body": "In after-hours clubs in early-1940s New York, a group of young musicians — the saxophonist Charlie Parker, trumpeter Dizzy Gillespie, pianists Thelonious Monk and Bud Powell — deliberately made jazz you could not dance to. Bebop was fast, harmonically dense, played by small groups, and aimed at listeners. It was the moment jazz chose to be an art music rather than entertainment.",
+      "source_ids": ["wp-bebop", "wp-hist"],
+      "image_file": "File:(Portrait of Dizzy Gillespie and Charlie Parker, Carnegie Hall, New York, N.Y., ca. Oct. 1947) (LOC) (4976471831).jpg"
+    },
+    {
+      "headline": "The great decade",
+      "body": "The 1950s and early '60s brought a burst of styles. Miles Davis moved from the restrained 'cool' sound to the modal Kind of Blue in 1959, still the best-selling jazz album ever made. Hard bop brought the blues and gospel back in. And free jazz, led by Ornette Coleman and the later John Coltrane, threw out fixed chords and steady meter altogether.",
+      "source_ids": ["wp-hist", "wp-jazz"],
+      "image_file": "File:John Coltrane 1963.jpg"
+    },
+    {
+      "headline": "Where it went",
+      "body": "In the 1970s Miles Davis plugged in again and fused jazz with rock and funk. The mass audience drifted away, but jazz moved into universities and concert halls and is now widely taught as America's classical music; in 1987 Congress formally declared it a national treasure. Its harmony and its ethic of improvisation run quietly through film scores, R&B and hip-hop to this day.",
+      "source_ids": ["wp-jazz", "wp-hist"],
+      "image_file": "File:Miles Davis - 1986 (cropped).jpg"
+    }
+  ]
+}

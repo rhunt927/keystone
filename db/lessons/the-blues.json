@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs the-blues",
+  "topic": {
+    "slug": "the-blues",
+    "title": "The Blues",
+    "domain": "arts-culture",
+    "one_line_summary": "A music invented by Black musicians in the Jim Crow South that became the foundation of almost all American popular music",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-blues",
+      "url": "https://en.wikipedia.org/wiki/Blues",
+      "title": "Blues — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-delta",
+      "url": "https://en.wikipedia.org/wiki/Delta_blues",
+      "title": "Delta blues — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-chicago",
+      "url": "https://en.wikipedia.org/wiki/Chicago_blues",
+      "title": "Chicago blues — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-handy",
+      "url": "https://en.wikipedia.org/wiki/W._C._Handy",
+      "title": "W. C. Handy — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The root",
+      "body": "Rock and roll, rhythm and blues, soul, funk, most of jazz, a lot of country — pull almost any thread of American popular music and it leads back to the same place: a music that took shape among Black Americans in the Deep South around 1900, and nowhere more than the flat cotton country of the Mississippi Delta.",
+      "source_ids": ["wp-blues", "wp-delta"],
+      "image_file": "File:Jitterbugging in juke joint, Clarksdale, Mississippi Delta 8c11034v.jpg"
+    },
+    {
+      "headline": "Where it came from",
+      "body": "The blues grew out of the music enslaved people had made and passed down: West African call-and-response singing, the field hollers and work songs of the plantations, and the spirituals. After emancipation, in the poverty of the sharecropping South, that inheritance settled into a form — a twelve-bar chord pattern, a first line sung twice and then answered, and the bent, flattened 'blue notes' that give the music its ache.",
+      "source_ids": ["wp-blues"],
+      "image_file": "File:Mississippi Delta Cotton Pickers.jpg"
+    },
+    {
+      "headline": "Onto paper",
+      "body": "In 1903, by his own account, a Black bandleader named W. C. Handy was waiting for a train in Tutwiler, Mississippi, when he heard a ragged man sliding a knife blade along guitar strings and singing about where the rails crossed. Handy started arranging what he heard. His 'Memphis Blues' and 'St. Louis Blues' put the music onto sheet music and into the popular marketplace for the first time.",
+      "source_ids": ["wp-handy", "wp-blues"],
+      "image_file": "File:Portrait of William Christopher Handy LCCN2004662979.jpg"
+    },
+    {
+      "headline": "The women who sold it first",
+      "body": "The first blues stars on record were women. In 1920 Mamie Smith's 'Crazy Blues' sold enormously and proved to the record industry that a Black audience would buy records — launching the 'race records' business. Bessie Smith, billed as the Empress of the Blues, became the highest-paid Black entertainer in America in the 1920s, backed on some sessions by a young Louis Armstrong.",
+      "source_ids": ["wp-blues"],
+      "image_file": "File:Bessie Smith (1936) by Carl Van Vechten.jpg"
+    },
+    {
+      "headline": "The Delta men",
+      "body": "Back in Mississippi, another strain was raw and solitary: one voice, one guitar, often played with a slide. Charley Patton and Son House were its founders. Its legend is Robert Johnson, said to have traded his soul at a midnight crossroads for his skill. Johnson recorded just 29 songs in 1936 and 1937 and died at 27, poisoned. Those recordings became perhaps the most influential in the history of the guitar.",
+      "source_ids": ["wp-delta", "wp-blues"],
+      "image_file": "File:Robert Johnson self-portrait original photograph (cropped).jpg"
+    },
+    {
+      "headline": "The music moves north, and plugs in",
+      "body": "During the Great Migration, millions of Black Southerners moved to northern cities, and the Delta blues went with them. In Chicago, McKinley Morganfield — Muddy Waters — picked up an electric guitar and put a band behind it: drums, bass, piano, and amplified harmonica. Recorded by Chess Records, the Chicago sound of Muddy Waters, Howlin' Wolf and Willie Dixon was louder, harder, and built for a crowded room.",
+      "source_ids": ["wp-chicago", "wp-blues"],
+      "image_file": "File:Muddy Waters.jpg"
+    },
+    {
+      "headline": "It becomes rock",
+      "body": "The same Chess studio recorded Chuck Berry and Bo Diddley, and rock and roll was essentially electric blues with a faster beat. In the 1960s young British musicians who had worn out their blues records built bands on it — the Rolling Stones took their name from a Muddy Waters song — and handed the music back to a mass American audience, now called rock.",
+      "source_ids": ["wp-blues", "wp-chicago"],
+      "image_file": "File:Chess Studio Booth.jpg"
+    },
+    {
+      "headline": "The DNA",
+      "body": "The blues never went away, and it never really needed to. Its twelve-bar form and its blue notes are the underlying grammar of rock, soul and R&B. B.B. King carried it around the world for more than sixty years, one bent note at a time. Every guitarist who pushes a string sharp to make it cry is speaking a language that poor Black musicians in the segregated South worked out for themselves.",
+      "source_ids": ["wp-blues"],
+      "image_file": "File:B.B. King (46264650642).jpg"
+    }
+  ]
+}

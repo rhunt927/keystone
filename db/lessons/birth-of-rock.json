@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs birth-of-rock",
+  "topic": {
+    "slug": "birth-of-rock",
+    "title": "The Birth of Rock and Roll",
+    "domain": "arts-culture",
+    "one_line_summary": "Black rhythm and blues met white country music on the radio in the 1950s — and within a decade ruled Western popular culture",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-rnr",
+      "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+      "title": "Rock and roll — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-rock",
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "title": "Rock music — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-brit",
+      "url": "https://en.wikipedia.org/wiki/British_Invasion",
+      "title": "British Invasion — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-elvis",
+      "url": "https://en.wikipedia.org/wiki/Elvis_Presley",
+      "title": "Elvis Presley — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "An explosion in the mid-1950s",
+      "body": "In about 1954, a new sound erupted in the United States: loud, electric, built on a hard backbeat, and aimed squarely at teenagers — who, in the postwar boom, suddenly had money and records of their own to buy. It was a fusion of two musics that American segregation had kept in separate charts: Black rhythm and blues, and white country and western. Within ten years it was the dominant popular music of the Western world.",
+      "source_ids": ["wp-rnr", "wp-rock"],
+      "image_file": "File:Sun Studio, Memphis.jpg"
+    },
+    {
+      "headline": "How it was assembled",
+      "body": "The core came from rhythm and blues — the beat, the electric guitar, the shouted vocal — mixed with country phrasing and the fervor of gospel. Radio DJs were the matchmakers: figures like Alan Freed, who popularized the phrase 'rock and roll,' played Black records for young white audiences who had never been sold them before. A small Memphis label, Sun Records, sat right on the seam.",
+      "source_ids": ["wp-rnr"],
+      "image_file": "File:Chuck Berry 1957 (cropped).jpg"
+    },
+    {
+      "headline": "The first wave",
+      "body": "Then came the records. Bill Haley's 'Rock Around the Clock' hit number one in 1955. Chuck Berry turned the guitar riff and the teenage story-song into an art with 'Maybellene' and 'Johnny B. Goode.' Little Richard and Fats Domino brought New Orleans fire. And Elvis Presley — a white nineteen-year-old from Mississippi singing music rooted in the Black South — became a national sensation and a national controversy at the same time.",
+      "source_ids": ["wp-elvis", "wp-rnr"],
+      "image_file": "File:Elvis Presley promoting Jailhouse Rock.jpg"
+    },
+    {
+      "headline": "The lull, then the invasion",
+      "body": "By 1960 the first wave had stalled — Elvis was drafted, Little Richard briefly quit music, Buddy Holly had died in a plane crash, Chuck Berry was facing prison. The next surge came from abroad. In February 1964 the Beatles landed in New York, and behind them the Rolling Stones, the Kinks and the Who — British bands that had learned from American blues and R&B records and were now selling that sound back to America.",
+      "source_ids": ["wp-brit", "wp-rock"],
+      "image_file": "File:The Beatles performing at The Ed Sullivan Show (cropped 2).jpg"
+    },
+    {
+      "headline": "Rock grows up",
+      "body": "Mid-decade, the music got ambitious. Bob Dylan brought literary, personal lyrics into pop and then plugged in, outraging folk purists. The Beatles turned the recording studio into an instrument on Rubber Soul, Revolver and Sgt. Pepper. The unit of art shifted from the two-and-a-half-minute single to the album, meant to be listened to whole.",
+      "source_ids": ["wp-rock"],
+      "image_file": "File:Bob Dylan 1963 promo photo by Don Hunstein.jpg"
+    },
+    {
+      "headline": "Louder, and in a field",
+      "body": "The late 1960s pushed to extremes: psychedelia, the guitar of Jimi Hendrix, and huge outdoor festivals — Woodstock, in 1969, drew something like 400,000 people. Out of the same amplified blues came hard rock and heavy metal, with Led Zeppelin and Black Sabbath making the guitar heavier and darker than anyone had before.",
+      "source_ids": ["wp-rock"],
+      "image_file": "File:Woodstock redmond crowd (cropped).jpg"
+    },
+    {
+      "headline": "Then it splintered",
+      "body": "From the 1970s on, rock stopped being one thing. It split into glam, progressive, and then punk — a deliberate 1976 revolt against everything that had grown pompous and stadium-sized — followed by new wave, '80s arena rock, and an underground 'alternative' scene that finally broke into the mainstream when Nirvana topped the charts in 1991.",
+      "source_ids": ["wp-rock"],
+      "image_file": "File:Jimi Hendrix (1967) (cropped).jpg"
+    },
+    {
+      "headline": "What survived",
+      "body": "Rock's chart dominance faded after the 1990s as hip-hop and pop moved to the center. But its fingerprints are everywhere: the guitar-bass-drums lineup, the full-length album, the whole idea of a band as a self-contained creative unit. And it is worth remembering how it started — as the music of the Black and white American South, finally meeting on the same radio dial.",
+      "source_ids": ["wp-rnr", "wp-rock"],
+      "image_file": "File:Little Richard 1957 (crop).jpg"
+    }
+  ]
+}
