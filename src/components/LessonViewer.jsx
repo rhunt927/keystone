@@ -304,7 +304,11 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
           {showSettings && (
             <div className="flex flex-col items-center gap-2 pt-1">
               {(() => {
-                const enVoices = voices.filter(v => v.lang?.toLowerCase().startsWith('en'))
+                // Apple's novelty/effect "voices" — filter them out, they're not narration.
+                const NOVELTY = /^(albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox)$/i
+                const enVoices = voices.filter(
+                  v => v.lang?.toLowerCase().startsWith('en') && !NOVELTY.test(v.name.trim())
+                )
                 const tierOf = v =>
                   /premium/i.test(v.name) ? 'Premium' : /enhanced/i.test(v.name) ? 'Enhanced' : 'Standard'
                 return (

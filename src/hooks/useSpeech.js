@@ -16,10 +16,13 @@ const DEFAULT_RATE = 1
 // Crucially, prefer LOCAL (on-device) voices. Chrome exposes network voices
 // ("Google US English", etc.) that require a fetch to Google's servers and
 // routinely never start, especially inside an installed PWA.
+const NOVELTY_VOICE = /^(albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox)$/i
+
 function autoPickVoice(voices) {
   if (!voices.length) return null
-  const en = voices.filter(v => v.lang?.toLowerCase().startsWith('en'))
-  const pool = en.length ? en : voices
+  const usable = voices.filter(v => !NOVELTY_VOICE.test(v.name.trim()))
+  const en = usable.filter(v => v.lang?.toLowerCase().startsWith('en'))
+  const pool = en.length ? en : usable.length ? usable : voices
   return (
     pool.find(v => /siri/i.test(v.name)) ||
     pool.find(v => v.localService && /premium|enhanced/i.test(v.name)) ||
