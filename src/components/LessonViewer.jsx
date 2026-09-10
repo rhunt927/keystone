@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSpeech } from '../hooks/useSpeech'
+import { useAudioLesson } from '../hooks/useAudioLesson'
 import { useSentenceImage } from '../hooks/useSentenceImage'
 import { splitSentences } from '../lib/sentences'
 import { narratorFor } from '../lib/narrators'
@@ -41,7 +42,7 @@ function Equalizer({ active }) {
   )
 }
 
-export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
+export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, onBack }) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [ended, setEnded] = useState(false)
@@ -51,15 +52,18 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     speak, resume, pause, stop, speaking, sentenceIndex, canResume, loadedText,
     supported, voices, voiceName, selectedVoiceURI, selectVoice, refreshVoices, rate, setRate,
   } = useSpeech()
+  const { ready: audioReady, engine: audio } = useAudioLesson(accessToken, cards, rate)
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
 
   const card = cards[index]
-  // Narrate the beat's body only — the short headline labels ("Twelve ships",
-  // "What it was") read as flashcard chapter titles, not narration.
   const narrationText = card?.body || ''
   const sentences = useMemo(() => splitSentences(narrationText), [narrationText])
   const beatText = useCallback(i => cards[i]?.body || '', [cards])
+
+  // If every beat has pre-generated audio, play that (studio voice, consistent
+  // everywhere). Otherwise fall back to the browser's speech synthesis.
+  const audioMode = cards.length > 0 && cards.every(c => c.audio_path) && audioReady
 
   const visualSpec = useMemo(() => {
     if (!card?.visual_spec) return null
@@ -70,9 +74,25 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     ? { url: card.image_url, source_url: card.image_source_url, attribution: card.image_attribution }
     : null
   const useLiveSearch = !visualSpec && !curatedImage
-  const activeSentence = useLiveSearch && (playing || speaking) ? sentences[sentenceIndex] : null
+  const activeSentence = useLiveSearch && !audioMode && (playing || speaking) ? sentences[sentenceIndex] : null
   const displayedImage = useSentenceImage(topic.title, activeSentence, curatedImage)
   const visualCredit = visualSpec ? visualAttribution(visualSpec) : null
+
+  // Unified engine surface
+  const enginePlaying = audioMode ? audio.playing : speaking
+  const engineCanResume = audioMode
+    ? audio.canResume
+    : canResume && loadedText === narrationText
+  const beatProgress = audioMode
+    ? audio.progress
+    : speaking && sentences.length
+      ? Math.min(sentenceIndex / sentences.length, 1)
+      : 0
+
+  const startBeat = useCallback((i, onDone) => {
+    if (audioMode) audio.start(i, { onDone })
+    else speak(beatText(i), { onDone })
+  }, [audioMode, audio, speak, beatText])
 
   const advance = useCallback(() => {
     setIndex(i => {
@@ -85,55 +105,52 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     })
   }, [cards.length])
 
-  // playingRef lets the beat-change effect below check "are we playing" without
-  // re-running every time `playing` toggles (which would restart, not resume).
   const playingRef = useRef(playing)
   useEffect(() => { playingRef.current = playing }, [playing])
 
-  // When the beat changes while playing, narrate the new beat and auto-advance
-  // on finish. The FIRST play is kicked off directly from the tap in
-  // handlePlayToggle (iOS needs the first speak() inside a user gesture) — this
-  // effect only covers auto-advance and skips.
+  // Beat-change effect: narrate the new beat and auto-advance on finish. The
+  // first play is kicked off from the tap in handlePlayToggle; this covers
+  // auto-advance and skips.
   useEffect(() => {
     if (!playingRef.current) return
-    if (!supported) {
+    if (!audioMode && !supported) {
       const t = window.setTimeout(advance, Math.max(4500, narrationText.length * 55))
       return () => window.clearTimeout(t)
     }
-    speak(narrationText, { onDone: advance })
+    startBeat(index, advance)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index])
+  }, [index, audioMode])
 
   function handlePlayToggle() {
     if (playing) {
-      pause()
+      audioMode ? audio.pause() : pause()
       setPlaying(false)
       return
     }
     if (ended) {
-      stop()
+      audioMode ? audio.stop() : stop()
       setEnded(false)
       setIndex(0)
       setPlaying(true)
-      speak(beatText(0), { onDone: advance })
+      startBeat(0, advance)
       return
     }
     setPlaying(true)
-    if (canResume && loadedText === narrationText) {
-      resume({ onDone: advance })
+    if (engineCanResume) {
+      audioMode ? audio.resume({ onDone: advance }) : resume({ onDone: advance })
     } else {
-      speak(narrationText, { onDone: advance })
+      startBeat(index, advance)
     }
   }
 
   function goToBeat(i) {
-    stop()
+    audioMode ? audio.stop() : stop()
     setEnded(false)
     setIndex(Math.max(0, Math.min(cards.length - 1, i)))
-    // the [index] effect re-speaks the new beat if we're playing
   }
 
   function leave() {
+    audio.stop()
     stop()
     setPlaying(false)
     onBack()
@@ -148,8 +165,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     else if (dx < -50) goToBeat(index + 1)
   }
 
-  const cardProgress = sentences.length ? Math.min(sentenceIndex / sentences.length, 1) : 0
-  const overallProgress = (index + (ended ? 1 : speaking ? cardProgress : 0)) / cards.length
+  const overallProgress = (index + (ended ? 1 : beatProgress)) / cards.length
 
   function onScrub(e) {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -157,7 +173,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     goToBeat(Math.floor(ratio * cards.length))
   }
 
-  const active = playing || speaking
+  const active = playing || enginePlaying
 
   return (
     <div className="space-y-3">
@@ -202,7 +218,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent pointer-events-none" />
 
             <div className="absolute top-3 right-3">
-              <Equalizer active={speaking} />
+              <Equalizer active={enginePlaying} />
             </div>
 
             {(displayedImage || visualCredit) && (
@@ -249,11 +265,13 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
               <span>Beat {index + 1} of {cards.length}</span>
               {ended && <span>End — press play to replay</span>}
             </div>
-            <div className="text-center text-[10px] opacity-40">
-              {supported
-                ? `voice: ${voiceName || 'default'} · ${speaking ? `speaking ${sentenceIndex + 1}/${sentences.length}` : playing ? 'starting…' : 'idle'}`
-                : 'speech synthesis not available'}
-            </div>
+            {!audioMode && (
+              <div className="text-center text-[10px] opacity-40">
+                {supported
+                  ? `voice: ${voiceName || 'default'}${speaking ? ` · ${sentenceIndex + 1}/${sentences.length}` : ''}`
+                  : 'speech synthesis not available'}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-center gap-6">
@@ -290,20 +308,20 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             >
               Transcript
             </button>
-            {supported && (
+            {(supported || audioMode) && (
               <button
                 onClick={() => { refreshVoices(); setShowSettings(s => !s) }}
                 aria-pressed={showSettings}
                 className={`px-2 py-1 rounded font-medium ${showSettings ? 'bg-[#6B4226] text-[#F1E4CF]' : 'opacity-60 hover:opacity-100'}`}
               >
-                Voice &amp; speed
+                {audioMode ? 'Speed' : 'Voice & speed'}
               </button>
             )}
           </div>
 
           {showSettings && (
             <div className="flex flex-col items-center gap-2 pt-1">
-              {(() => {
+              {!audioMode && (() => {
                 // Apple's novelty/effect "voices" — filter them out, they're not narration.
                 const NOVELTY = /^(albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox)$/i
                 const enVoices = voices.filter(
@@ -345,7 +363,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
                 <span className="text-[11px] opacity-60">Speed</span>
                 <input
                   type="range" min="0.5" max="2" step="0.1" value={rate}
-                  onChange={e => { setRate(Number(e.target.value)); if (speaking) resume({ onDone: advance }) }}
+                  onChange={e => { setRate(Number(e.target.value)); if (!audioMode && speaking) resume({ onDone: advance }) }}
                   className="w-32 accent-[#6B4226]"
                   aria-label="Narration speed"
                 />

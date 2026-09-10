@@ -106,6 +106,7 @@ function App() {
         domain={view.domain}
         lessonTitle={lesson?.title}
         cards={cards}
+        accessToken={accessToken}
         onBack={() => setView({ screen: 'topics', domain: view.domain })}
       />
     )

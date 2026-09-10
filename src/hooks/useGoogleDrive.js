@@ -57,6 +57,49 @@ export async function loadDatabase(token) {
   return { folderId, fileId, data: new Uint8Array(buffer) }
 }
 
+// --- Pre-generated narration audio (keystone/audio/<slug>/beat-N.mp3) ---------
+
+const folderIdCache = new Map() // "audio", "audio/<slug>" -> Drive folder id
+const audioUrlCache = new Map() // relPath -> object URL
+
+async function findChildFolder(parentId, name, token) {
+  const key = `${parentId}/${name}`
+  if (folderIdCache.has(key)) return folderIdCache.get(key)
+  const res = await driveRequest(
+    `files?q=name='${name}' and '${parentId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false&fields=files(id)`,
+    {}, token
+  )
+  const { files } = await res.json()
+  const id = files[0]?.id || null
+  folderIdCache.set(key, id)
+  return id
+}
+
+// relPath like "black-death/beat-3.mp3". Returns an object URL (cached), or
+// null if the file isn't in Drive.
+export async function fetchAudioUrl(token, relPath) {
+  if (audioUrlCache.has(relPath)) return audioUrlCache.get(relPath)
+
+  const [slug, filename] = relPath.split('/')
+  const keystoneId = await findOrCreateFolder(token)
+  const audioId = await findChildFolder(keystoneId, 'audio', token)
+  if (!audioId) return null
+  const slugId = await findChildFolder(audioId, slug, token)
+  if (!slugId) return null
+
+  const search = await driveRequest(
+    `files?q=name='${filename}' and '${slugId}' in parents and trashed=false&fields=files(id)`,
+    {}, token
+  )
+  const fileId = (await search.json()).files[0]?.id
+  if (!fileId) return null
+
+  const res = await driveRequest(`files/${fileId}?alt=media`, {}, token)
+  const url = URL.createObjectURL(await res.blob())
+  audioUrlCache.set(relPath, url)
+  return url
+}
+
 export async function saveDatabase(token, folderId, fileId, uint8Array) {
   const blob = new Blob([uint8Array], { type: 'application/octet-stream' })
   const metadata = { name: DB_FILENAME, mimeType: 'application/octet-stream' }
