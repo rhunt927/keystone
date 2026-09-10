@@ -47,9 +47,17 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
       lessons scan the article's own images by section. No-AI-photorealism
       guardrail satisfied — all real, attributed, licensed art/photos.
 - [x] **Motion graphics** — cards can carry a `visual_spec` (JSON) instead of a
-      photo. `VisualCard.jsx`: a spread-map (real CC-BY-SA Commons map, radial
-      reveal + year ticker) and a count-up counter, both built from the sourced
-      figures on the card. Not AI imagery, not dramatization.
+      photo. `VisualCard.jsx`: spread-map (real CC-BY-SA Commons map, radial
+      reveal + year ticker), count-up counter, and timeline (dots in sequence),
+      all built from the sourced figures/dates on the card. Not AI, not
+      dramatization.
+- [x] **Narration voice: pre-generated Google Cloud TTS (Studio voice), $0.**
+      Browser text-to-speech is capped on iPhone (iOS blocks the good voices
+      from web apps). Google TTS free tier covers ~1M chars/month; audio is
+      rendered once per lesson at authoring time and stored in Drive, so
+      playback is free and identical on every device. Needed a billing account
+      on the Google project (free-trial credit, no auto-charge). Browser speech
+      stays as the fallback for lessons without pre-generated audio.
 
 ---
 
@@ -131,7 +139,13 @@ both localhost and the live deploy.
 - [ ] Wire this into the UI as an on-demand action (vs. only a manual script) —
       deferred until Phase 4 has something to trigger it from
 
-## Phase 4 — Core UI (in progress)
+## Phase 4 — Core UI (playback model settled; content + feed remain)
+
+**State of play (2026-09-10):** two authored lessons live (Black Death, Rosa
+Parks), both with hand-picked images, a motion graphic, and pre-generated
+Studio-voice narration. The player is an auto-advancing "episode" with real
+transport controls. What's left before this feels like a product: more
+lessons, and the continuous-feed navigation.
 
 - [x] Topic picker / home screen — domain click → topic list (title + one-line
       summary), `TopicList.jsx`
@@ -232,17 +246,48 @@ both localhost and the live deploy.
 - [x] Dropped the per-beat headline labels from the player — too flashcard-y,
       and the narrator was speaking them as sentence fragments. Still in the DB,
       just unused in the viewer.
-- [ ] **← NEXT: re-author Rosa Parks as a grounded narrative** — it's still the
-      old verbatim version live. Same treatment: `db/lessons/rosa-parks.json`,
-      hand-written arc from the cited sources (include the Ilitch rent fact),
-      hand-picked images per beat, maybe a timeline visual for the boycott.
-- [ ] More authored lessons across domains once the format feels right (needed
-      before the "doom-scroll feed" idea is testable — see Open Questions)
-- [ ] More `VisualCard` types as lessons need them (timeline, before/after,
-      simple bar) — keep each built from sourced numbers only
+- [x] **Pre-generated studio narration (2026-09-10)** — browser TTS tops out at
+      "Samantha"-tier on iPhone (iOS won't expose downloaded Enhanced/Premium or
+      Siri voices to *any* web app — confirmed on the device: 68 voices, 0
+      enhanced). Fix: **Google Cloud Text-to-Speech** (Studio-Q voice), free
+      tier ~1M chars/month, spent once at authoring time. `scripts/narrate-lesson.mjs`
+      writes MP3s to Drive `keystone/audio/<slug>/beat-N.mp3`; the app
+      (`useAudioLesson`, `useGoogleDrive.fetchAudioUrl`) discovers them **by
+      Drive convention, not a DB column** (avoids racing keystone.db with the
+      authoring scripts) and plays them through one `<audio>` element with real
+      seek/pause/speed. Falls back to browser speech for un-narrated lessons.
+      Requires a billing account on the Google project (free-trial $300 credit;
+      no auto-charges). API key in `.env` as `GOOGLE_TTS_API_KEY` (not
+      VITE_-prefixed, never in the bundle).
+- [x] **Rosa Parks re-authored (2026-09-10)** — `db/lessons/rosa-parks.json`,
+      8 beats, myth-vs-reality framing, the verbatim "tired of giving in" quote,
+      Claudette Colvin, the deliberate test-case choice, 381 days, what it cost
+      her, the Mike Ilitch benefactor, lying in state. New **`timeline`
+      VisualCard** type for the boycott beat. Studio narration generated.
+- [x] Spread-map reveals once instead of looping; build footer only on the
+      login screen now.
+- [ ] **← NEXT (pick one):**
+      - **More authored lessons** across domains — needed before the
+        "doom-scroll feed" idea is testable (see Open Questions). Each is:
+        write `db/lessons/<slug>.json` from cited sources → `load-lesson` →
+        `narrate-lesson` → commit JSON.
+      - **Feed / continuous-scroll navigation** — the stated product goal
+        ("replace my doom scrolling"). Open app → content just plays, swipe for
+        the next lesson, like a feed. Bigger rework of `App.jsx` navigation.
+        Blocked on having several lessons.
+      - **Re-narrate Black Death** if the Studio voice should be a different one
+        (currently Studio-Q male; could try Studio-O, or a Chirp3-HD voice).
+- [ ] Within-beat scrubbing for audio lessons (the `<audio>` element supports
+      real seek; scrubber currently only jumps whole beats)
+- [ ] Rewind button behaviour: >3s into a beat → restart it; <3s → previous beat
+      (standard media-player pattern), instead of always previous beat
+- [ ] More `VisualCard` types as lessons need them (before/after, simple bar) —
+      keep each built from sourced numbers only
 - [ ] "Deep dive" expansion per topic
 - [ ] Quiz component (uses quiz_questions/quiz_options)
 - [ ] Path view — themed sequences of topics
+- [ ] Per-sentence live Commons image fallback still not verified working
+      (Known Issues) — only matters for auto-generated (non-authored) lessons
 
 ## Phase 5 — Cross-Device Polish
 
