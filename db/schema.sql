@@ -116,6 +116,10 @@ CREATE TABLE IF NOT EXISTS cards (
   -- Optional motion-graphic spec (JSON) for cards that visualise sourced data
   -- rather than showing a photo — e.g. an animated spread map or a count-up.
   visual_spec  TEXT,
+  -- Optional pre-generated narration audio, relative to the Drive
+  -- `keystone/audio/` folder (e.g. "black-death/beat-3.mp3"). When present the
+  -- app plays this instead of browser text-to-speech.
+  audio_path   TEXT,
   created_at   TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
