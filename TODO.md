@@ -141,11 +141,12 @@ both localhost and the live deploy.
 
 ## Phase 4 — Core UI (playback model settled; content + feed remain)
 
-**State of play (2026-09-10):** two authored lessons live (Black Death, Rosa
-Parks), both with hand-picked images, a motion graphic, and pre-generated
-Studio-voice narration. The player is an auto-advancing "episode" with real
-transport controls. What's left before this feels like a product: more
-lessons, and the continuous-feed navigation.
+**State of play (2026-09-10, later):** 23 authored lessons live across all four
+domains — every one with hand-picked Commons imagery, pre-generated Studio-voice
+(`en-US-Studio-Q`) narration, and a motion graphic where one fits. The player is
+an auto-advancing "episode" with real transport controls. The remaining gap
+before this feels like a product is the continuous-feed navigation (Open
+Questions) — content breadth is no longer the blocker.
 
 - [x] Topic picker / home screen — domain click → topic list (title + one-line
       summary), `TopicList.jsx`
@@ -266,17 +267,31 @@ lessons, and the continuous-feed navigation.
       VisualCard** type for the boycott beat. Studio narration generated.
 - [x] Spread-map reveals once instead of looping; build footer only on the
       login screen now.
-- [ ] **← NEXT (pick one):**
-      - **More authored lessons** across domains — needed before the
-        "doom-scroll feed" idea is testable (see Open Questions). Each is:
-        write `db/lessons/<slug>.json` from cited sources → `load-lesson` →
-        `narrate-lesson` → commit JSON.
+- [x] **Content batch across all four domains (2026-09-10)** — 21 new authored
+      lessons, each 8 beats, source-grounded (Wikipedia-cited), no invented
+      quotes, hand-picked `File:` image per beat, `en-US-Studio-Q` narration,
+      timeline/spread-map visuals where they fit. Committed per domain, pushed.
+      - **History (6):** the-papacy, british-monarchy, henry-viii, the-medici,
+        world-war-i, the-mongols
+      - **Middle East (1, filed under history):** modern-middle-east — sober,
+        multi-sourced, contested figures attributed
+      - **Arts & Culture (6):** the-renaissance, the-blues, history-of-jazz,
+        classical-music-eras, birth-of-rock, the-skyscraper
+      - **Science (4):** history-of-the-computer, natural-selection,
+        the-octopus, antibiotics
+      - **Current Events (5):** electoral-college, the-filibuster,
+        how-a-bill-becomes-law, why-scotus-is-powerful, gerrymandering —
+        deliberately evergreen, non-partisan "how it works" explainers
+      With Black Death + Rosa Parks that's **23 lessons** total.
+- [ ] **← NEXT:**
       - **Feed / continuous-scroll navigation** — the stated product goal
         ("replace my doom scrolling"). Open app → content just plays, swipe for
         the next lesson, like a feed. Bigger rework of `App.jsx` navigation.
-        Blocked on having several lessons.
+        No longer blocked — there are 23 lessons to feed now.
+      - Spot-check the new lessons on device (image fit, narration, visuals),
+        note any beats whose `image_file` resolved to a weak match.
       - **Re-narrate Black Death** if the Studio voice should be a different one
-        (currently Studio-Q male; could try Studio-O, or a Chirp3-HD voice).
+        (currently Studio-Q; all 23 lessons now use Studio-Q for consistency).
 - [ ] Within-beat scrubbing for audio lessons (the `<audio>` element supports
       real seek; scrubber currently only jumps whole beats)
 - [ ] Rewind button behaviour: >3s into a beat → restart it; <3s → previous beat
