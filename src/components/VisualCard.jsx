@@ -29,7 +29,9 @@ function useRafProgress(durationMs, loop) {
 function SpreadMap({ spec }) {
   const from = spec.from_year ?? 1347
   const to = spec.to_year ?? 1353
-  const progress = useRafProgress(7000, true)
+  // Reveal once and hold — no loop (the looping "circle in and out" was
+  // distracting during narration).
+  const progress = useRafProgress(6500, false)
   const eased = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2
   const year = Math.round(from + eased * (to - from))
   // Reveal expands from the south-east corner (Crimea / the Black Sea), which

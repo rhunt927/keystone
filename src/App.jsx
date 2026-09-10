@@ -22,7 +22,6 @@ function App() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F1E4CF] text-[#3A2415]">
         Loading…
-        <BuildFooter />
       </div>
     )
   }
@@ -128,7 +127,6 @@ function App() {
 
         {body}
       </div>
-      <BuildFooter />
     </div>
   )
 }
