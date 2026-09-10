@@ -1,0 +1,92 @@
+{
+  "_note": "Hand-authored, source-grounded, deliberately non-partisan explainer of a durable institution. No invented quotes. Load: node scripts/load-lesson.mjs electoral-college",
+  "topic": {
+    "slug": "electoral-college",
+    "title": "The Electoral College",
+    "domain": "current-events",
+    "one_line_summary": "Why Americans don't actually vote for president — and how a compromise built for a country of four million people still decides the office",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-ec",
+      "url": "https://en.wikipedia.org/wiki/United_States_Electoral_College",
+      "title": "United States Electoral College — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-npv",
+      "url": "https://en.wikipedia.org/wiki/National_Popular_Vote_Interstate_Compact",
+      "title": "National Popular Vote Interstate Compact — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-conting",
+      "url": "https://en.wikipedia.org/wiki/Contingent_election",
+      "title": "Contingent election — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "You are not voting for president",
+      "body": "When an American marks a ballot for president, that vote does not go into a national total. It instructs their state which slate of people — 'electors' — to appoint. Those electors, 538 of them nationwide, later meet in their state capitals and cast the only ballots that legally elect the president. It is an indirect election, and five times in U.S. history the person who won the most votes from the public still lost.",
+      "source_ids": ["wp-ec"],
+      "image_file": "File:USA electoral college since 2024 hex cartogram.svg"
+    },
+    {
+      "headline": "A compromise from 1787",
+      "body": "The framers at the Constitutional Convention could not agree on how to pick a president. Some distrusted a direct national vote in an era with no national media or parties. Some wanted Congress to choose. Small states feared being outvoted by large ones. The deal: each state gets electors equal to its number of House members plus its two senators. It was also bound up with slavery — the three-fifths clause inflated the electoral weight of slave states.",
+      "source_ids": ["wp-ec"],
+      "image_file": "File:Scene at the Signing of the Constitution of the United States.jpg"
+    },
+    {
+      "headline": "How it works today",
+      "body": "There are 538 electors — 435 for House seats, 100 for senators, and 3 for the District of Columbia. A candidate needs a majority, 270, to win. Each state runs its own popular vote and appoints electors accordingly. And here is a key detail found nowhere in the Constitution: 48 states and D.C. choose, by their own law, to give all of their electors to whoever wins that state — winner-take-all. Only Maine and Nebraska split theirs.",
+      "source_ids": ["wp-ec"],
+      "image_file": "File:Constitution of the United States - DPLA - 9ca804144bd5965e992ae3528bc3c6a3 (page 1).jpg"
+    },
+    {
+      "headline": "What it distorts",
+      "body": "Two effects follow. The two 'senator' electors give a voter in a small state far more weight than a voter in a large one. And winner-take-all means a campaign only needs to compete in a handful of closely divided 'swing states' — most of the country is safely one color and gets ignored. Together these can hand the presidency to the loser of the national popular vote, as in 1876, 1888, 2000 and 2016.",
+      "source_ids": ["wp-ec"],
+      "visual": {
+        "type": "timeline",
+        "events": [
+          { "date": "1824", "label": "No majority; John Quincy Adams chosen by the House over popular-vote leader Andrew Jackson" },
+          { "date": "1876", "label": "Rutherford B. Hayes wins the electoral vote, loses the popular vote" },
+          { "date": "1888", "label": "Benjamin Harrison wins the electoral vote, loses the popular vote" },
+          { "date": "2000", "label": "George W. Bush wins the electoral vote, loses the popular vote" },
+          { "date": "2016", "label": "Donald Trump wins the electoral vote, loses the popular vote" }
+        ]
+      }
+    },
+    {
+      "headline": "Electors, and the count",
+      "body": "Electors are pledged to a candidate, but over the centuries a small number have voted otherwise — 'faithless electors.' In 2020 the Supreme Court ruled that states may legally bind them. The electoral votes are then opened and counted before Congress on January 6. After the disputed count of 2021, Congress passed the Electoral Count Reform Act of 2022 to clarify that the Vice President's role in that session is purely ceremonial.",
+      "source_ids": ["wp-ec"],
+      "image_file": "File:Joint session of Congress, Electoral Count, 2017.jpg"
+    },
+    {
+      "headline": "If nobody reaches 270",
+      "body": "A tie, or a strong third-party candidate, throws the election into the House of Representatives — but under special rules. Each state delegation casts a single vote, so Wyoming's lone member and California's 52 members count equally, and a candidate needs 26 states to win. This 'contingent election' has happened once, in 1824. The Senate separately picks the Vice President.",
+      "source_ids": ["wp-conting", "wp-ec"],
+      "image_file": "File:US Capitol west side.JPG"
+    },
+    {
+      "headline": "Attempts to change it",
+      "body": "Abolishing the Electoral College has been proposed in Congress hundreds of times; an amendment passed the House in 1969 but was blocked in the Senate. A different approach avoids amending the Constitution: the National Popular Vote Interstate Compact, in which states agree to award their electors to the national popular-vote winner — but only once states holding a combined 270 have joined. As of the mid-2020s, members hold a bit under 210.",
+      "source_ids": ["wp-npv"],
+      "image_file": "File:US Capitol dome Jan 2006.jpg"
+    },
+    {
+      "headline": "Why it survives",
+      "body": "Scrapping it outright requires a constitutional amendment: two-thirds of both houses of Congress and three-quarters of the states. At any given moment, the party and the states that currently benefit have little reason to agree. So a mechanism designed in 1787 for a nation of four million people, before political parties existed and when few thought ordinary citizens should vote for president at all, still selects the most powerful office in the country.",
+      "source_ids": ["wp-ec"],
+      "image_file": "File:Constitution of the United States, page 4.jpg"
+    }
+  ]
+}

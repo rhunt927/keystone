@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded, non-partisan explainer. No invented quotes. Load: node scripts/load-lesson.mjs why-scotus-is-powerful",
+  "topic": {
+    "slug": "why-scotus-is-powerful",
+    "title": "Why the Supreme Court Got So Powerful",
+    "domain": "current-events",
+    "one_line_summary": "The Constitution never clearly gave nine unelected judges the power to strike down laws — they claimed it in 1803, and it stuck",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-scotus",
+      "url": "https://en.wikipedia.org/wiki/Supreme_Court_of_the_United_States",
+      "title": "Supreme Court of the United States — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-jr",
+      "url": "https://en.wikipedia.org/wiki/Judicial_review_in_the_United_States",
+      "title": "Judicial review in the United States — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-marbury",
+      "url": "https://en.wikipedia.org/wiki/Marbury_v._Madison",
+      "title": "Marbury v. Madison — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-packing",
+      "url": "https://en.wikipedia.org/wiki/Judicial_Procedures_Reform_Bill_of_1937",
+      "title": "Judicial Procedures Reform Bill of 1937 — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Nine people, final say",
+      "body": "Nine unelected judges, appointed for life, can void a law passed by Congress and signed by the President, or overturn a policy that millions of a state's voters approved. Their ruling is effectively final — no appeal, and Congress can only undo it by rewriting the Constitution. The striking thing is that the Constitution never explicitly hands the Court that power. The Court asserted it.",
+      "source_ids": ["wp-scotus", "wp-jr"],
+      "image_file": "File:US Supreme Court.JPG"
+    },
+    {
+      "headline": "A very short paragraph",
+      "body": "The Constitution spends long, detailed articles on Congress and the presidency. The judiciary gets Article III — a few sentences establishing 'one supreme Court' and leaving almost everything else blank. It does not say the Court can nullify laws. It does not even fix the number of justices; Congress sets that, and it has ranged from six to ten before settling at nine in 1869.",
+      "source_ids": ["wp-scotus"],
+      "image_file": "File:Courtroom in U.S. Supreme Court from rear.jpg"
+    },
+    {
+      "headline": "Marbury v. Madison",
+      "body": "In 1803, in a dispute over a withheld judicial commission, Chief Justice John Marshall wrote that a law repugnant to the Constitution is void, and that it is 'emphatically the province and duty of the judicial department to say what the law is.' He engineered the ruling so that the sitting administration had nothing to actually defy — the Court claimed the power while declining to order anyone to do anything. It held. This is judicial review.",
+      "source_ids": ["wp-marbury", "wp-jr"],
+      "image_file": "File:Chief Justice John Marshall.jpeg"
+    },
+    {
+      "headline": "The reach expands",
+      "body": "Marshall's Court also asserted federal authority over the states. Then, after the Civil War, the Fourteenth Amendment's guarantee that no state may deny 'due process' or 'equal protection' gave the Court a hook to review state laws too. Over the following century it gradually applied most of the Bill of Rights against the states — dramatically enlarging the universe of laws it could strike down.",
+      "source_ids": ["wp-scotus", "wp-jr"],
+      "image_file": "File:Building of the United States Supreme Court.jpg"
+    },
+    {
+      "headline": "The 1937 showdown",
+      "body": "In the 1930s the Court struck down large parts of Franklin Roosevelt's New Deal. After winning re-election in a landslide, Roosevelt proposed adding up to six justices — 'court-packing.' Congress rejected the plan, but the Court abruptly began upholding New Deal laws anyway, a shift nicknamed 'the switch in time.' The episode showed that the Court's power depends on not being seen as simply political, and that it watches election results.",
+      "source_ids": ["wp-packing", "wp-scotus"],
+      "image_file": "File:Smithsonian - NPG - Roosevelt - NPG 97 134.jpg"
+    },
+    {
+      "headline": "The Court as a change engine",
+      "body": "Under Chief Justice Earl Warren, from 1953 to 1969, the Court used judicial review aggressively: striking down school segregation in Brown v. Board of Education, requiring electoral districts of equal population, and creating the Miranda warning and the right to a court-appointed lawyer. The Court became a leading driver of social policy — and, permanently, a top political prize.",
+      "source_ids": ["wp-scotus"],
+      "image_file": "File:EarlWarren.jpg"
+    },
+    {
+      "headline": "Neither sword nor purse",
+      "body": "The Court has no army and no budget power. It cannot make anyone obey its decisions; its authority rests entirely on the President, Congress, states and the public treating its word as final. That norm has proven remarkably strong — even presidents who loathed a ruling have complied, as when Richard Nixon surrendered the White House tapes in 1974 and resigned days later.",
+      "source_ids": ["wp-scotus", "wp-jr"],
+      "image_file": "File:Panorama of United States Supreme Court Building at Dusk.jpg"
+    },
+    {
+      "headline": "The stakes now",
+      "body": "Lifetime tenure plus a polarized confirmation process means one vacancy can lock in a legal direction for 30 years, which is why nominations have become among the fiercest fights in American politics. Reform ideas circulate regularly — fixed terms, a binding ethics code, adding seats, limiting the Court's jurisdiction — but every one of them runs into the same problem: the Court itself would decide whether the reform is constitutional.",
+      "source_ids": ["wp-scotus"],
+      "image_file": "File:Exterior of Supreme Court Building 20240601.jpg"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded, non-partisan explainer. No invented quotes. Load: node scripts/load-lesson.mjs the-filibuster",
+  "topic": {
+    "slug": "the-filibuster",
+    "title": "The Filibuster",
+    "domain": "current-events",
+    "one_line_summary": "Why it usually takes 60 votes, not 51, to pass a law in the U.S. Senate — a rule that isn't in the Constitution and began by accident",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-fil",
+      "url": "https://en.wikipedia.org/wiki/Filibuster_in_the_United_States_Senate",
+      "title": "Filibuster in the United States Senate — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-cloture",
+      "url": "https://en.wikipedia.org/wiki/Cloture",
+      "title": "Cloture — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-nuclear",
+      "url": "https://en.wikipedia.org/wiki/Nuclear_option",
+      "title": "Nuclear option — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-recon",
+      "url": "https://en.wikipedia.org/wiki/Reconciliation_(United_States_Congress)",
+      "title": "Reconciliation (United States Congress) — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Sixty, not fifty-one",
+      "body": "The Senate has 100 members, and you might assume 51 votes passes a bill. For most legislation, it doesn't. Under Senate rules, any senator can keep debate going, and it takes 60 votes to force debate to end and move to a final vote. So 60 — not a simple majority — is the real threshold for most laws. This is the filibuster, and it appears nowhere in the Constitution.",
+      "source_ids": ["wp-fil"],
+      "image_file": "File:United States Senate Floor.jpg"
+    },
+    {
+      "headline": "It started as a mistake",
+      "body": "In 1806 the Senate, on Aaron Burr's advice, cleaned up its rulebook and dropped a little-used motion that had let a simple majority cut off debate. Nobody intended to create a supermajority requirement; they just removed a redundant rule. For decades it barely mattered. The first true filibuster came in the 1830s. The name comes from a Dutch word for pirate, by way of Spanish — someone hijacking the proceedings.",
+      "source_ids": ["wp-fil"],
+      "image_file": "File:Crop of Senate Chamber at United States Capitol, 1867 (27269170214).jpg"
+    },
+    {
+      "headline": "Talk until it dies",
+      "body": "With no way to force a vote, a senator could block a bill simply by refusing to yield the floor — talking for hours or days. After a filibuster sank a naval bill in 1917, the Senate finally adopted Rule 22, letting a two-thirds vote end debate. The record for a one-person talking filibuster still belongs to Strom Thurmond, who held the floor for 24 hours and 18 minutes in 1957 against a civil rights bill.",
+      "source_ids": ["wp-cloture", "wp-fil"],
+      "image_file": "File:Strom Thurmond, c 1961 (cropped).jpg"
+    },
+    {
+      "headline": "The civil rights era",
+      "body": "For much of the 20th century the filibuster's dominant use was by Southern senators to block civil rights and anti-lynching legislation. The Civil Rights Act of 1964 became law only after supporters spent 60 working days breaking a filibuster and assembled a bipartisan supermajority to shut it down — one of the longest debates in Senate history.",
+      "source_ids": ["wp-fil"],
+      "image_file": "File:Mr. Smith Goes to Washington filibuster (trailer).png"
+    },
+    {
+      "headline": "The silent filibuster",
+      "body": "Two changes made it routine. In 1975 the threshold to end debate was lowered from two-thirds to three-fifths — 60 votes. And the modern Senate adopted a system that lets other business proceed while a bill is stalled, so a filibuster no longer requires anyone to actually speak. Now the minority simply signals that 60 votes will be needed, and that becomes the standing price of nearly every bill, with no drama on the floor.",
+      "source_ids": ["wp-fil", "wp-cloture"],
+      "image_file": "File:Senate in session.jpg"
+    },
+    {
+      "headline": "The nuclear option",
+      "body": "The Senate can change how its rules are interpreted by a simple majority, using a procedural maneuver nicknamed the 'nuclear option.' In 2013 the majority used it to end filibusters of most presidential nominations; in 2017 it was extended to Supreme Court nominees. As a result, judges and executive appointees are now confirmed with 51 votes — but legislation still needs 60.",
+      "source_ids": ["wp-nuclear", "wp-fil"],
+      "image_file": "File:Strom Thurmond (colors fixed).png"
+    },
+    {
+      "headline": "The budget loophole",
+      "body": "There is one major carve-out. Under a 1974 process called reconciliation, bills that change federal spending or taxes can pass with 51 votes and cannot be filibustered — but only about once a year, and only for provisions with a direct budget effect. This is why so many big laws of the last two decades — major tax cuts, large spending packages, pieces of health care policy — were passed as reconciliation bills rather than ordinary legislation.",
+      "source_ids": ["wp-recon", "wp-fil"],
+      "image_file": "File:Huey Long Senate Speech (cropped).jpg"
+    },
+    {
+      "headline": "The argument over it",
+      "body": "Supporters say the 60-vote rule forces the parties to negotiate, protects the minority, and keeps policy from lurching every time control changes. Critics say it is a historical accident with an ugly record that now lets 41 senators — who can together represent a minority of the country's population — block almost anything, and that it is a main cause of legislative gridlock. Every few years a Senate majority weighs abolishing it for legislation, and so far has stepped back — aware it will be in the minority again someday.",
+      "source_ids": ["wp-fil"],
+      "image_file": "File:Senate chamber desks.jpg"
+    }
+  ]
+}

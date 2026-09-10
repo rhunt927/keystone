@@ -1,0 +1,83 @@
+{
+  "_note": "Hand-authored, source-grounded, non-partisan explainer. No invented quotes. Load: node scripts/load-lesson.mjs gerrymandering",
+  "topic": {
+    "slug": "gerrymandering",
+    "title": "Gerrymandering",
+    "domain": "current-events",
+    "one_line_summary": "How the party that draws the district lines can decide who wins — by picking its voters before the voters pick it",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-gerry",
+      "url": "https://en.wikipedia.org/wiki/Gerrymandering_in_the_United_States",
+      "title": "Gerrymandering in the United States — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-redist",
+      "url": "https://en.wikipedia.org/wiki/Redistricting_in_the_United_States",
+      "title": "Redistricting in the United States — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-rucho",
+      "url": "https://en.wikipedia.org/wiki/Rucho_v._Common_Cause",
+      "title": "Rucho v. Common Cause — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Choosing your voters",
+      "body": "In an ordinary election, voters choose their representative. Gerrymandering flips that: whoever draws the boundaries of the districts can often decide, before anyone votes, which party will win most of the seats. The votes are real. The outcome is still, to a large degree, arranged in advance by the shape of the lines on the map.",
+      "source_ids": ["wp-gerry"],
+      "image_file": "File:The Gerry-Mander Edit.png"
+    },
+    {
+      "headline": "Where the word comes from",
+      "body": "In 1812 the governor of Massachusetts, Elbridge Gerry, signed a redistricting plan that carved out one district in a shape so twisted a newspaper illustrator drew it with wings and claws and labeled it 'the Gerry-mander' — a salamander. The name stuck to the tactic. The tactic itself was already older than the country.",
+      "source_ids": ["wp-gerry"],
+      "image_file": "File:Elbridge-gerry-painting (cropped 3x4 close).jpg"
+    },
+    {
+      "headline": "Why the U.S. system invites it",
+      "body": "The Constitution requires a national census every ten years. Afterward, House seats are redistributed among the states, and then most states have their legislature redraw the congressional and state-legislative district lines. So whichever party controls a state's government in a census year typically controls that state's maps — and therefore its elections — for the next decade.",
+      "source_ids": ["wp-redist", "wp-gerry"],
+      "image_file": "File:Illinois's 4th congressional district (since 2023).svg"
+    },
+    {
+      "headline": "Cracking and packing",
+      "body": "There are two basic moves. 'Cracking' splits a bloc of the opposing party's voters across many districts, so they fall just short of a majority in each one. 'Packing' does the opposite — jamming them into a few districts they win by huge margins, so their extra votes are wasted. With detailed voter data, a mapmaker can do both across a state at once.",
+      "source_ids": ["wp-gerry"],
+      "image_file": "File:How to Steal an Election - Gerrymandering.svg"
+    },
+    {
+      "headline": "The result",
+      "body": "Done well, a gerrymander lets a party win a minority of the votes cast statewide but a solid majority of the seats. There are examples in recent decades from states controlled by each major party where the division of seats diverged sharply from the division of the actual vote.",
+      "source_ids": ["wp-gerry"],
+      "image_file": "File:Maryland's 3rd congressional district (since 2023).svg"
+    },
+    {
+      "headline": "What the courts allow",
+      "body": "In 2019, in Rucho v. Common Cause, the Supreme Court ruled that partisan gerrymandering is a 'political question' beyond the reach of federal courts — they will not referee it. But racial gerrymandering, which dilutes the voting power of minority groups, remains illegal under the Voting Rights Act and the Constitution, and state courts can still strike down maps under their own state constitutions.",
+      "source_ids": ["wp-rucho", "wp-gerry"],
+      "image_file": "File:US Supreme Court.JPG"
+    },
+    {
+      "headline": "Ways to limit it",
+      "body": "Some states have taken the pen away from the legislature and handed redistricting to an independent or bipartisan commission — California, Arizona, Michigan and others, usually through a ballot measure voters approved directly. The Supreme Court upheld that approach in 2015. Courts sometimes impose their own maps, and mathematicians have built statistical tests to measure how skewed a plan is.",
+      "source_ids": ["wp-redist", "wp-gerry"],
+      "image_file": "File:Gerry-mander-1812-broadside.jpg"
+    },
+    {
+      "headline": "Why it persists",
+      "body": "The catch is structural: the people with the power to end gerrymandering are usually the people it put in office. Both parties use it wherever they hold the map. And the modern version is far more effective than Gerry's — precinct-level voter files and mapping software let today's line-drawers predict and lock in results with a precision the 1812 salamander could never have managed.",
+      "source_ids": ["wp-gerry"],
+      "image_file": "File:North Carolina's 12th congressional district (2023–2025).svg"
+    }
+  ]
+}

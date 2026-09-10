@@ -1,0 +1,83 @@
+{
+  "_note": "Hand-authored, source-grounded, non-partisan civics explainer. No invented quotes. Load: node scripts/load-lesson.mjs how-a-bill-becomes-law",
+  "topic": {
+    "slug": "how-a-bill-becomes-law",
+    "title": "How a Bill Becomes Law",
+    "domain": "current-events",
+    "one_line_summary": "The textbook version is roughly right — but it leaves out that almost every bill dies quietly, and where",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-law",
+      "url": "https://en.wikipedia.org/wiki/Act_of_Congress",
+      "title": "Act of Congress — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-proc",
+      "url": "https://en.wikipedia.org/wiki/United_States_congressional_committee",
+      "title": "United States congressional committee — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-veto",
+      "url": "https://en.wikipedia.org/wiki/Veto_power_in_the_United_States",
+      "title": "Veto power in the United States — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The cartoon is mostly right",
+      "body": "A bill is proposed, goes through committee, passes the House and the Senate in identical form, and is signed by the President. That familiar summary is accurate as far as it goes. What it leaves out is the attrition: of the roughly ten thousand bills introduced in a two-year Congress, only a few hundred ever become law, and most die without a single vote being cast.",
+      "source_ids": ["wp-law"],
+      "image_file": "File:United States House of Representatives chamber.jpg"
+    },
+    {
+      "headline": "Anyone can write one",
+      "body": "Only a member of the House or Senate can formally introduce a bill, by dropping it in a wooden box called the hopper or handing it to a clerk. But the text can be written by anyone — an executive agency, the White House, an industry group, an advocacy organization, a constituent. Introduction is easy and cheap, which is why there are so many. Getting further is the hard part.",
+      "source_ids": ["wp-law"],
+      "image_file": "File:U.S. House of Representatives Bill Hopper.png"
+    },
+    {
+      "headline": "Where bills go to die",
+      "body": "Every bill is referred to a committee that specializes in that subject. This is the single biggest bottleneck: the committee chair decides whether to schedule it, and for most bills the answer is silence. A bill that is taken up gets hearings, then a 'markup' where members rewrite it line by line, and then a vote on whether to send it to the full chamber.",
+      "source_ids": ["wp-proc", "wp-law"],
+      "image_file": "File:Committee on Ways and Means Hearing on U.S.-China Trade and Competition - 2020.jpg"
+    },
+    {
+      "headline": "The House floor",
+      "body": "In the House, a bill that clears committee must pass through the Rules Committee, which sets the terms of debate — how long it runs and which amendments are even allowed. Because the majority party controls it, the Rules Committee is a powerful gate. Once on the floor, debate is limited and a simple majority — 218 of 435 — passes the bill.",
+      "source_ids": ["wp-proc"],
+      "image_file": "File:House Rules Committee LCCN2016875520.jpg"
+    },
+    {
+      "headline": "The Senate floor",
+      "body": "The Senate has no Rules Committee and no strict limit on debate. That is what makes the filibuster possible: rather than a simple majority, most bills need 60 votes to end debate and proceed to a final vote. Senators can also attach amendments on unrelated subjects, called riders. A bill can pass the House comfortably and simply never come up in the Senate.",
+      "source_ids": ["wp-proc"],
+      "image_file": "File:United States Senate Floor.jpg"
+    },
+    {
+      "headline": "Making the two match",
+      "body": "The House and Senate almost never pass exactly the same text, and the Constitution requires identical wording. So the two chambers either trade amendments back and forth until they converge, or appoint a conference committee to negotiate one combined version — which both the House and Senate must then approve again, unchanged.",
+      "source_ids": ["wp-law", "wp-proc"],
+      "image_file": "File:United States Capitol dome interior 01.JPG"
+    },
+    {
+      "headline": "The President's move",
+      "body": "Now it reaches the President, who has three options. Sign it, and it is law. Veto it, and it returns to Congress, which can override the veto only with a two-thirds vote in both chambers — which is rare. Or do nothing: if Congress is in session, the bill becomes law after ten days anyway; if Congress has adjourned, that inaction kills it, a move called a pocket veto.",
+      "source_ids": ["wp-veto", "wp-law"],
+      "image_file": "File:President Ronald Reagan During The Signing Ceremony for The Continuing Resolution and Reconciliation Bill in The Oval Office - DPLA - 4564e3200988a78057e3d77bf50c2f1a.jpg"
+    },
+    {
+      "headline": "How it really works now",
+      "body": "In practice, a large share of the bills that do become law are minor — renaming post offices, authorizing routine programs. Major policy increasingly moves in one of a few ways: enormous year-end packages negotiated by party leaders, budget 'reconciliation' bills that bypass the filibuster, or not at all — in which case executive agencies and the courts end up filling the space that legislation left empty.",
+      "source_ids": ["wp-law"],
+      "image_file": "File:US Capitol east side.JPG"
+    }
+  ]
+}
