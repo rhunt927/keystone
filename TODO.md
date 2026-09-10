@@ -30,14 +30,26 @@ as an installable PWA — no App Store, same pattern as hunt-garcia-tracker.
 
 - [x] **Search/grounding source: Wikipedia/Wikimedia REST + Action APIs.** Free, no
       key, satisfies the no-spend constraint.
-- [x] **No model rewrite step.** Wikipedia's own lead-section prose is used
-      **verbatim**, chunked into cards — not summarized/rewritten by a model. Zero
-      cost, and nothing to hallucinate since the content *is* the cited source
-      word-for-word. Revisit only if a more narrative voice is wanted later (would
-      then cost money — the open question from before still applies if so).
-- [ ] **Image sourcing** — still open. Wikimedia Commons gives real, licensed,
-      attributed photos/art for free, satisfying the no-AI-photorealism guardrail —
-      not yet wired into the generation script (text-only proof so far)
+- [x] ~~No model rewrite step / verbatim only~~ — **REVERSED (2026-09-10).**
+      Verbatim Wikipedia prose read aloud was, in the user's words, boring —
+      "nothing more than reading back facts on the wiki page." The original brief
+      always said the model *should write* the content ("Model summarizes/writes
+      short-form content **only** from what was retrieved"); Paladin's sin was
+      inventing framing not in any source, not good writing itself. New approach:
+      **grounded narrative, authored by Claude from the cited sources** — a hook,
+      an arc, an ending — with every beat still carrying a visible citation and
+      no invented quotes/events. Authored by hand in working sessions (no
+      per-use API cost); the app plays the cached script. `db/lessons/<slug>.json`
+      + `scripts/load-lesson.mjs`. The automated verbatim path (`generate-lesson.mjs`)
+      stays as the breadth fallback for topics not hand-authored.
+- [x] **Image sourcing** — Wikimedia Commons, resolved. Authored lessons name a
+      specific `File:` per beat (reliable) or give a search hint; auto-generated
+      lessons scan the article's own images by section. No-AI-photorealism
+      guardrail satisfied — all real, attributed, licensed art/photos.
+- [x] **Motion graphics** — cards can carry a `visual_spec` (JSON) instead of a
+      photo. `VisualCard.jsx`: a spread-map (real CC-BY-SA Commons map, radial
+      reveal + year ticker) and a count-up counter, both built from the sourced
+      figures on the card. Not AI imagery, not dramatization.
 
 ---
 
@@ -200,6 +212,20 @@ both localhost and the live deploy.
       as a new kind of dependency the earlier phases didn't have. Match quality
       depends on Commons' own search relevance and how well-illustrated the
       topic is there — not guaranteed perfect for every sentence on every topic.
+- [x] **Grounded-narrative rewrite + motion graphics (2026-09-10)** — see the
+      reversed decision up top. First authored lesson: **The Black Death** (9
+      beats, `db/lessons/black-death.json`), with an animated spread-map and a
+      count-up. `VisualCard.jsx`, `scripts/load-lesson.mjs`, `src/lib/migrate.js`.
+      Photos now show full (`object-contain` over a blurred fill) instead of
+      being hard-cropped.
+- [ ] **← NEXT: re-author Rosa Parks as a grounded narrative** — it's still the
+      old verbatim version live. Same treatment: `db/lessons/rosa-parks.json`,
+      hand-written arc from the cited sources (include the Ilitch rent fact),
+      hand-picked images per beat, maybe a timeline visual for the boycott.
+- [ ] More authored lessons across domains once the format feels right (needed
+      before the "doom-scroll feed" idea is testable — see Open Questions)
+- [ ] More `VisualCard` types as lessons need them (timeline, before/after,
+      simple bar) — keep each built from sourced numbers only
 - [ ] "Deep dive" expansion per topic
 - [ ] Quiz component (uses quiz_questions/quiz_options)
 - [ ] Path view — themed sequences of topics
@@ -251,25 +277,16 @@ both localhost and the live deploy.
       runner (which defaults to UTC). Same underlying behavior exists in
       hunt-garcia-tracker (identical `toISOString()` call), just hadn't been
       noticed there.
-- [ ] **← NEXT: per-sentence images aren't actually changing correctly
-      (2026-09-09, unconfirmed root cause)** — user reports the live
-      per-sentence Commons image swap (`useSentenceImage.js`, added same
-      session) isn't behaving right; not yet diagnosed. Start here next time.
-      Things to check first:
-      - Is `sentenceIndex` from `useSpeech` actually advancing per sentence, or
-        stuck/skipping? (`utterance.onstart` in `speakFrom` is what drives it)
-      - Is the `origin=*` cross-origin request to Commons actually succeeding
-        from the deployed `rhunt927.github.io` origin, or silently failing/CORS
-        — open Safari's Web Inspector console/network tab on the live site
-        while a card narrates and check for fetch errors
-      - Is `extractQuery()`'s keyword extraction producing a reasonable query
-        per sentence, or garbage that returns no/irrelevant Commons results
-        (log the query + result to check)
-      - Is the per-sentence cache in `useSentenceImage` keying correctly, or
-        could sentences with identical/near-identical text collide
-      - Double check the `speaking ? sentences[sentenceIndex] : null` gating in
-        `LessonViewer.jsx` — confirm `activeSentence` is actually changing value
-        as playback progresses, not stuck on the first sentence
+- [~] **Per-sentence live image swap not working right (2026-09-09)** —
+      downgraded, not fully fixed. The live per-sentence Commons search
+      (`useSentenceImage.js`) is now **only a fallback** for auto-generated
+      verbatim lessons that have no curated image. Authored lessons
+      (Black Death, and Rosa Parks once redone) ship a hand-picked image or
+      motion graphic per beat and never hit this path. Still worth fixing
+      eventually for the auto-generated breadth path — old debug checklist:
+      is `sentenceIndex` advancing; does the `origin=*` Commons fetch succeed
+      from `rhunt927.github.io`; is `extractQuery()` producing sane queries;
+      cache keying; the `activeSentence` gating in `LessonViewer`.
 
 ---
 
