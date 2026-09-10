@@ -48,8 +48,8 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const [showText, setShowText] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const {
-    speak, resume, pause, stop, prime, speaking, sentenceIndex, canResume, loadedText,
-    supported, voices, selectedVoiceURI, selectVoice, rate, setRate,
+    speak, resume, pause, stop, speaking, sentenceIndex, canResume, loadedText,
+    supported, voices, voiceName, selectedVoiceURI, selectVoice, rate, setRate,
   } = useSpeech()
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
@@ -110,7 +110,6 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
       setPlaying(false)
       return
     }
-    prime() // unlock iOS speech synthesis inside this tap
     if (ended) {
       stop()
       setEnded(false)
@@ -249,6 +248,11 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             <div className="flex justify-between text-[10px] opacity-50">
               <span>Beat {index + 1} of {cards.length}</span>
               {ended && <span>End — press play to replay</span>}
+            </div>
+            <div className="text-center text-[10px] opacity-40">
+              {supported
+                ? `voice: ${voiceName || 'default'} · ${speaking ? `speaking ${sentenceIndex + 1}/${sentences.length}` : playing ? 'starting…' : 'idle'}`
+                : 'speech synthesis not available'}
             </div>
           </div>
 

@@ -100,22 +100,16 @@ export function useSpeech() {
     window.speechSynthesis.speak(u)
   }
 
-  // iOS Safari only lets speechSynthesis start from inside a user gesture, and
-  // only after a first successful utterance. The real speak() happens a tick
-  // later (in an effect), so call this synchronously from the Play tap to
-  // unlock it.
-  const prime = useCallback(() => {
-    if (!supported) return
-    try {
-      window.speechSynthesis.speak(new SpeechSynthesisUtterance(''))
-    } catch { /* ignore */ }
-  }, [supported])
-
-  // Start a text from the top.
+  // Start a text from the top. Must be called synchronously from a user
+  // gesture the first time (iOS), which LessonViewer does from the Play tap.
   const speak = useCallback((text, opts = {}) => {
     if (!supported || !text) return
     genRef.current += 1
-    window.speechSynthesis.cancel()
+    // Only cancel if something is actually going — a cancel() with an empty
+    // queue, followed by speak() in the same tick, is a known WebKit no-op.
+    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+      window.speechSynthesis.cancel()
+    }
     sentencesRef.current = splitSentences(text)
     posRef.current = 0
     doneRef.current = opts.onDone || null
@@ -157,10 +151,11 @@ export function useSpeech() {
   useEffect(() => stop, [stop]) // fully stop on unmount
 
   return {
-    speak, resume, pause, stop, prime,
+    speak, resume, pause, stop,
     speaking, sentenceIndex, canResume, loadedText,
     supported,
     voices,
+    voiceName: effectiveVoice?.name ?? null,
     selectedVoiceURI: effectiveVoice?.voiceURI ?? '',
     selectVoice,
     rate, setRate,
