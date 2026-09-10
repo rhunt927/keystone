@@ -3,6 +3,14 @@ import { useSpeech } from '../hooks/useSpeech'
 import { useSentenceImage } from '../hooks/useSentenceImage'
 import { splitSentences } from '../lib/sentences'
 import { narratorFor } from '../lib/narrators'
+import { VisualCard } from './VisualCard'
+
+function visualAttribution(spec) {
+  if (spec?.type === 'spread-map' && spec.attribution) {
+    return { text: `Map: ${spec.attribution}`, href: spec.source_url || spec.image }
+  }
+  return null
+}
 
 function Equalizer({ active }) {
   return (
@@ -35,13 +43,21 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   )
   const sentences = useMemo(() => splitSentences(narrationText), [narrationText])
 
-  const fallbackImage = card?.image_url
+  const visualSpec = useMemo(() => {
+    if (!card?.visual_spec) return null
+    try { return JSON.parse(card.visual_spec) } catch { return null }
+  }, [card])
+
+  const curatedImage = card?.image_url
     ? { url: card.image_url, source_url: card.image_source_url, attribution: card.image_attribution }
     : null
-  // Only search per-sentence while actually playing this card's narration —
-  // otherwise just show the card's own stored image (e.g. before pressing Play).
-  const activeSentence = speaking ? sentences[sentenceIndex] : null
-  const displayedImage = useSentenceImage(topic.title, activeSentence, fallbackImage)
+  // Per-sentence live Commons search is only a fallback for auto-generated
+  // lessons that have no curated image and no motion graphic — authored
+  // lessons ship a hand-picked image per beat and skip the search entirely.
+  const useLiveSearch = !visualSpec && !curatedImage
+  const activeSentence = useLiveSearch && speaking ? sentences[sentenceIndex] : null
+  const displayedImage = useSentenceImage(topic.title, activeSentence, curatedImage)
+  const visualCredit = visualSpec ? visualAttribution(visualSpec) : null
 
   // Stop any narration in flight whenever the card changes or the viewer unmounts.
   useEffect(() => stop, [index, stop])
@@ -92,15 +108,26 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
       ) : (
         <div onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="space-y-3">
           <div
-            key={`${card.id}-${displayedImage?.url ?? 'none'}`}
-            className="card-in relative rounded-xl overflow-hidden aspect-[4/5] bg-black/10"
+            key={`${card.id}-${visualSpec ? 'visual' : displayedImage?.url ?? 'none'}`}
+            className="card-in relative rounded-xl overflow-hidden aspect-[4/5] bg-[#1c130c]"
           >
-            {displayedImage ? (
-              <img
-                src={displayedImage.url}
-                alt={card.headline || topic.title}
-                className={`w-full h-full object-cover ${speaking ? 'ken-burns' : ''}`}
-              />
+            {visualSpec ? (
+              <VisualCard spec={visualSpec} />
+            ) : displayedImage ? (
+              <>
+                {/* Blurred fill so wide paintings aren't cropped to unrecognizable */}
+                <img
+                  src={displayedImage.url}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-50"
+                />
+                <img
+                  src={displayedImage.url}
+                  alt={card.headline || topic.title}
+                  className={`relative w-full h-full object-contain ${speaking ? 'ken-burns' : ''}`}
+                />
+              </>
             ) : (
               <div
                 className="w-full h-full flex items-center justify-center text-center px-6 text-sm opacity-60"
@@ -110,25 +137,25 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
               </div>
             )}
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent pointer-events-none" />
 
             <div className="absolute top-3 right-3">
               <Equalizer active={speaking} />
             </div>
 
-            {displayedImage && (
+            {(displayedImage || visualCredit) && (
               <a
-                href={displayedImage.source_url || displayedImage.url}
+                href={visualCredit?.href || displayedImage.source_url || displayedImage.url}
                 target="_blank"
                 rel="noreferrer"
                 className="absolute bottom-2 right-2 text-[10px] text-white/70 hover:text-white underline"
               >
-                Photo: {displayedImage.attribution || 'Wikimedia Commons'}
+                {visualCredit?.text || `Photo: ${displayedImage.attribution || 'Wikimedia Commons'}`}
               </a>
             )}
 
             {showText && (
-              <div className="absolute inset-x-0 bottom-0 p-4 text-white space-y-1">
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white space-y-1 bg-black/40">
                 {card.headline && <h2 className="font-medium">{card.headline}</h2>}
                 <p className="text-sm leading-relaxed">{card.body}</p>
               </div>

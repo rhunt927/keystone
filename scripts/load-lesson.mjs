@@ -1,0 +1,189 @@
+#!/usr/bin/env node
+// Loads a hand-authored, source-grounded narrative lesson (db/lessons/<slug>.json)
+// into keystone.db. Unlike generate-lesson.mjs (which chunks Wikipedia prose
+// verbatim), these lessons are written for engagement — a hook, an arc, an
+// ending — but every beat still carries a visible citation, no invented quotes
+// or events. Authoring happens by hand from the cited sources; this script just
+// writes the result and resolves each beat's Commons image.
+//
+// Usage: node scripts/load-lesson.mjs black-death
+
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import initSqlJs from 'sql.js'
+import { runMigrations } from '../src/lib/migrate.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const REPO_ROOT = path.resolve(__dirname, '..')
+const SCHEMA_PATH = path.join(REPO_ROOT, 'db', 'schema.sql')
+const DB_PATH =
+  '/Users/rhunt/Library/CloudStorage/GoogleDrive-rghunt@gmail.com/My Drive/keystone/keystone.db'
+const USER_AGENT = 'keystone-app/0.1 (personal learning project; rghunt@gmail.com)'
+
+function stripHtml(html) {
+  const text = (html || '').replace(/<[^>]+>/g, '').trim()
+  const half = text.slice(0, text.length / 2)
+  return text.length % 2 === 0 && half + half === text ? half : text
+}
+
+async function fetchJson(url) {
+  const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } })
+  if (!res.ok) throw new Error(`Fetch failed (${res.status}): ${url}`)
+  return res.json()
+}
+
+async function commonsInfo(fileName) {
+  const name = fileName.replace(/^File:/i, '')
+  const data = await fetchJson(
+    `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent('File:' + name)}&prop=imageinfo&iiprop=extmetadata%7Curl%7Csize&format=json`
+  )
+  const info = Object.values(data.query.pages)[0]?.imageinfo?.[0]
+  if (!info?.url) return null
+  const meta = info.extmetadata || {}
+  return {
+    url: info.url,
+    sourceUrl: info.descriptionurl || info.url,
+    attribution: stripHtml(meta.Artist?.value) || stripHtml(meta.Credit?.value) || 'Wikimedia Commons',
+    license: stripHtml(meta.LicenseShortName?.value) || null,
+  }
+}
+
+async function resolveBeatImage(beat) {
+  if (beat.image_file) return commonsInfo(beat.image_file)
+  if (beat.image_query) {
+    const search = await fetchJson(
+      `https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srsearch=${encodeURIComponent(beat.image_query)}&srlimit=6&format=json`
+    )
+    for (const hit of search.query?.search || []) {
+      if (!/\.(jpe?g|png)$/i.test(hit.title)) continue
+      const info = await commonsInfo(hit.title)
+      if (info) return info
+    }
+  }
+  return null
+}
+
+function upsertImage(db, image, altText, now) {
+  const existing = db.exec('SELECT id FROM images WHERE url = ?', [image.url])[0]
+  if (existing) {
+    const id = existing.values[0][0]
+    db.run('UPDATE images SET attribution = ?, license = ?, source_url = ? WHERE id = ?', [
+      image.attribution, image.license, image.sourceUrl, id,
+    ])
+    return id
+  }
+  db.run(
+    `INSERT INTO images (url, alt_text, attribution, source_url, license, is_photo, depicts_named_real_person, created_at)
+     VALUES (?, ?, ?, ?, ?, 1, 0, ?)`,
+    [image.url, altText, image.attribution, image.sourceUrl, image.license, now]
+  )
+  return db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
+}
+
+async function main() {
+  const slug = process.argv[2]
+  if (!slug) {
+    console.error('Usage: node scripts/load-lesson.mjs <lesson-slug>')
+    process.exit(1)
+  }
+
+  const lessonPath = path.join(REPO_ROOT, 'db', 'lessons', `${slug}.json`)
+  const doc = JSON.parse(fs.readFileSync(lessonPath, 'utf8'))
+  const { topic, sources, beats } = doc
+  console.log(`Loading "${topic.title}" — ${beats.length} beat(s), ${sources.length} source(s)`)
+
+  const SQL = await initSqlJs({
+    locateFile: file => path.join(REPO_ROOT, 'node_modules', 'sql.js', 'dist', file),
+  })
+  const db = new SQL.Database(fs.readFileSync(DB_PATH))
+  db.run(fs.readFileSync(SCHEMA_PATH, 'utf8'))
+  runMigrations(db)
+
+  const now = new Date().toISOString()
+  const domainId = db.exec('SELECT id FROM domains WHERE slug = ?', [topic.domain])[0]?.values[0][0]
+  if (!domainId) throw new Error(`Unknown domain "${topic.domain}"`)
+
+  db.run(
+    `INSERT INTO topics (domain_id, slug, title, one_line_summary, status, created_at, updated_at)
+     VALUES (?, ?, ?, ?, 'ready', ?, ?)
+     ON CONFLICT(slug) DO UPDATE SET
+       one_line_summary = excluded.one_line_summary, status = 'ready', updated_at = excluded.updated_at`,
+    [domainId, topic.slug, topic.title, topic.one_line_summary || null, now, now]
+  )
+  const topicId = db.exec('SELECT id FROM topics WHERE slug = ?', [topic.slug])[0].values[0][0]
+
+  // Replace this topic's overview lesson (cards cascade) on re-run.
+  const existing = db.exec("SELECT id FROM lessons WHERE topic_id = ? AND kind = 'overview'", [topicId])[0]
+  if (existing) db.run('DELETE FROM lessons WHERE id = ?', [existing.values[0][0]])
+
+  db.run(
+    "INSERT INTO lessons (topic_id, kind, title, position, created_at) VALUES (?, 'overview', ?, 0, ?)",
+    [topicId, topic.title, now]
+  )
+  const lessonId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
+
+  const sourceIdByKey = {}
+  for (const s of sources) {
+    db.run(
+      `INSERT INTO sources (url, title, publisher, source_type, retrieved_at, created_at)
+       VALUES (?, ?, ?, ?, ?, ?)
+       ON CONFLICT(url) DO UPDATE SET title = excluded.title, publisher = excluded.publisher,
+         source_type = excluded.source_type, retrieved_at = excluded.retrieved_at`,
+      [s.url, s.title, s.publisher || null, s.source_type || 'other', now, now]
+    )
+    sourceIdByKey[s.id] = db.exec('SELECT id FROM sources WHERE url = ?', [s.url])[0].values[0][0]
+  }
+
+  let withImage = 0
+  let withVisual = 0
+  for (let i = 0; i < beats.length; i++) {
+    const beat = beats[i]
+    let imageId = null
+    if (!beat.visual) {
+      const image = await resolveBeatImage(beat).catch(() => null)
+      if (image) {
+        imageId = upsertImage(db, image, beat.headline || topic.title, now)
+        withImage++
+      } else {
+        console.warn(`  beat ${i} ("${beat.headline || ''}") — no image resolved`)
+      }
+    } else {
+      withVisual++
+    }
+
+    db.run(
+      `INSERT INTO cards (lesson_id, position, card_type, headline, body, image_id, visual_spec, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        lessonId, i, beat.visual ? 'visual' : 'text',
+        beat.headline || null, beat.body, imageId,
+        beat.visual ? JSON.stringify(beat.visual) : null, now,
+      ]
+    )
+    const cardId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
+    for (const key of beat.source_ids || []) {
+      if (sourceIdByKey[key]) {
+        db.run('INSERT OR IGNORE INTO card_sources (card_id, source_id) VALUES (?, ?)', [cardId, sourceIdByKey[key]])
+      }
+    }
+  }
+
+  db.run(
+    `INSERT INTO search_cache (topic_id, query, provider, raw_response, retrieved_at)
+     VALUES (?, ?, 'authored', ?, ?)`,
+    [topicId, slug, JSON.stringify(doc), now]
+  )
+
+  fs.writeFileSync(DB_PATH, Buffer.from(db.export()))
+  db.close()
+
+  console.log(`\n✔ Loaded "${topic.title}" (topic ${topicId}, lesson ${lessonId})`)
+  console.log(`  ${beats.length} beats — ${withImage} with a photo, ${withVisual} with a motion graphic`)
+  console.log(`  Saved to ${DB_PATH}`)
+}
+
+main().catch(err => {
+  console.error('\n✘', err.message)
+  process.exit(1)
+})

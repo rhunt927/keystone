@@ -3,12 +3,15 @@ import initSqlJs from 'sql.js'
 import sqlWasm from 'sql.js/dist/sql-wasm.wasm?url'
 import schemaSql from '../../db/schema.sql?raw'
 import { loadDatabase, saveDatabase } from './useGoogleDrive'
+import { runMigrations } from '../lib/migrate'
 
-// db/schema.sql is the single source of truth for the schema — it's all
-// `CREATE TABLE IF NOT EXISTS` / `INSERT OR IGNORE`, so re-running it on
-// every load is a safe, idempotent "create or migrate" step.
+// db/schema.sql is the single source of truth for new installs — it's all
+// `CREATE TABLE IF NOT EXISTS` / `INSERT OR IGNORE`, so re-running it on every
+// load is a safe, idempotent "create" step. Schema *changes* to existing
+// tables (new columns, altered CHECK constraints) go through runMigrations.
 function applySchema(db) {
   db.run(schemaSql)
+  runMigrations(db)
 }
 
 export function useDatabase(accessToken, onAuthError) {

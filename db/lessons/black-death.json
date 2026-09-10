@@ -1,0 +1,94 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. Every beat's claims trace to the listed sources; no invented quotes or events. Load with: node scripts/load-lesson.mjs black-death",
+  "topic": {
+    "slug": "black-death",
+    "title": "The Black Death",
+    "domain": "history",
+    "one_line_summary": "The 14th-century plague that killed a third of Europe — and remade the world that survived it"
+  },
+  "sources": [
+    {
+      "id": "wp-bd",
+      "url": "https://en.wikipedia.org/wiki/Black_Death",
+      "title": "Black Death — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-cons",
+      "url": "https://en.wikipedia.org/wiki/Consequences_of_the_Black_Death",
+      "title": "Consequences of the Black Death — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Twelve ships",
+      "body": "In October 1347, twelve Genoese galleys tied up at a dock in Sicily. Many of the men aboard were already dead. The rest were dying — burning with fever, their bodies covered in black swellings. Within days the sickness was ashore and racing across the island. It was the beginning of the deadliest pandemic in recorded history.",
+      "source_ids": ["wp-bd"],
+      "image_file": "File:Doutielt3.jpg"
+    },
+    {
+      "headline": "What it was",
+      "body": "The killer was a bacterium, Yersinia pestis, carried in the guts of fleas that lived on black rats. A single flea bite could deliver it. Then came the fever — as high as 41 degrees Celsius — and the buboes: hard swellings in the groin, neck and armpits that the writer Boccaccio described as growing \"as large as a common apple.\" Left untreated, it killed about four out of every five people it infected, most of them within a week.",
+      "source_ids": ["wp-bd"],
+      "image_file": "File:Peste bubonique - enluminure.jpg"
+    },
+    {
+      "headline": "How it traveled",
+      "body": "It had come a long way — out of the steppes of Central Asia, west along the trade roads to Caffa, a Genoese outpost on the Black Sea. There, a besieging Mongol army was said to have catapulted its own plague dead over the town walls. Genoese ships fleeing Caffa carried it to Constantinople in the summer of 1347, where it killed the Byzantine emperor's 13-year-old son, and from there into every port of the Mediterranean.",
+      "source_ids": ["wp-bd"],
+      "image_file": "File:Long-tailed black rat (Rattus rattus).jpg"
+    },
+    {
+      "headline": "A continent in six years",
+      "body": "From Sicily it moved faster than anyone could outrun it. Genoa and Venice by January 1348. France, Spain, Portugal and England by that June. Then north and east through Germany and Scandinavia — into Norway in 1349, when a ship landed at Askoy near Bergen — and on to northern Russia and Moscow by 1353. In about six years it had crossed the whole of Europe.",
+      "source_ids": ["wp-bd"],
+      "visual": {
+        "type": "spread-map",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/1346-1353_spread_of_the_Black_Death_in_Europe_map.svg",
+        "attribution": "Flappiefh, CC BY-SA 4.0, via Wikimedia Commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:1346-1353_spread_of_the_Black_Death_in_Europe_map.svg",
+        "from_year": 1347,
+        "to_year": 1353
+      }
+    },
+    {
+      "headline": "The toll",
+      "body": "No one counted the dead. The estimates that survive are staggering: 30 to 60 percent of all of Europe, and by some reckonings 75 to 200 million people across Eurasia. In Cairo — then the largest city in the Mediterranean world — more than a third of some 600,000 residents died, and chroniclers wrote that the Nile ran choked with corpses. Europe's population would not return to its former size for 150 years, and in some places longer.",
+      "source_ids": ["wp-bd", "wp-cons"],
+      "visual": {
+        "type": "counter",
+        "to": 60,
+        "suffix": "%",
+        "label": "of Europe's people — dead in about six years",
+        "note": "estimates range 30–60%; 75–200 million across Eurasia"
+      }
+    },
+    {
+      "headline": "Fear, and blame",
+      "body": "No one understood infection. The medical faculty of the University of Paris concluded that a conjunction of planets had poisoned the air. Many were certain it was God's punishment; bands of flagellants moved from town to town, whipping themselves bloody in public to win forgiveness. And in town after town, mobs turned on their Jewish neighbors and murdered them — around 2,000 killed in the Strasbourg massacre of February 1349 alone. By 1351, some 60 large and 150 smaller Jewish communities had been destroyed.",
+      "source_ids": ["wp-bd"],
+      "image_file": "File:Flagellants.png"
+    },
+    {
+      "headline": "The end of serfdom",
+      "body": "Then the world the survivors woke up to began to shift. So many workers had died that the ones still living held leverage no medieval peasant had ever had. Wages soared. Rents collapsed — land that once brought in five pounds now brought one. Landlords who tried to hold tenants to the old feudal obligations watched them simply walk away. Across Western Europe, serfdom all but disappeared over the following century.",
+      "source_ids": ["wp-bd", "wp-cons"],
+      "image_file": "File:Les Très Riches Heures du duc de Berry juin.jpg"
+    },
+    {
+      "headline": "Death in the culture",
+      "body": "Death saturated the art that followed. A whole genre, the danse macabre, showed Death leading everyone — king, bishop, peasant — hand in hand to the same end. One argument among historians holds that this new intimacy with death, especially in hard-hit Italy, turned people's attention away from the afterlife and toward this life, feeding currents that became the Renaissance. It's a theory, not a verdict — the article that raises it also says it doesn't fully explain the Renaissance — but the shift in mood is unmistakable in the paintings.",
+      "source_ids": ["wp-bd"],
+      "image_file": "File:Pieter Bruegel the Elder - The Triumph of Death - WGA3389.jpg"
+    },
+    {
+      "headline": "It never really left",
+      "body": "The plague did not end in 1353. It returned to Europe again and again for three more centuries. And Yersinia pestis never went extinct — it still lives in wild rodents on nearly every continent, including the western United States. As recently as 2017, an outbreak in Madagascar killed more than 170 people. Antibiotics can treat it now. It was never truly defeated — only outrun.",
+      "source_ids": ["wp-bd"],
+      "image_file": "File:Yersinia pestis Bacteria.jpg"
+    }
+  ]
+}

@@ -105,16 +105,22 @@ CREATE INDEX IF NOT EXISTS idx_lessons_topic ON lessons(topic_id);
 -- Cards — the short-form swipeable content unit within a lesson.
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS cards (
-  id          INTEGER PRIMARY KEY,
-  lesson_id   INTEGER NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
-  position    INTEGER NOT NULL DEFAULT 0,
-  card_type   TEXT NOT NULL DEFAULT 'text'
-                 CHECK (card_type IN ('text', 'image', 'quote', 'stat')),
-  headline    TEXT,
-  body        TEXT,
-  image_id    INTEGER REFERENCES images(id) ON DELETE SET NULL,
-  created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+  id           INTEGER PRIMARY KEY,
+  lesson_id    INTEGER NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+  position     INTEGER NOT NULL DEFAULT 0,
+  card_type    TEXT NOT NULL DEFAULT 'text'
+                  CHECK (card_type IN ('text', 'image', 'quote', 'stat', 'visual')),
+  headline     TEXT,
+  body         TEXT,
+  image_id     INTEGER REFERENCES images(id) ON DELETE SET NULL,
+  -- Optional motion-graphic spec (JSON) for cards that visualise sourced data
+  -- rather than showing a photo — e.g. an animated spread map or a count-up.
+  visual_spec  TEXT,
+  created_at   TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- Idempotent add for DBs created before visual_spec existed.
+-- (sql.js/SQLite raises if the column is already there — callers ignore that.)
 
 CREATE INDEX IF NOT EXISTS idx_cards_lesson ON cards(lesson_id);
 

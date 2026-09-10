@@ -15,6 +15,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import initSqlJs from 'sql.js'
+import { runMigrations } from '../src/lib/migrate.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..')
@@ -295,7 +296,8 @@ async function main() {
   })
   const dbBytes = fs.readFileSync(DB_PATH)
   const db = new SQL.Database(dbBytes)
-  db.run(fs.readFileSync(SCHEMA_PATH, 'utf8')) // idempotent create-or-migrate
+  db.run(fs.readFileSync(SCHEMA_PATH, 'utf8')) // idempotent create
+  runMigrations(db)
 
   const domainRow = db.exec('SELECT id FROM domains WHERE slug = ?', [domainSlug])[0]
   if (!domainRow) throw new Error(`Unknown domain slug "${domainSlug}"`)
