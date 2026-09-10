@@ -218,6 +218,15 @@ both localhost and the live deploy.
       count-up. `VisualCard.jsx`, `scripts/load-lesson.mjs`, `src/lib/migrate.js`.
       Photos now show full (`object-contain` over a blurred fill) instead of
       being hard-cropped.
+- [x] **Auto-play episodes + transport controls (2026-09-10)** — "the manual
+      changing of the cards is nuts." A lesson now plays start to finish on its
+      own: press play once, each beat narrates and auto-advances, replay at the
+      end. Skip-back / play-pause / skip-forward, a scrubbable whole-lesson
+      progress bar (tap to jump to a beat), pause-resumes-mid-sentence. Voice &
+      speed and transcript moved behind toggles. `useSpeech` reworked with an
+      onDone callback and a generation guard against stale Safari onend events;
+      `prime()` unlocks iOS speech from the Play tap. Timer-based auto-advance
+      fallback when speech synthesis is unavailable.
 - [ ] **← NEXT: re-author Rosa Parks as a grounded narrative** — it's still the
       old verbatim version live. Same treatment: `db/lessons/rosa-parks.json`,
       hand-written arc from the cited sources (include the Ilitch rent fact),
