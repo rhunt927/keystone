@@ -1,0 +1,97 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. Every beat's claims trace to the listed sources; no invented quotes. Load: node scripts/load-lesson.mjs the-papacy",
+  "topic": {
+    "slug": "the-papacy",
+    "title": "The Popes",
+    "domain": "history",
+    "one_line_summary": "The oldest continuously occupied office on earth — hunted, then crowned, then humbled, then made a sovereign state",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-hist",
+      "url": "https://en.wikipedia.org/wiki/History_of_the_papacy",
+      "title": "History of the papacy — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-list",
+      "url": "https://en.wikipedia.org/wiki/List_of_popes",
+      "title": "List of popes — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-prisoner",
+      "url": "https://en.wikipedia.org/wiki/Prisoner_in_the_Vatican",
+      "title": "Prisoner in the Vatican — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-schism",
+      "url": "https://en.wikipedia.org/wiki/East%E2%80%93West_Schism",
+      "title": "East–West Schism — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The oldest office",
+      "body": "There is no other job like it. The Roman Catholic Church holds that every pope is the direct successor of the apostle Peter, a Galilean fisherman executed in Rome under the emperor Nero around the year 64. Whether or not you accept that first link, the list itself is real: an unbroken chain of more than 260 men holding one title for nearly two thousand years. Kings, empires and entire nations have risen and fallen inside the lifespan of that single institution.",
+      "source_ids": ["wp-hist", "wp-list"],
+      "image_file": "File:Michelangelo, crocifissione di san pietro, 1546-50, 02.jpg"
+    },
+    {
+      "headline": "From hunted to enthroned",
+      "body": "For its first three centuries Christianity was illegal, and being bishop of Rome was a good way to be killed. That reversed almost overnight. In 313 the emperor Constantine's Edict of Milan legalized the faith; within a lifetime it was the official religion of the Roman Empire. When the western empire finally collapsed in 476, the pope was one of the few authorities left standing in Italy — and he began filling the vacuum the emperors had left behind.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:Head of Colossus of Constantine, Aug 24 2021.jpg"
+    },
+    {
+      "headline": "The kingmaker",
+      "body": "On Christmas Day in the year 800, in Saint Peter's Basilica, Pope Leo III placed a crown on the head of the Frankish king Charlemagne and declared him Roman Emperor. It was a stunning claim: that the pope had the authority to make an emperor. Around the same time the popes came to rule a broad band of central Italy in their own right — the Papal States — territory they would govern as monarchs for the next thousand years.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:Pope Leo III crowning Charlemagne as Emperor on Christmas Day, 800;, from Chroniques de France ou de St Denis, 14th century (22690436826).jpg"
+    },
+    {
+      "headline": "Barefoot in the snow",
+      "body": "Who really outranked whom — pope or king? It came to a head in 1077. Pope Gregory VII and the German emperor Henry IV were fighting over who got to appoint bishops. Gregory excommunicated him and released his subjects from their oaths of loyalty. Facing revolt, Henry crossed the Alps in winter and, according to the chroniclers, stood outside the castle of Canossa for three days in the snow, as a penitent, before the pope agreed to see him.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:Hugo-v-cluny heinrich-iv mathilde-v-tuszien cod-vat-lat-4922 1115ad.jpg"
+    },
+    {
+      "headline": "One church becomes two",
+      "body": "The deepest break was with the East. For centuries the Greek-speaking Christians of Constantinople and the Latin-speaking Christians of Rome had drifted apart over language, ritual, and above all the question of whether the pope held authority over the whole church. In 1054 legates from Rome and the patriarch of Constantinople excommunicated each other. That rupture, the East–West Schism, has never healed: it is why there is an Orthodox Church and a Catholic Church to this day.",
+      "source_ids": ["wp-schism", "wp-hist"],
+      "image_file": "File:Hagia Sophia Interior Panorama.jpg"
+    },
+    {
+      "headline": "The low point",
+      "body": "Then came a run of humiliations. From 1309 to 1377 the popes did not even live in Rome — seven popes in a row, all French, ruled from Avignon under the shadow of the French crown. When the papacy finally returned, the cardinals split and elected rival popes. For nearly forty years, from 1378 to 1417, Europe had two popes at once excommunicating each other; at one point, briefly, three.",
+      "source_ids": ["wp-hist"],
+      "visual": {
+        "type": "timeline",
+        "events": [
+          { "date": "1309", "label": "The papacy moves to Avignon, in the orbit of the French king" },
+          { "date": "1377", "label": "The popes return to Rome after seven French popes" },
+          { "date": "1378–1417", "label": "The Western Schism: rival popes in Rome and Avignon — at one point three at once" }
+        ]
+      }
+    },
+    {
+      "headline": "The rupture",
+      "body": "In 1517 a German monk named Martin Luther attacked the sale of indulgences — payments the church accepted in exchange for reducing punishment for sin. He soon went further, calling the pope himself the Antichrist. This time the protest could not be contained: printing presses spread it across Europe, princes took sides, and Western Christianity split permanently into Catholic and Protestant. The church's response, the Council of Trent, met on and off from 1545 to 1563 and defined Catholic doctrine against the reformers.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:Lucas Cranach d.Ä. - Martin Luther, 1528 (Veste Coburg).jpg"
+    },
+    {
+      "headline": "Prisoner, then sovereign",
+      "body": "The last great fall was territorial. In 1870 the newly unified Kingdom of Italy captured Rome and annexed the Papal States, ending more than a thousand years of papal rule over central Italy. In protest, the popes shut themselves inside the Vatican and refused to leave, calling themselves 'prisoners in the Vatican' — a standoff that lasted 59 years. It ended in 1929, when the Lateran Treaty with Mussolini's government created the smallest country on earth: the 121-acre Vatican City, of which the pope is the sovereign.",
+      "source_ids": ["wp-prisoner", "wp-hist"],
+      "image_file": "File:Vatican City and St. Peter Square evening twilight aerial view.jpg"
+    }
+  ]
+}

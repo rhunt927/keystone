@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs world-war-i",
+  "topic": {
+    "slug": "world-war-i",
+    "title": "The First World War",
+    "domain": "history",
+    "one_line_summary": "How one assassination in Sarajevo pulled the whole of Europe into four years of industrial slaughter — and destroyed four empires",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-ww1",
+      "url": "https://en.wikipedia.org/wiki/World_War_I",
+      "title": "World War I — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-causes",
+      "url": "https://en.wikipedia.org/wiki/Causes_of_World_War_I",
+      "title": "Causes of World War I — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-somme",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_the_Somme",
+      "title": "Battle of the Somme — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-versailles",
+      "url": "https://en.wikipedia.org/wiki/Treaty_of_Versailles",
+      "title": "Treaty of Versailles — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The wrong turn",
+      "body": "On 28 June 1914, in Sarajevo, a driver took a wrong turn. He was carrying Archduke Franz Ferdinand, heir to the throne of Austria-Hungary. As the car stopped to reverse, a 19-year-old Bosnian Serb nationalist named Gavrilo Princip happened to be standing a few feet away. He stepped forward and fired twice, killing the archduke and his wife Sophie. Within six weeks, the great powers of Europe were at war.",
+      "source_ids": ["wp-ww1", "wp-causes"],
+      "image_file": "File:Gavrilo Princip's Arrest2.jpg"
+    },
+    {
+      "headline": "The machine",
+      "body": "Europe had spent decades sorting itself into two armed alliances. Austria-Hungary blamed Serbia and, with Germany's backing, declared war. Russia mobilized to protect Serbia. Germany declared war on Russia, then on France, then invaded neutral Belgium to get at France quickly — which brought in Britain. In little more than a week, a murder in the Balkans had set Germany and Austria-Hungary against France, Russia, and the British Empire.",
+      "source_ids": ["wp-causes", "wp-ww1"],
+      "image_file": "File:Map Europe alliances 1914-en greyscale v02.svg"
+    },
+    {
+      "headline": "Not over by Christmas",
+      "body": "Everyone expected a short war. Germany's plan to knock France out in weeks stalled at the Marne in September 1914. Both sides then dug in — and kept digging, until a continuous line of trenches ran roughly 400 miles from the North Sea to the Swiss border. For the next three and a half years, that line barely moved. Battles were fought to gain a few miles of churned mud.",
+      "source_ids": ["wp-ww1"],
+      "image_file": "File:Cheshire Regiment trench Somme 1916.jpg"
+    },
+    {
+      "headline": "New ways to die",
+      "body": "This was the first fully industrial war. Massed artillery caused most of the casualties, firing millions of shells that turned the landscape lunar. Machine guns made crossing open ground close to suicidal. Poison gas was first used on a large scale in 1915. Tanks and military aircraft appeared for the first time. The technology of killing had raced far ahead of the tactics, and the men paid the difference.",
+      "source_ids": ["wp-ww1"],
+      "image_file": "File:British Mark I male tank Somme 25 September 1916.jpg"
+    },
+    {
+      "headline": "One morning on the Somme",
+      "body": "On 1 July 1916, the British Army attacked along the river Somme. In that single day it suffered about 57,000 casualties — nearly 20,000 of them killed. It remains the bloodiest day in British military history. The battle dragged on until November and cost more than a million casualties on all sides, for an advance of about six miles.",
+      "source_ids": ["wp-somme"],
+      "image_file": "File:British wounded Bernafay Wood 19 July 1916.jpg"
+    },
+    {
+      "headline": "A world war",
+      "body": "The fighting was never only in France. There were campaigns at Gallipoli, across the Middle East, in Africa, and at sea. Troops came from India, Australia, Canada, New Zealand, Africa and the Caribbean to fight in Europe. In 1917 two things shifted the balance: Russia collapsed into revolution and pulled out of the war, and the United States, provoked by German submarine attacks, joined on the Allied side.",
+      "source_ids": ["wp-ww1"],
+      "image_file": "File:The Assassination of Archduke Franz Ferdinand, June 1914 Q79761.jpg"
+    },
+    {
+      "headline": "Eleven, eleven, eleven",
+      "body": "Germany gambled on one last offensive in the spring of 1918. When it failed, the Allied counterattack — with fresh American troops and a crushing naval blockade behind it — did not stop. Germany asked for terms. The guns fell silent at the eleventh hour of the eleventh day of the eleventh month of 1918. Around 20 million people were dead, close to half of them civilians. Four empires — German, Austro-Hungarian, Russian and Ottoman — had ceased to exist.",
+      "source_ids": ["wp-ww1"],
+      "image_file": "File:US 64th regiment celebrate the Armistice.jpg"
+    },
+    {
+      "headline": "The peace that failed",
+      "body": "In June 1919, at the Palace of Versailles, the victors handed Germany the terms: accept responsibility for the war, pay enormous reparations, give up territory, and shrink its army to almost nothing. It was meant to keep Germany down for good. Instead it left a sense of humiliation that extremist politicians would spend the next two decades exploiting. The war that was supposed to end all wars set the stage for a second one, twenty years later.",
+      "source_ids": ["wp-versailles", "wp-ww1"],
+      "image_file": "File:Treaty of Versailles Signing, Hall of Mirrors.jpg"
+    }
+  ]
+}

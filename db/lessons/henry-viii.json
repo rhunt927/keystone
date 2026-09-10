@@ -1,0 +1,100 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs henry-viii",
+  "topic": {
+    "slug": "henry-viii",
+    "title": "Henry VIII",
+    "domain": "history",
+    "one_line_summary": "A king so desperate for a son that he broke England away from the Catholic Church — and was then outlived and outshone by a daughter he'd declared illegitimate",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-h8",
+      "url": "https://en.wikipedia.org/wiki/Henry_VIII",
+      "title": "Henry VIII — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-ref",
+      "url": "https://en.wikipedia.org/wiki/English_Reformation",
+      "title": "English Reformation — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-diss",
+      "url": "https://en.wikipedia.org/wiki/Dissolution_of_the_monasteries",
+      "title": "Dissolution of the monasteries — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-anne",
+      "url": "https://en.wikipedia.org/wiki/Anne_Boleyn",
+      "title": "Anne Boleyn — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The man in the portrait",
+      "body": "You already know the face: legs planted apart, shoulders filling the frame, small hard eyes. Hans Holbein painted Henry VIII as the image of absolute power, and it stuck. But behind that swagger the whole reign turned on a single anxiety — that he had no son to leave the throne to. Chasing an heir, Henry would execute two of his wives, tear England out of the Catholic Church, and remake the country.",
+      "source_ids": ["wp-h8"],
+      "image_file": "File:Portrait of Henry VIII of England (Holbein).jpg"
+    },
+    {
+      "headline": "The spare",
+      "body": "Henry wasn't raised to rule. His older brother Arthur was the heir, and in 1501 Arthur married a Spanish princess, Catherine of Aragon. Five months later Arthur was dead. Henry inherited the throne in 1509 at seventeen — and, with a special dispensation from the pope, married his brother's widow. For years it looked like a success. But of their children only one survived infancy: a daughter, Mary.",
+      "source_ids": ["wp-h8"],
+      "image_file": "File:Catherine of aragon 1525.jpg"
+    },
+    {
+      "headline": "The King's Great Matter",
+      "body": "By the mid-1520s Henry was convinced the marriage was cursed — Scripture warned against marrying a brother's wife — and he had fallen for a young courtier named Anne Boleyn, who refused to be merely a mistress. He asked the pope to annul his marriage. But Rome had just been sacked by the armies of Catherine's own nephew, the Emperor Charles V. The pope was in no position to insult him. The answer was no.",
+      "source_ids": ["wp-h8", "wp-ref"],
+      "image_file": "File:AnneBoleynHever.jpg"
+    },
+    {
+      "headline": "The break",
+      "body": "So Henry stopped asking. Guided by his minister Thomas Cromwell, Parliament passed law after law cutting the ties to Rome, and in 1534 the Act of Supremacy declared the king 'the only supreme head on earth of the Church of England.' A new archbishop granted the annulment. Henry married Anne. A thousand-year link between England and the papacy was simply legislated out of existence.",
+      "source_ids": ["wp-ref", "wp-h8"],
+      "image_file": "File:Thomas Cromwell, Earl of Essex by Hans Holbein the Younger.jpg"
+    },
+    {
+      "headline": "The price of saying no",
+      "body": "Everyone in public life was made to swear an oath accepting the new order. Thomas More — former Lord Chancellor, one of the most respected men in Europe — would not swear that the king outranked the pope in spiritual matters. He didn't argue publicly; he just stayed silent. It wasn't enough. He was convicted of treason and beheaded in 1535. Several monks who refused were executed even more brutally.",
+      "source_ids": ["wp-h8", "wp-ref"],
+      "image_file": "File:Hans Holbein, the Younger - Sir Thomas More - Google Art Project.jpg"
+    },
+    {
+      "headline": "The great land grab",
+      "body": "Then Cromwell turned to the monasteries. Between 1536 and 1541 the crown shut down more than 800 religious houses, took their gold, lead and land, pensioned off or scattered the monks, and left the great abbeys as the roofless ruins that still stand across Britain today. The confiscated estates were sold to nobles and gentry — the largest transfer of land in England until the twentieth century, and one that bought a whole class of people into supporting the new church.",
+      "source_ids": ["wp-diss"],
+      "image_file": "File:Fountains Abbey view crop1 2005-08-27.jpg"
+    },
+    {
+      "headline": "Six wives",
+      "body": "The heir still didn't come. Anne Boleyn gave him another daughter, Elizabeth, then miscarried a son — and in 1536 was charged with adultery and treason on thin evidence and beheaded. Henry married again within days. Over 24 years there were six wives in all, and the schoolroom rhyme for their fates is grimly accurate: divorced, beheaded, died; divorced, beheaded, survived.",
+      "source_ids": ["wp-anne", "wp-h8"],
+      "visual": {
+        "type": "timeline",
+        "events": [
+          { "date": "Catherine of Aragon", "label": "Marriage annulled after 24 years" },
+          { "date": "Anne Boleyn", "label": "Beheaded on charges of adultery and treason, 1536" },
+          { "date": "Jane Seymour", "label": "Bore his son Edward; died days later, 1537" },
+          { "date": "Anne of Cleves", "label": "Marriage annulled within months, 1540" },
+          { "date": "Catherine Howard", "label": "Beheaded for adultery, 1542" },
+          { "date": "Catherine Parr", "label": "Outlived him" }
+        ]
+      }
+    },
+    {
+      "headline": "The daughter he dismissed",
+      "body": "Henry finally got his son, Edward, from his third wife, Jane Seymour. It was almost pointless. Edward became king at nine and died at fifteen. The throne passed to Catherine of Aragon's daughter Mary, who tried to drag England back to Rome by burning Protestants. And then to Anne Boleyn's daughter — the child Henry had once declared illegitimate — who reigned for 44 years as Elizabeth I, locked in the Protestant Church of England for good, and became the most celebrated monarch England had ever had.",
+      "source_ids": ["wp-h8"],
+      "image_file": "File:Darnley Portrait, Queen Elizabeth I.jpg"
+    }
+  ]
+}

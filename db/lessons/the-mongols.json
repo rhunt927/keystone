@@ -1,0 +1,97 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs the-mongols",
+  "topic": {
+    "slug": "the-mongols",
+    "title": "The Mongols",
+    "domain": "history",
+    "one_line_summary": "An outcast steppe boy built the largest land empire in history in a single lifetime — and then it stitched Eurasia together",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-me",
+      "url": "https://en.wikipedia.org/wiki/Mongol_Empire",
+      "title": "Mongol Empire — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-gk",
+      "url": "https://en.wikipedia.org/wiki/Genghis_Khan",
+      "title": "Genghis Khan — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-inv",
+      "url": "https://en.wikipedia.org/wiki/Mongol_invasions_and_conquests",
+      "title": "Mongol invasions and conquests — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-pax",
+      "url": "https://en.wikipedia.org/wiki/Pax_Mongolica",
+      "title": "Pax Mongolica — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The outcast",
+      "body": "He was born around 1162 on the Mongolian steppe and named Temüjin. When he was a boy his father was poisoned by a rival clan, and his family was abandoned by their own people to survive alone on roots and small game. He was captured and held for a time in a wooden neck-collar. Almost nothing about his childhood predicted what came next.",
+      "source_ids": ["wp-gk"],
+      "image_file": "File:YuanEmperorAlbumGenghisPortrait (cropped).jpg"
+    },
+    {
+      "headline": "Genghis Khan",
+      "body": "Over decades of alliance, betrayal and war, Temüjin united the feuding tribes of the steppe. In 1206 an assembly of chiefs proclaimed him Genghis Khan — roughly, universal ruler. He then did something radical: he broke the old tribal units apart and rebuilt his people into a single army organized in tens, hundreds and thousands, with command based on loyalty and merit rather than birth.",
+      "source_ids": ["wp-gk", "wp-me"],
+      "image_file": "File:Genghis Khan Equestrian Statue.jpg"
+    },
+    {
+      "headline": "The army",
+      "body": "The Mongol soldier was a mounted archer who could shoot accurately at a full gallop and ride 60 to 100 miles a day, switching between a string of horses. Their tactics were feints, ambushes and false retreats that lured enemies apart. They learned siege engineering from the Chinese and Persians they conquered. And they used terror deliberately: a city that surrendered was spared and taxed; a city that resisted was often destroyed and its people massacred, as a message to the next one.",
+      "source_ids": ["wp-me", "wp-inv"],
+      "image_file": "File:Mongol lovas íjász.jpg"
+    },
+    {
+      "headline": "The explosion",
+      "body": "Then it spread faster than any empire before it. Northern China first. Then, after the ruler of the Khwarazmian Empire executed a Mongol trade envoy, Genghis turned west and erased it — Samarkand, Bukhara, the great cities of Central Asia and Persia sacked one after another, with death tolls the chroniclers put in the hundreds of thousands. In roughly 20 years the Mongols conquered more territory than Rome had in 400.",
+      "source_ids": ["wp-inv", "wp-me"],
+      "visual": {
+        "type": "spread-map",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/df/Expansion_of_the_Mongol_Empire.svg",
+        "attribution": "Cattette, CC BY-SA 4.0, via Wikimedia Commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Expansion_of_the_Mongol_Empire.svg",
+        "from_year": 1206,
+        "to_year": 1294
+      }
+    },
+    {
+      "headline": "The largest empire ever",
+      "body": "Genghis died in 1227, and his sons and grandsons kept going. They overran the Russian principalities, pushed into Poland and Hungary, and in 1258 sacked Baghdad, killing the caliph and ending the 500-year Abbasid dynasty. At its height the empire ran from Korea to the gates of Vienna, covering around nine million square miles — the largest contiguous land empire in history, holding perhaps a quarter of the world's people.",
+      "source_ids": ["wp-me", "wp-inv"],
+      "image_file": "File:DiezAlbumsFallOfBaghdad.jpg"
+    },
+    {
+      "headline": "The Mongol Peace",
+      "body": "Conquest was half the story. Once the fighting stopped, a single power controlled the entire Silk Road, and for about a century a merchant could travel from the Black Sea to Beijing under one set of laws, protected by a relay system of post stations. Goods, technologies and ideas moved across Eurasia as never before — this is the era that brought Marco Polo east and helped carry gunpowder, printing and the compass west. The same open roads, historians think, also carried the Black Death.",
+      "source_ids": ["wp-pax", "wp-me"],
+      "image_file": "File:YuanEmperorAlbumKhubilaiPortrait.jpg"
+    },
+    {
+      "headline": "Kublai's China",
+      "body": "Genghis's grandson Kublai Khan finished the conquest of China in 1279, founded the Yuan dynasty, and built his capital where Beijing now stands. Twice he sent huge fleets to invade Japan, in 1274 and 1281, and both times storms wrecked them — the winds the Japanese remembered as kamikaze, the divine wind.",
+      "source_ids": ["wp-me"],
+      "image_file": "File:Bataille entre mongols & chinois (1211).jpeg"
+    },
+    {
+      "headline": "How it came apart",
+      "body": "It fractured almost as fast as it grew. Within two generations the empire had split into four rival khanates that fought each other, took on local languages and religions, and slowly dissolved into the regions they ruled. The Yuan were pushed out of China in 1368. But the imprint stayed: centuries of Mongol rule shaped Russia, the trade routes reshaped the medieval world, and a genetic study has suggested that millions of men across the old empire may carry a Y-chromosome line traceable to Genghis Khan's family.",
+      "source_ids": ["wp-me", "wp-gk"],
+      "image_file": "File:Mongolia, the Tangut Country, and the Solitudes of Northern Tibet - Mongol Cavalry.jpg"
+    }
+  ]
+}

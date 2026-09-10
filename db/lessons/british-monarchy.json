@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. Every beat traces to the listed sources; no invented quotes. Load: node scripts/load-lesson.mjs british-monarchy",
+  "topic": {
+    "slug": "british-monarchy",
+    "title": "The British Kings and Queens",
+    "domain": "history",
+    "one_line_summary": "A thousand-year story of a crown that slowly lost its power — conquered, constrained by law, briefly abolished, and finally made almost entirely ceremonial",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-mon",
+      "url": "https://en.wikipedia.org/wiki/Monarchy_of_the_United_Kingdom",
+      "title": "Monarchy of the United Kingdom — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-conq",
+      "url": "https://en.wikipedia.org/wiki/Norman_Conquest",
+      "title": "Norman Conquest — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-magna",
+      "url": "https://en.wikipedia.org/wiki/Magna_Carta",
+      "title": "Magna Carta — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-glorious",
+      "url": "https://en.wikipedia.org/wiki/Glorious_Revolution",
+      "title": "Glorious Revolution — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The chair",
+      "body": "In Westminster Abbey there is a battered oak chair, over 700 years old, covered in centuries of graffiti carved by schoolboys and tourists. Almost every English and British monarch since the early 1300s has been crowned sitting in it. That continuity is the point: the British monarchy is one of the oldest institutions in the Western world. But the story of the last thousand years is really the story of that crown losing almost all of its power.",
+      "source_ids": ["wp-mon"],
+      "image_file": "File:Coronation Chair, Westminster Abbey.jpg"
+    },
+    {
+      "headline": "Made from many",
+      "body": "England began as several rival Anglo-Saxon kingdoms. In the 9th century, King Alfred of Wessex held off the Viking invasions and started pulling them together. His grandson Æthelstan is usually counted as the first king of a united England, from the year 927. For a century and a half the crown passed among Saxon and Danish kings, sometimes peacefully, often not.",
+      "source_ids": ["wp-mon"],
+      "image_file": "File:Statue Of Alfred The Great in Winchester.jpg"
+    },
+    {
+      "headline": "1066",
+      "body": "Then came the last successful invasion of England. In 1066 William, Duke of Normandy, crossed the Channel, killed King Harold at the Battle of Hastings, and took the throne by force. The Normans replaced the entire English ruling class with French-speaking nobles, rebuilt the country in stone castles, and catalogued every landholding in the Domesday Book. Every British monarch since traces their line back through William.",
+      "source_ids": ["wp-conq", "wp-mon"],
+      "image_file": "File:Bayeux Tapestry scene57 Harold death.jpg"
+    },
+    {
+      "headline": "The king is not above the law",
+      "body": "In 1215 King John — at war, broke, and taxing his barons to breaking point — was cornered at Runnymede and forced to seal Magna Carta. Most of its clauses were medieval housekeeping, and John repudiated it within weeks. But one idea in it never went away: that the king himself is bound by law, and cannot simply imprison or fleece his subjects at will. It became the foundation stone of English liberty.",
+      "source_ids": ["wp-magna"],
+      "image_file": "File:Magna Carta (British Library Cotton MS Augustus II.106).jpg"
+    },
+    {
+      "headline": "The break with Rome",
+      "body": "In the 1530s Henry VIII wanted his marriage annulled and the pope refused. So Henry had Parliament declare him Supreme Head of the Church in England, split from Rome entirely, and seized the vast wealth of the monasteries. It made the English crown richer and more powerful than ever — and tied the monarchy permanently to a national church, a knot that would tangle English politics for the next two centuries.",
+      "source_ids": ["wp-mon"],
+      "image_file": "File:Portrait of Henry VIII of England (Holbein).jpg"
+    },
+    {
+      "headline": "They killed a king",
+      "body": "The knot pulled apart under Henry's grandson-in-law's line. Charles I believed he ruled by divine right and tried to govern without Parliament. The result was civil war. Parliament's armies won, put the king on trial, and on 30 January 1649 beheaded him outside his own palace in London. For eleven years England was a republic under Oliver Cromwell. It didn't hold: in 1660 Parliament invited Charles's son back and restored the monarchy.",
+      "source_ids": ["wp-mon"],
+      "image_file": "File:The Execution of Charles I.jpg"
+    },
+    {
+      "headline": "The bloodless revolution",
+      "body": "The final showdown came in 1688. King James II was Catholic and acting like an absolute monarch, and Parliament had had enough. It invited the Dutch prince William of Orange and his wife Mary — James's own daughter — to invade. James fled without a real fight. Parliament handed the crown to William and Mary on conditions, written down in the Bill of Rights of 1689: no taxing or suspending laws without Parliament, no standing army in peacetime without its consent. From then on, Parliament was sovereign, not the king.",
+      "source_ids": ["wp-glorious", "wp-mon"],
+      "image_file": "File:King William III of England, (1650-1702) (lighter).jpg"
+    },
+    {
+      "headline": "Reigns but does not rule",
+      "body": "After that the crown faded, slowly, into a symbol. By Queen Victoria's reign it presided over the largest empire in history but had little say in governing it. In the 20th century the monarch stopped choosing prime ministers, stopped vetoing laws, stopped taking sides. Elizabeth II, on the throne for 70 years, met 15 British prime ministers and publicly opposed none of them. The modern monarch, in the constitutional phrase, reigns but does not rule.",
+      "source_ids": ["wp-mon"],
+      "image_file": "File:Queen Elizabeth II on her Coronation Day (cropped).jpg"
+    }
+  ]
+}

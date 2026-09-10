@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs the-medici",
+  "topic": {
+    "slug": "the-medici",
+    "title": "The Medici",
+    "domain": "history",
+    "one_line_summary": "A family of bankers who never held a crown for their first century in power — and used their fortune to buy the Renaissance",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-med",
+      "url": "https://en.wikipedia.org/wiki/House_of_Medici",
+      "title": "House of Medici — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-bank",
+      "url": "https://en.wikipedia.org/wiki/Medici_Bank",
+      "title": "Medici Bank — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-lorenzo",
+      "url": "https://en.wikipedia.org/wiki/Lorenzo_de%27_Medici",
+      "title": "Lorenzo de' Medici — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-cath",
+      "url": "https://en.wikipedia.org/wiki/Catherine_de%27_Medici",
+      "title": "Catherine de' Medici — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Money into marble",
+      "body": "Botticelli's Birth of Venus. Michelangelo's David. Brunelleschi's dome over Florence. The Renaissance has a hometown, and behind a huge amount of it stands one family — not princes or bishops, but bankers. The Medici were self-made money. For their first century in power they held no title at all. What they had was the largest fortune in Europe, and a habit of spending it on artists.",
+      "source_ids": ["wp-med"],
+      "image_file": "File:La nascita di Venere (Botticelli).jpg"
+    },
+    {
+      "headline": "The bank",
+      "body": "It started around 1397, when Giovanni di Bicci de' Medici founded a bank in Florence. Its great coup was becoming banker to the papacy — handling the revenues of the Catholic Church across Europe. With branches from London to Rome and pioneering accounting methods, the Medici Bank made the family, by the mid-1400s, the wealthiest in Europe.",
+      "source_ids": ["wp-bank", "wp-med"],
+      "image_file": "File:Palazzo Medici Riccardi.JPG"
+    },
+    {
+      "headline": "Power without office",
+      "body": "Giovanni's son Cosimo turned money into control. From 1434 he was the effective ruler of the Florentine Republic for thirty years — while holding, most of the time, no office whatsoever. He governed through loans, favors, marriages, and quiet influence over who got elected. Florence stayed a republic on paper. Everyone knew who ran it. Grateful Florentines later carved 'father of his country' on his tomb.",
+      "source_ids": ["wp-med"],
+      "image_file": "File:Jacopo Pontormo - Cosimo il Vecchio - WGA18084.jpg"
+    },
+    {
+      "headline": "The patron",
+      "body": "Cosimo poured that fortune into the city. He bankrolled the sculptor Donatello, the painter Fra Angelico, the architect Michelozzo, and paid to rebuild the monastery of San Marco — including a library he opened to the public, one of the first in Europe. The Medici didn't invent Renaissance art, but they funded it, housed the artists, and made Florence the place a young talent had to be.",
+      "source_ids": ["wp-med"],
+      "image_file": "File:Florence, Italy, Brunelleschi's Dome of Florence Cathedral.jpg"
+    },
+    {
+      "headline": "Lorenzo the Magnificent",
+      "body": "Cosimo's grandson Lorenzo, who took over in 1469, was the dazzling one: poet, collector, and shrewd diplomat who spent years keeping Italy's rival states from war. A teenage Michelangelo lived in his household. But in 1478 a rival family, backed by the pope, tried to wipe the Medici out — attacking Lorenzo and his brother Giuliano during Mass in the cathedral. Giuliano was stabbed to death at the altar. Lorenzo, wounded, fought his way clear.",
+      "source_ids": ["wp-lorenzo", "wp-med"],
+      "image_file": "File:Portrait of Lorenzo de' Medici, the Magnificent (1449–1492), by Giorgio Vasari - Uffizi Gallery.jpg"
+    },
+    {
+      "headline": "Out, and back",
+      "body": "Lorenzo had neglected the bank, and it was failing. Two years after his death, in 1494, a French invasion and a wave of religious fervor drove the Medici out of Florence altogether. They spent 18 years in exile, clawed their way back in 1512 with foreign troops, were expelled again, and returned for good in 1530 — this time dropping the pretense. They became hereditary Dukes of Florence, and later Grand Dukes of Tuscany, ruling openly for two more centuries.",
+      "source_ids": ["wp-med"],
+      "image_file": "File:Exterior of Palazzo Medici-Riccardi 01.jpg"
+    },
+    {
+      "headline": "Popes and queens",
+      "body": "The family's reach went far beyond Tuscany. Lorenzo's son became Pope Leo X — the pope who faced down Martin Luther. A Medici cousin became Pope Clement VII — the pope who refused to annul Henry VIII's marriage. And Lorenzo's great-granddaughter Catherine de' Medici married into the French royal house, became queen, and then ruled France in all but name for years as the mother of three kings, through the worst of its religious wars.",
+      "source_ids": ["wp-cath", "wp-med"],
+      "image_file": "File:Raphael - Pope Leo X with two cardinals (cropped).jpg"
+    },
+    {
+      "headline": "The last Medici",
+      "body": "The later Medici backed science: Galileo was court mathematician in Florence and named the moons of Jupiter he discovered the 'Medicean Stars' after his patron. But the line ran thin. The last Medici ruler died in 1737 with no heir. His sister, the final member of the family, signed a pact leaving the entire Medici art collection to the state of Tuscany — on the condition that it never leave Florence. It never has. That is why the Uffizi is the Uffizi.",
+      "source_ids": ["wp-med"],
+      "image_file": "File:Justus Sustermans - Portrait of Galileo Galilei (Uffizi) (cropped).jpg"
+    }
+  ]
+}
