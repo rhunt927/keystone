@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. Every beat's claims trace to the listed sources; no invented quotes (the 'tired of giving in' quote is her verbatim words from Wikipedia). Load: node scripts/load-lesson.mjs rosa-parks ; then narrate.",
+  "topic": {
+    "slug": "rosa-parks",
+    "title": "Rosa Parks",
+    "domain": "history",
+    "one_line_summary": "Not a tired seamstress who happened to snap — a trained organizer at the center of a movement that was ready for her",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-rp",
+      "url": "https://en.wikipedia.org/wiki/Rosa_Parks",
+      "title": "Rosa Parks — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "cbs-ilitch",
+      "url": "https://www.cbsnews.com/news/rosa-parks-gets-rent-free-offer/",
+      "title": "Rosa Parks Gets Rent-Free Offer",
+      "publisher": "CBS News",
+      "source_type": "news"
+    },
+    {
+      "id": "nbc-ilitch",
+      "url": "https://www.nbcsports.com/mlb/news/mike-ilitch-paid-rosa-parks-rent-for-years",
+      "title": "Mike Ilitch paid Rosa Parks' rent for years",
+      "publisher": "NBC Sports",
+      "source_type": "news"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The myth",
+      "body": "The story most people know is simple: a tired seamstress, worn out after work, was too weary to give up her bus seat. Almost none of that is the real story. Rosa Parks said so herself: \"People always say that I didn't give up my seat because I was tired, but that isn't true. I was not tired physically... No, the only tired I was, was tired of giving in.\"",
+      "source_ids": ["wp-rp"],
+      "image_file": "File:Rosa Parks being fingerprinted by Deputy Sheriff D.H. Lackey after being arrested on February 22, 1956, during the Montgomery bus boycott.jpg"
+    },
+    {
+      "headline": "Who she actually was",
+      "body": "On December 1, 1955, Rosa Parks was 42 years old and had been secretary of the Montgomery NAACP for more than a decade. She had spent years investigating racial and sexual violence — including the gang rape of Recy Taylor — and registering Black voters against a system built to stop them. That summer she had trained in organized resistance at the Highlander Folk School in Tennessee, where Black and white people lived and worked as equals.",
+      "source_ids": ["wp-rp"],
+      "image_file": "File:Rosa Parks 1955.jpg"
+    },
+    {
+      "headline": "Not the first",
+      "body": "She also wasn't the first to refuse. Earlier that year, a 15-year-old Montgomery student named Claudette Colvin had been arrested for staying in her seat. Others had too. Local civil rights leaders had been waiting — searching for exactly the right person to build a legal challenge around.",
+      "source_ids": ["wp-rp"],
+      "image_file": "File:Claudette Colvin.jpg"
+    },
+    {
+      "headline": "Why her",
+      "body": "When Parks was arrested, the NAACP's E.D. Nixon saw the case they'd been waiting for: she was employed, married, and widely respected — a hard person for the state to discredit. That night, Jo Ann Robinson and the Women's Political Council went to work, and by morning they had run off 35,000 mimeographed leaflets calling for a one-day boycott of the buses on the day of Parks's trial.",
+      "source_ids": ["wp-rp"],
+      "image_file": "File:Rosa Parks 1955 2.jpg"
+    },
+    {
+      "headline": "381 days",
+      "body": "It was supposed to last one day. Black Montgomery stayed off the buses that day — and then kept going. They formed the Montgomery Improvement Association and elected as its president a 26-year-old preacher, new to town, named Martin Luther King Jr. The boycott held for 381 days. It ended only when the Supreme Court struck down bus segregation, in a case called Browder v. Gayle — brought not by Parks, but by four other women, one of them Claudette Colvin.",
+      "source_ids": ["wp-rp"],
+      "visual": {
+        "type": "timeline",
+        "events": [
+          { "date": "December 1, 1955", "label": "Parks refuses to move, and is arrested" },
+          { "date": "Day of her trial", "label": "A planned one-day bus boycott" },
+          { "date": "381 days later", "label": "Supreme Court ends bus segregation (Browder v. Gayle); the boycott ends" }
+        ]
+      }
+    },
+    {
+      "headline": "What it cost her",
+      "body": "Parks paid for it. In January 1956 she was fired from her job as a seamstress at the Montgomery Fair department store. A week later, her husband Raymond was fired from his job at Maxwell Air Force Base. The family faced death threats and financial hardship. In 1957, worn down by economic insecurity and threats to her safety, Rosa and Raymond Parks left Alabama for Detroit.",
+      "source_ids": ["wp-rp"],
+      "image_file": "File:Rosa Parks Bus.jpg"
+    },
+    {
+      "headline": "Detroit, and a quiet benefactor",
+      "body": "In Detroit, Congressman John Conyers hired her as a secretary and receptionist in his district office — a job she held for decades. But money stayed tight. In August 1994, at 81, she was robbed and beaten in her own home by a man who broke down her back door. When Little Caesars founder Mike Ilitch learned of it, he quietly arranged to cover her housing costs — and did, through a trust, for the rest of her life.",
+      "source_ids": ["wp-rp", "cbs-ilitch", "nbc-ilitch"],
+      "image_file": "File:Rosa Parks 1996.jpg"
+    },
+    {
+      "headline": "How it ended",
+      "body": "Rosa Parks died in 2005, at 92. Her body lay in state in the Rotunda of the United States Capitol. She had received the Presidential Medal of Freedom and the Congressional Gold Medal, and in 2013 a statue of her — showing her on the day of her arrest — was unveiled in the Capitol: the first of a Black American to stand there.",
+      "source_ids": ["wp-rp"],
+      "image_file": "File:Rosa Parks Lying in Honor (8509693081).jpg"
+    }
+  ]
+}

@@ -70,9 +70,37 @@ function CountUp({ spec }) {
   )
 }
 
+function Timeline({ spec }) {
+  const events = spec.events || []
+  const progress = useRafProgress(Math.max(3000, events.length * 1400), false)
+  const shown = Math.ceil(progress * events.length)
+
+  return (
+    <div className="absolute inset-0 flex flex-col justify-center gap-5 px-7 bg-[#3A2415] text-[#F1E4CF]">
+      {events.map((e, i) => (
+        <div
+          key={i}
+          className="flex gap-3 transition-all duration-500"
+          style={{ opacity: i < shown ? 1 : 0.12, transform: i < shown ? 'none' : 'translateY(4px)' }}
+        >
+          <div className="flex flex-col items-center pt-1">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#F1E4CF]" />
+            {i < events.length - 1 && <div className="w-px flex-1 bg-[#F1E4CF]/30 mt-1" />}
+          </div>
+          <div className="pb-1">
+            <div className="text-xs font-serif opacity-70">{e.date}</div>
+            <div className="text-sm leading-snug">{e.label}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function VisualCard({ spec }) {
   if (!spec) return null
   if (spec.type === 'spread-map') return <SpreadMap spec={spec} />
   if (spec.type === 'counter') return <CountUp spec={spec} />
+  if (spec.type === 'timeline') return <Timeline spec={spec} />
   return null
 }
