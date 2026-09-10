@@ -265,13 +265,15 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
               <span>Beat {index + 1} of {cards.length}</span>
               {ended && <span>End — press play to replay</span>}
             </div>
-            {!audioMode && (
-              <div className="text-center text-[10px] opacity-40">
-                {supported
-                  ? `voice: ${voiceName || 'default'}${speaking ? ` · ${sentenceIndex + 1}/${sentences.length}` : ''}`
-                  : 'speech synthesis not available'}
-              </div>
-            )}
+            <div className="text-center text-[10px] opacity-40">
+              {audioMode
+                ? 'narration: studio audio'
+                : cards.every(c => c.audio_path)
+                  ? 'narration: studio audio queued in Drive — reopen once it finishes syncing'
+                  : supported
+                    ? `voice: ${voiceName || 'default'}${speaking ? ` · ${sentenceIndex + 1}/${sentences.length}` : ''}`
+                    : 'speech synthesis not available'}
+            </div>
           </div>
 
           <div className="flex items-center justify-center gap-6">

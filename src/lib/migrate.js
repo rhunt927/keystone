@@ -15,9 +15,10 @@ function columnNames(db, table) {
 
 // cards: add visual_spec (+ drop the old card_type CHECK that predates the
 // 'visual' type — needs a table rebuild), and add audio_path.
+// Returns true if it changed anything.
 function migrateCards(db) {
   const cols = columnNames(db, 'cards')
-  if (cols.length === 0) return
+  if (cols.length === 0) return false
 
   if (!cols.includes('visual_spec')) {
     db.run('PRAGMA foreign_keys=OFF')
@@ -41,14 +42,18 @@ function migrateCards(db) {
       CREATE INDEX IF NOT EXISTS idx_cards_lesson ON cards(lesson_id);
     `)
     db.run('PRAGMA foreign_keys=ON')
-    return
+    return true
   }
 
   if (!cols.includes('audio_path')) {
-    try { db.run('ALTER TABLE cards ADD COLUMN audio_path TEXT') } catch { /* already there */ }
+    try {
+      db.run('ALTER TABLE cards ADD COLUMN audio_path TEXT')
+      return true
+    } catch { /* already there */ }
   }
+  return false
 }
 
 export function runMigrations(db) {
-  migrateCards(db)
+  return migrateCards(db)
 }

@@ -9,9 +9,13 @@ import { runMigrations } from '../lib/migrate'
 // `CREATE TABLE IF NOT EXISTS` / `INSERT OR IGNORE`, so re-running it on every
 // load is a safe, idempotent "create" step. Schema *changes* to existing
 // tables (new columns, altered CHECK constraints) go through runMigrations.
-function applySchema(db) {
+// Returns true if the DB shape actually changed (new install, or a migration
+// ran) — the caller only writes back to Drive in that case, so a plain read
+// doesn't race the authoring scripts that also write keystone.db.
+function applySchema(db, isNewFile) {
   db.run(schemaSql)
-  runMigrations(db)
+  const migrated = runMigrations(db)
+  return isNewFile || migrated
 }
 
 export function useDatabase(accessToken, onAuthError) {
@@ -34,13 +38,16 @@ export function useDatabase(accessToken, onAuthError) {
 
         driveRef.current = { folderId, fileId }
         const database = data ? new SQL.Database(data) : new SQL.Database()
-        applySchema(database)
+        const changed = applySchema(database, !data)
         setDb(database)
 
-        // Save immediately after schema apply so Drive is up to date
-        // (covers both "brand new file" and "schema version bump" cases).
-        const newFileId = await saveDatabase(accessToken, folderId, fileId ?? null, database.export())
-        if (!cancelled) driveRef.current.fileId = newFileId
+        // Only write back when we actually changed the shape — otherwise a
+        // plain read would clobber a newer keystone.db an authoring script
+        // just uploaded.
+        if (changed && !cancelled) {
+          const newFileId = await saveDatabase(accessToken, folderId, fileId ?? null, database.export())
+          driveRef.current.fileId = newFileId
+        }
       } catch (e) {
         if (cancelled) return
         if (e.isAuthError) {
