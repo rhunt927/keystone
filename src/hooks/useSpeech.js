@@ -12,13 +12,30 @@ const DEFAULT_RATE = 1
 // Spoken Content). Some newer OS versions do list one literally named "Siri" —
 // preferred if present, then the best-quality Enhanced/Premium voice, then any
 // en-US voice — but the user can always override this via the voice picker.
+//
+// Crucially, prefer LOCAL (on-device) voices. Chrome exposes network voices
+// ("Google US English", etc.) that require a fetch to Google's servers and
+// routinely never start, especially inside an installed PWA.
 function autoPickVoice(voices) {
   if (!voices.length) return null
+  const en = voices.filter(v => v.lang?.toLowerCase().startsWith('en'))
+  const pool = en.length ? en : voices
   return (
-    voices.find(v => /siri/i.test(v.name)) ||
-    voices.find(v => /premium|enhanced/i.test(v.name) && v.lang?.startsWith('en')) ||
-    voices.find(v => v.lang === 'en-US') ||
-    voices[0]
+    pool.find(v => /siri/i.test(v.name)) ||
+    pool.find(v => v.localService && /premium|enhanced/i.test(v.name)) ||
+    pool.find(v => v.localService && v.lang === 'en-US') ||
+    pool.find(v => v.localService) ||
+    pool.find(v => v.lang === 'en-US') ||
+    pool[0]
+  )
+}
+
+function localFallbackVoice() {
+  const voices = window.speechSynthesis.getVoices()
+  return (
+    voices.find(v => v.localService && v.lang?.toLowerCase().startsWith('en')) ||
+    voices.find(v => v.localService) ||
+    null
   )
 }
 
@@ -34,6 +51,7 @@ export function useSpeech() {
   const [sentenceIndex, setSentenceIndex] = useState(0)
   const [canResume, setCanResume] = useState(false)
   const [loadedText, setLoadedText] = useState(null)
+  const [activeVoiceName, setActiveVoiceName] = useState(null)
   const [voices, setVoices] = useState([])
   const [storedVoiceURI, setStoredVoiceURI] = useState(() => {
     try { return localStorage.getItem(VOICE_STORAGE_KEY) } catch { return null }
@@ -73,7 +91,7 @@ export function useSpeech() {
     try { localStorage.setItem(RATE_STORAGE_KEY, String(value)) } catch { /* ignore */ }
   }, [])
 
-  function speakFrom(startIdx, gen) {
+  function speakFrom(startIdx, gen, retry = 0) {
     const sentences = sentencesRef.current
     if (startIdx >= sentences.length) {
       setSpeaking(false)
@@ -88,9 +106,18 @@ export function useSpeech() {
     setCanResume(startIdx > 0)
 
     const u = new SpeechSynthesisUtterance(sentences[startIdx])
-    if (voiceRef.current) u.voice = voiceRef.current
+    const usedVoice = voiceRef.current
+    if (usedVoice) u.voice = usedVoice
     u.rate = rateRef.current
-    u.onstart = () => { if (gen === genRef.current) setSpeaking(true) }
+
+    let started = false
+    u.onstart = () => {
+      started = true
+      if (gen === genRef.current) {
+        setSpeaking(true)
+        setActiveVoiceName(usedVoice?.name || 'system default')
+      }
+    }
     u.onerror = () => { if (gen === genRef.current) setSpeaking(false) }
     u.onend = () => {
       if (gen !== genRef.current) return
@@ -98,6 +125,22 @@ export function useSpeech() {
       speakFrom(startIdx + 1, gen)
     }
     window.speechSynthesis.speak(u)
+
+    // Watchdog: some voices (Chrome's network "Google …" voices especially)
+    // silently never fire onstart. After 2s of nothing, retry once with the
+    // system default local voice, then give up.
+    window.setTimeout(() => {
+      if (started || gen !== genRef.current) return
+      window.speechSynthesis.cancel()
+      if (retry >= 1) {
+        setSpeaking(false)
+        return
+      }
+      voiceRef.current =
+        usedVoice && usedVoice.localService === false ? localFallbackVoice() : null
+      genRef.current += 1
+      speakFrom(startIdx, genRef.current, retry + 1)
+    }, 2000)
   }
 
   // Start a text from the top. Must be called synchronously from a user
@@ -155,7 +198,7 @@ export function useSpeech() {
     speaking, sentenceIndex, canResume, loadedText,
     supported,
     voices,
-    voiceName: effectiveVoice?.name ?? null,
+    voiceName: activeVoiceName || effectiveVoice?.name || null,
     selectedVoiceURI: effectiveVoice?.voiceURI ?? '',
     selectVoice,
     rate, setRate,

@@ -308,9 +308,15 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
                 onChange={e => selectVoice(e.target.value)}
                 className="text-[11px] bg-transparent opacity-70 hover:opacity-100 max-w-full"
               >
-                {voices.filter(v => v.lang?.startsWith('en')).map(v => (
-                  <option key={v.voiceURI} value={v.voiceURI}>{v.name} ({v.lang})</option>
-                ))}
+                {voices
+                  .filter(v => v.lang?.toLowerCase().startsWith('en'))
+                  .slice()
+                  .sort((a, b) => (a.localService === b.localService ? 0 : a.localService ? -1 : 1))
+                  .map(v => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name} ({v.lang}){v.localService ? '' : ' — online'}
+                    </option>
+                  ))}
               </select>
               <div className="flex items-center gap-2">
                 <span className="text-[11px] opacity-60">Speed</span>
