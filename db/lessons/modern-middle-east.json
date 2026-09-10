@@ -1,0 +1,104 @@
+{
+  "_note": "Hand-authored, source-grounded narrative on a contested subject. Framing kept to mainstream scholarly consensus; contested figures attributed; no invented quotes. Load: node scripts/load-lesson.mjs modern-middle-east",
+  "topic": {
+    "slug": "modern-middle-east",
+    "title": "How the Modern Middle East Was Made",
+    "domain": "history",
+    "one_line_summary": "Most of the region's borders, states and fault lines were set in a single generation around the First World War — and never resolved",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-hist",
+      "url": "https://en.wikipedia.org/wiki/History_of_the_Middle_East",
+      "title": "History of the Middle East — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-sp",
+      "url": "https://en.wikipedia.org/wiki/Sykes%E2%80%93Picot_Agreement",
+      "title": "Sykes–Picot Agreement — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-balfour",
+      "url": "https://en.wikipedia.org/wiki/Balfour_Declaration",
+      "title": "Balfour Declaration — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-1948",
+      "url": "https://en.wikipedia.org/wiki/1948_Arab%E2%80%93Israeli_War",
+      "title": "1948 Arab–Israeli War — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-iran",
+      "url": "https://en.wikipedia.org/wiki/Iranian_Revolution",
+      "title": "Iranian Revolution — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-arabspring",
+      "url": "https://en.wikipedia.org/wiki/Arab_Spring",
+      "title": "Arab Spring — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Lines in the sand",
+      "body": "Look at a map of the Middle East and you'll see borders that run in long straight lines through empty desert. Those lines are young. Most of the region's states — their names, their shapes, their capitals — did not exist much before 1920. They were assembled, in the space of a single generation, largely by outsiders, in the wreckage of a war. This is the story of how that happened, and why so much of it was never settled.",
+      "source_ids": ["wp-hist", "wp-sp"],
+      "image_file": "File:MPK1-426 Sykes Picot Agreement Map signed 8 May 1916.jpg"
+    },
+    {
+      "headline": "Four hundred years of one empire",
+      "body": "For roughly four centuries, from the 1500s to the First World War, most of the region was part of a single state: the Ottoman Empire, governed from Istanbul. It stretched from Iraq across the Arab lands to the edge of Arabia and, at times, North Africa. It was not a collection of nations. It was a multi-ethnic, multi-religious empire in which most people identified by faith, family and city, not by country.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:Flag-map of Ottoman Empire (1900).png"
+    },
+    {
+      "headline": "Three promises",
+      "body": "The Ottomans sided with Germany in the First World War and lost. During that war, Britain made three commitments that were hard to reconcile. It encouraged an Arab revolt against the Ottomans with the understanding that Arab independence would follow. It secretly agreed with France, in the Sykes–Picot Agreement of 1916, to divide the Arab lands between them. And in the Balfour Declaration of 1917 it announced support for 'a national home for the Jewish people' in Palestine. All three parties later held Britain to its word.",
+      "source_ids": ["wp-sp", "wp-balfour", "wp-hist"],
+      "image_file": "File:T E LAWRENCE AND THE ARAB REVOLT 1916 - 1918 - IWM Q 58817.jpg"
+    },
+    {
+      "headline": "The mandates",
+      "body": "After the war the new League of Nations formalized the carve-up as 'mandates': Britain would administer Iraq, Transjordan and Palestine; France would administer Syria and Lebanon. The borders were drawn for imperial convenience, sometimes joining rival communities in one state and splitting others, like the Kurds, across several. Only in Anatolia did the plan fail — there, nationalist forces under Mustafa Kemal Atatürk fought off partition and founded the Republic of Turkey.",
+      "source_ids": ["wp-hist", "wp-sp"],
+      "image_file": "File:Kemal Atatürk portrait.jpg"
+    },
+    {
+      "headline": "Oil changes everything",
+      "body": "Then, from the 1930s, geologists struck oil around the Persian Gulf — in Iran, Iraq, Kuwait and, in enormous quantity, Saudi Arabia. Overnight the region became strategically indispensable to every great power. For the states that had it, oil money funded rapid modernization but also propped up rulers who no longer had to tax or answer to their people. For everyone else, it meant a century of outside powers taking a very close interest in local politics.",
+      "source_ids": ["wp-hist"],
+      "image_file": "File:Dammam No. 7 on March 4, 1938.jpg"
+    },
+    {
+      "headline": "1948",
+      "body": "Jewish immigration to Palestine surged in the 1930s as Jews fled Nazi Europe, and violence between Jewish and Arab communities grew. In 1947 Britain handed the problem to the United Nations, which voted to partition Palestine into a Jewish and an Arab state. Israel declared independence in May 1948; neighboring Arab states invaded. Israel survived and expanded beyond the partition lines. Around 700,000 Palestinians fled or were expelled and were never allowed back — an event Palestinians call the Nakba, 'the catastrophe.' No Arab Palestinian state was established. That unresolved conflict has driven wars in 1948, 1967 and 1973, and shaped regional politics ever since.",
+      "source_ids": ["wp-1948", "wp-hist"],
+      "image_file": "File:Declaration of State of Israel 1948.jpg"
+    },
+    {
+      "headline": "Strongmen and revolutions",
+      "body": "As the colonial powers withdrew, a wave of coups replaced kings with military rulers and one-party states — in Egypt, Syria, Iraq, Libya — many of them clients of either the United States or the Soviet Union during the Cold War. Iran took its own path. In 1953 the US and Britain helped overthrow an elected government to preserve the Shah and Western oil interests. In 1979 a revolution overthrew the Shah in turn and created an Islamic Republic, converting a key Western ally into an adversary and sharpening a rivalry between Iran and Saudi Arabia that still runs through the region.",
+      "source_ids": ["wp-iran", "wp-hist"],
+      "image_file": "File:1979 Iranian Revolution.jpg"
+    },
+    {
+      "headline": "Why it never settled",
+      "body": "Stack the layers together: borders imposed from outside, an unresolved conflict over Palestine, oil wealth that funded both autocrats and foreign intervention, Cold War proxy fights, and the Iran–Saudi contest. Add repeated Western military involvement, including the Gulf wars of 1991 and 2003. When mass protests swept the Arab world in 2011, they toppled several leaders but tipped Syria, Libya and Yemen into civil wars that drew in outside powers. A century on, the region is still living with fault lines drawn when the Ottoman Empire fell.",
+      "source_ids": ["wp-arabspring", "wp-hist"],
+      "image_file": "File:Tahrir Square on February 8 2011.png"
+    }
+  ]
+}
