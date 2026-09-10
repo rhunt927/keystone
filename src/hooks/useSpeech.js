@@ -107,8 +107,7 @@ export function useSpeech() {
   const prime = useCallback(() => {
     if (!supported) return
     try {
-      window.speechSynthesis.speak(new SpeechSynthesisUtterance(' '))
-      window.speechSynthesis.cancel()
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(''))
     } catch { /* ignore */ }
   }, [supported])
 

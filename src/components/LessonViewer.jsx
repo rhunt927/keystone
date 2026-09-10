@@ -55,11 +55,12 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const { accent } = narratorFor(domain?.slug)
 
   const card = cards[index]
-  const narrationText = useMemo(
-    () => [card?.headline, card?.body].filter(Boolean).join('. '),
-    [card]
-  )
+  // Narrate the beat's body only — the short headline labels ("Twelve ships",
+  // "What it was") read as flashcard chapter titles, not narration.
+  const narrationText = card?.body || ''
   const sentences = useMemo(() => splitSentences(narrationText), [narrationText])
+  const beatText = useCallback(i => cards[i]?.body || '', [cards])
+
   const visualSpec = useMemo(() => {
     if (!card?.visual_spec) return null
     try { return JSON.parse(card.visual_spec) } catch { return null }
@@ -84,42 +85,53 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     })
   }, [cards.length])
 
-  // Playback engine — fires on play/pause and beat change only, NOT on
-  // narration progress (that would stutter). Resumes mid-beat after a pause;
-  // otherwise starts the beat from the top and auto-advances on finish.
+  // playingRef lets the beat-change effect below check "are we playing" without
+  // re-running every time `playing` toggles (which would restart, not resume).
+  const playingRef = useRef(playing)
+  useEffect(() => { playingRef.current = playing }, [playing])
+
+  // When the beat changes while playing, narrate the new beat and auto-advance
+  // on finish. The FIRST play is kicked off directly from the tap in
+  // handlePlayToggle (iOS needs the first speak() inside a user gesture) — this
+  // effect only covers auto-advance and skips.
   useEffect(() => {
-    if (!playing) return
+    if (!playingRef.current) return
     if (!supported) {
       const t = window.setTimeout(advance, Math.max(4500, narrationText.length * 55))
       return () => window.clearTimeout(t)
     }
-    if (loadedText === narrationText && canResume) {
-      resume({ onDone: advance })
-    } else {
-      speak(narrationText, { onDone: advance })
-    }
-    return () => pause()
+    speak(narrationText, { onDone: advance })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playing, index])
+  }, [index])
 
   function handlePlayToggle() {
     if (playing) {
+      pause()
       setPlaying(false)
       return
     }
     prime() // unlock iOS speech synthesis inside this tap
     if (ended) {
       stop()
-      setIndex(0)
       setEnded(false)
+      setIndex(0)
+      setPlaying(true)
+      speak(beatText(0), { onDone: advance })
+      return
     }
     setPlaying(true)
+    if (canResume && loadedText === narrationText) {
+      resume({ onDone: advance })
+    } else {
+      speak(narrationText, { onDone: advance })
+    }
   }
 
   function goToBeat(i) {
     stop()
     setEnded(false)
     setIndex(Math.max(0, Math.min(cards.length - 1, i)))
+    // the [index] effect re-speaks the new beat if we're playing
   }
 
   function leave() {
@@ -175,7 +187,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
                 />
                 <img
                   src={displayedImage.url}
-                  alt={card.headline || topic.title}
+                  alt={topic.title}
                   className={`relative w-full h-full object-contain ${active ? 'ken-burns' : ''}`}
                 />
               </>
@@ -190,11 +202,6 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent pointer-events-none" />
 
-            {card.headline && (
-              <div className="absolute top-3 left-3 text-[#F1E4CF] text-sm font-medium drop-shadow">
-                {card.headline}
-              </div>
-            )}
             <div className="absolute top-3 right-3">
               <Equalizer active={speaking} />
             </div>
@@ -211,8 +218,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             )}
 
             {showText && (
-              <div className="absolute inset-x-0 bottom-0 p-4 text-white space-y-1 bg-black/45">
-                {card.headline && <h2 className="font-medium">{card.headline}</h2>}
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white bg-black/45">
                 <p className="text-sm leading-relaxed">{card.body}</p>
               </div>
             )}
@@ -228,7 +234,6 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             </div>
           )}
 
-          {/* Scrubber */}
           <div className="space-y-1">
             <div
               onClick={onScrub}
@@ -247,7 +252,6 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             </div>
           </div>
 
-          {/* Transport */}
           <div className="flex items-center justify-center gap-6">
             <button
               onClick={() => goToBeat(index - 1)}
@@ -274,7 +278,6 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             </button>
           </div>
 
-          {/* Secondary controls */}
           <div className="flex items-center justify-center gap-4 text-xs">
             <button
               onClick={() => setShowText(s => !s)}
