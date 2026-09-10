@@ -49,7 +49,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const [showSettings, setShowSettings] = useState(false)
   const {
     speak, resume, pause, stop, speaking, sentenceIndex, canResume, loadedText,
-    supported, voices, voiceName, selectedVoiceURI, selectVoice, rate, setRate,
+    supported, voices, voiceName, selectedVoiceURI, selectVoice, refreshVoices, rate, setRate,
   } = useSpeech()
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
@@ -292,7 +292,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             </button>
             {supported && (
               <button
-                onClick={() => setShowSettings(s => !s)}
+                onClick={() => { refreshVoices(); setShowSettings(s => !s) }}
                 aria-pressed={showSettings}
                 className={`px-2 py-1 rounded font-medium ${showSettings ? 'bg-[#6B4226] text-[#F1E4CF]' : 'opacity-60 hover:opacity-100'}`}
               >

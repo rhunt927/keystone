@@ -52,7 +52,11 @@ export function useSpeech() {
   const [canResume, setCanResume] = useState(false)
   const [loadedText, setLoadedText] = useState(null)
   const [activeVoiceName, setActiveVoiceName] = useState(null)
-  const [voices, setVoices] = useState([])
+  const [voices, setVoices] = useState(() =>
+    typeof window !== 'undefined' && 'speechSynthesis' in window
+      ? window.speechSynthesis.getVoices()
+      : []
+  )
   const [storedVoiceURI, setStoredVoiceURI] = useState(() => {
     try { return localStorage.getItem(VOICE_STORAGE_KEY) } catch { return null }
   })
@@ -68,13 +72,18 @@ export function useSpeech() {
   const genRef = useRef(0)
   const supported = typeof window !== 'undefined' && 'speechSynthesis' in window
 
+  const refreshVoices = useCallback(() => {
+    if (supported) setVoices(window.speechSynthesis.getVoices())
+  }, [supported])
+
   useEffect(() => {
     if (!supported) return
-    const loadVoices = () => setVoices(window.speechSynthesis.getVoices())
-    loadVoices()
-    window.speechSynthesis.onvoiceschanged = loadVoices
+    // onvoiceschanged fires asynchronously once the OS finishes enumerating —
+    // this is the sanctioned "subscribe to an external system" effect. The
+    // initial list comes from the useState initializer above.
+    window.speechSynthesis.onvoiceschanged = refreshVoices
     return () => { window.speechSynthesis.onvoiceschanged = null }
-  }, [supported])
+  }, [supported, refreshVoices])
 
   const effectiveVoice =
     voices.find(v => v.voiceURI === storedVoiceURI) || autoPickVoice(voices) || null
@@ -198,6 +207,7 @@ export function useSpeech() {
     speaking, sentenceIndex, canResume, loadedText,
     supported,
     voices,
+    refreshVoices,
     voiceName: activeVoiceName || effectiveVoice?.name || null,
     selectedVoiceURI: effectiveVoice?.voiceURI ?? '',
     selectVoice,
