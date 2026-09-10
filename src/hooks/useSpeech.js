@@ -22,16 +22,18 @@ function autoPickVoice(voices) {
   )
 }
 
-// Sentences are chunked (via the shared splitSentences) so "pause" and "change
-// speed" can resume from roughly where playback was, rather than restarting
-// the whole card. Safari's native speechSynthesis.pause()/resume() is well
-// known to be unreliable (it can silently fail to resume, especially on iOS)
-// — since this app targets Apple devices specifically, tracking our own
-// sentence position and re-speaking from there is the more robust approach,
-// not a WebKit-specific workaround. The same split also drives per-sentence
-// image matching (useSentenceImage) via the exposed `sentenceIndex`.
+// Narration is spoken one sentence at a time (shared splitSentences). That lets
+// pause/resume and speed changes continue from the current sentence instead of
+// restarting a whole beat — Safari's native speechSynthesis.pause()/resume() is
+// unreliable, especially on iOS, and this app targets Apple devices. A
+// generation counter invalidates the onend callbacks of any utterance that's
+// been superseded (Safari fires onend on cancel(), which would otherwise
+// advance a stale sentence chain).
 export function useSpeech() {
   const [speaking, setSpeaking] = useState(false)
+  const [sentenceIndex, setSentenceIndex] = useState(0)
+  const [canResume, setCanResume] = useState(false)
+  const [loadedText, setLoadedText] = useState(null)
   const [voices, setVoices] = useState([])
   const [storedVoiceURI, setStoredVoiceURI] = useState(() => {
     try { return localStorage.getItem(VOICE_STORAGE_KEY) } catch { return null }
@@ -39,38 +41,26 @@ export function useSpeech() {
   const [rate, setRateState] = useState(() => {
     try { return Number(localStorage.getItem(RATE_STORAGE_KEY)) || DEFAULT_RATE } catch { return DEFAULT_RATE }
   })
+
   const voiceRef = useRef(null)
-  // Kept in sync exclusively via setRate (below) — a plain render-time write
-  // like `rateRef.current = rate` is itself an anti-pattern React now flags.
   const rateRef = useRef(rate)
   const sentencesRef = useRef([])
-  const sentenceIndexRef = useRef(0)
-  const currentTextRef = useRef(null)
-  // Reactive mirror of sentenceIndexRef — consumers (like useSentenceImage)
-  // need to re-render as narration progresses; the ref alone is silent.
-  const [sentenceIndex, setSentenceIndex] = useState(0)
+  const posRef = useRef(0)
+  const doneRef = useRef(null)
+  const genRef = useRef(0)
   const supported = typeof window !== 'undefined' && 'speechSynthesis' in window
 
   useEffect(() => {
     if (!supported) return
-    function loadVoices() {
-      setVoices(window.speechSynthesis.getVoices())
-    }
+    const loadVoices = () => setVoices(window.speechSynthesis.getVoices())
     loadVoices()
-    // Safari loads voices asynchronously — this fires once they're ready.
     window.speechSynthesis.onvoiceschanged = loadVoices
     return () => { window.speechSynthesis.onvoiceschanged = null }
   }, [supported])
 
-  // Derived each render, not stored in state — the user's saved choice if it's
-  // still available, otherwise the best auto-pick. Keeping this out of state
-  // avoids a setState-during-effect just to mirror a value computable directly.
   const effectiveVoice =
     voices.find(v => v.voiceURI === storedVoiceURI) || autoPickVoice(voices) || null
-
-  useEffect(() => {
-    voiceRef.current = effectiveVoice
-  }, [effectiveVoice])
+  useEffect(() => { voiceRef.current = effectiveVoice }, [effectiveVoice])
 
   const selectVoice = useCallback(voiceURI => {
     setStoredVoiceURI(voiceURI)
@@ -78,83 +68,102 @@ export function useSpeech() {
   }, [])
 
   const setRate = useCallback(value => {
-    rateRef.current = value // sync immediately — a caller may speak() in the same tick
+    rateRef.current = value
     setRateState(value)
     try { localStorage.setItem(RATE_STORAGE_KEY, String(value)) } catch { /* ignore */ }
   }, [])
 
-  function speakFrom(idx) {
+  function speakFrom(startIdx, gen) {
     const sentences = sentencesRef.current
-    if (idx >= sentences.length) {
+    if (startIdx >= sentences.length) {
       setSpeaking(false)
+      setCanResume(false)
+      const cb = doneRef.current
+      doneRef.current = null
+      cb?.()
       return
     }
-    const utterance = new SpeechSynthesisUtterance(sentences[idx])
-    if (voiceRef.current) utterance.voice = voiceRef.current
-    utterance.rate = rateRef.current
-    utterance.onstart = () => {
-      setSpeaking(true)
-      setSentenceIndex(idx)
+    posRef.current = startIdx
+    setSentenceIndex(startIdx)
+    setCanResume(startIdx > 0)
+
+    const u = new SpeechSynthesisUtterance(sentences[startIdx])
+    if (voiceRef.current) u.voice = voiceRef.current
+    u.rate = rateRef.current
+    u.onstart = () => { if (gen === genRef.current) setSpeaking(true) }
+    u.onerror = () => { if (gen === genRef.current) setSpeaking(false) }
+    u.onend = () => {
+      if (gen !== genRef.current) return
+      posRef.current = startIdx + 1
+      speakFrom(startIdx + 1, gen)
     }
-    utterance.onerror = () => setSpeaking(false)
-    utterance.onend = () => {
-      sentenceIndexRef.current = idx + 1
-      speakFrom(sentenceIndexRef.current)
-    }
-    window.speechSynthesis.speak(utterance)
+    window.speechSynthesis.speak(u)
   }
 
-  // Starts a new card from the top. To continue an already-paused card instead,
-  // use `resume()`.
-  const speak = useCallback(text => {
+  // iOS Safari only lets speechSynthesis start from inside a user gesture, and
+  // only after a first successful utterance. The real speak() happens a tick
+  // later (in an effect), so call this synchronously from the Play tap to
+  // unlock it.
+  const prime = useCallback(() => {
+    if (!supported) return
+    try {
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(' '))
+      window.speechSynthesis.cancel()
+    } catch { /* ignore */ }
+  }, [supported])
+
+  // Start a text from the top.
+  const speak = useCallback((text, opts = {}) => {
     if (!supported || !text) return
+    genRef.current += 1
     window.speechSynthesis.cancel()
     sentencesRef.current = splitSentences(text)
-    sentenceIndexRef.current = 0
-    currentTextRef.current = text
-    speakFrom(0)
+    posRef.current = 0
+    doneRef.current = opts.onDone || null
+    setLoadedText(text)
+    setSentenceIndex(0)
+    speakFrom(0, genRef.current)
   }, [supported])
 
-  // Continues from the current sentence — used after a pause, or after a
-  // speed change so the new rate takes effect without losing your place.
-  const resume = useCallback(() => {
-    if (!supported || !currentTextRef.current) return
+  // Continue the loaded text from the current sentence — after a pause, or a
+  // speed change, without losing your place.
+  const resume = useCallback((opts = {}) => {
+    if (!supported || !sentencesRef.current.length) return
+    genRef.current += 1
     window.speechSynthesis.cancel()
-    speakFrom(sentenceIndexRef.current)
+    if (opts.onDone) doneRef.current = opts.onDone
+    speakFrom(posRef.current, genRef.current)
   }, [supported])
 
-  // Stops speaking but remembers the sentence position, so `resume()` picks
-  // back up from here rather than the top of the card.
+  // Stop but keep the sentence bookmark, so resume() picks up from here.
   const pause = useCallback(() => {
+    genRef.current += 1
     if (supported) window.speechSynthesis.cancel()
     setSpeaking(false)
   }, [supported])
 
-  // Fully resets — used when switching cards, since there's nothing to resume.
+  // Full reset — nothing to resume (leaving the lesson, or jumping beats).
   const stop = useCallback(() => {
+    genRef.current += 1
     if (supported) window.speechSynthesis.cancel()
     sentencesRef.current = []
-    sentenceIndexRef.current = 0
-    currentTextRef.current = null
+    posRef.current = 0
+    doneRef.current = null
     setSpeaking(false)
+    setCanResume(false)
     setSentenceIndex(0)
+    setLoadedText(null)
   }, [supported])
 
-  useEffect(() => stop, [stop]) // fully stop narration on unmount
+  useEffect(() => stop, [stop]) // fully stop on unmount
 
   return {
-    speak,
-    resume,
-    pause,
-    stop,
-    speaking,
-    sentenceIndex,
-    canResume: sentenceIndexRef.current > 0 && sentenceIndexRef.current < sentencesRef.current.length,
+    speak, resume, pause, stop, prime,
+    speaking, sentenceIndex, canResume, loadedText,
     supported,
     voices,
     selectedVoiceURI: effectiveVoice?.voiceURI ?? '',
     selectVoice,
-    rate,
-    setRate,
+    rate, setRate,
   }
 }

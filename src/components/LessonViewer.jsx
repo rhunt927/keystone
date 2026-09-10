@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSpeech } from '../hooks/useSpeech'
 import { useSentenceImage } from '../hooks/useSentenceImage'
 import { splitSentences } from '../lib/sentences'
@@ -10,6 +10,21 @@ function visualAttribution(spec) {
     return { text: `Map: ${spec.attribution}`, href: spec.source_url || spec.image }
   }
   return null
+}
+
+function Icon({ path, className = 'w-6 h-6' }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d={path} />
+    </svg>
+  )
+}
+const ICONS = {
+  prev: 'M7 5v14a1 1 0 0 1-2 0V5a1 1 0 0 1 2 0zm12.5-.87L9 11.13a1 1 0 0 0 0 1.74l10.5 7A1 1 0 0 0 21 19V5a1 1 0 0 0-1.5-.87z',
+  next: 'M17 5v14a1 1 0 0 0 2 0V5a1 1 0 0 0-2 0zM4.5 4.13A1 1 0 0 0 3 5v14a1 1 0 0 0 1.5.87l10.5-7a1 1 0 0 0 0-1.74l-10.5-7z',
+  play: 'M6 4.75a1 1 0 0 1 1.53-.85l12 7.25a1 1 0 0 1 0 1.7l-12 7.25A1 1 0 0 1 6 19.25V4.75z',
+  pause: 'M7 4a1 1 0 0 1 1 1v14a1 1 0 0 1-2 0V5a1 1 0 0 1 1-1zm10 0a1 1 0 0 1 1 1v14a1 1 0 0 1-2 0V5a1 1 0 0 1 1-1z',
+  replay: 'M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z',
 }
 
 function Equalizer({ active }) {
@@ -28,9 +43,12 @@ function Equalizer({ active }) {
 
 export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const [index, setIndex] = useState(0)
+  const [playing, setPlaying] = useState(false)
+  const [ended, setEnded] = useState(false)
   const [showText, setShowText] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const {
-    speak, resume, pause, stop, speaking, sentenceIndex, canResume,
+    speak, resume, pause, stop, prime, speaking, sentenceIndex, canResume, loadedText,
     supported, voices, selectedVoiceURI, selectVoice, rate, setRate,
   } = useSpeech()
   const touchStartX = useRef(null)
@@ -42,7 +60,6 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
     [card]
   )
   const sentences = useMemo(() => splitSentences(narrationText), [narrationText])
-
   const visualSpec = useMemo(() => {
     if (!card?.visual_spec) return null
     try { return JSON.parse(card.visual_spec) } catch { return null }
@@ -51,54 +68,89 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
   const curatedImage = card?.image_url
     ? { url: card.image_url, source_url: card.image_source_url, attribution: card.image_attribution }
     : null
-  // Per-sentence live Commons search is only a fallback for auto-generated
-  // lessons that have no curated image and no motion graphic — authored
-  // lessons ship a hand-picked image per beat and skip the search entirely.
   const useLiveSearch = !visualSpec && !curatedImage
-  const activeSentence = useLiveSearch && speaking ? sentences[sentenceIndex] : null
+  const activeSentence = useLiveSearch && (playing || speaking) ? sentences[sentenceIndex] : null
   const displayedImage = useSentenceImage(topic.title, activeSentence, curatedImage)
   const visualCredit = visualSpec ? visualAttribution(visualSpec) : null
 
-  // Stop any narration in flight whenever the card changes or the viewer unmounts.
-  useEffect(() => stop, [index, stop])
+  const advance = useCallback(() => {
+    setIndex(i => {
+      if (i >= cards.length - 1) {
+        setPlaying(false)
+        setEnded(true)
+        return i
+      }
+      return i + 1
+    })
+  }, [cards.length])
 
-  function goTo(next) {
-    stop()
-    setIndex(Math.max(0, Math.min(cards.length - 1, next)))
-  }
-
-  function handlePlayPause() {
-    if (speaking) {
-      pause()
-    } else if (canResume) {
-      resume()
-    } else {
-      speak(narrationText)
+  // Playback engine — fires on play/pause and beat change only, NOT on
+  // narration progress (that would stutter). Resumes mid-beat after a pause;
+  // otherwise starts the beat from the top and auto-advances on finish.
+  useEffect(() => {
+    if (!playing) return
+    if (!supported) {
+      const t = window.setTimeout(advance, Math.max(4500, narrationText.length * 55))
+      return () => window.clearTimeout(t)
     }
+    if (loadedText === narrationText && canResume) {
+      resume({ onDone: advance })
+    } else {
+      speak(narrationText, { onDone: advance })
+    }
+    return () => pause()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, index])
+
+  function handlePlayToggle() {
+    if (playing) {
+      setPlaying(false)
+      return
+    }
+    prime() // unlock iOS speech synthesis inside this tap
+    if (ended) {
+      stop()
+      setIndex(0)
+      setEnded(false)
+    }
+    setPlaying(true)
   }
 
-  function handleRateChange(value) {
-    setRate(value)
-    // The Web Speech API can't change an utterance's rate mid-sentence —
-    // resume() re-speaks from the current sentence (not the whole card) at
-    // the new rate, so a change doesn't throw away narration progress.
-    if (speaking) resume()
+  function goToBeat(i) {
+    stop()
+    setEnded(false)
+    setIndex(Math.max(0, Math.min(cards.length - 1, i)))
   }
 
-  function onTouchStart(e) {
-    touchStartX.current = e.touches[0].clientX
+  function leave() {
+    stop()
+    setPlaying(false)
+    onBack()
   }
+
+  function onTouchStart(e) { touchStartX.current = e.touches[0].clientX }
   function onTouchEnd(e) {
     if (touchStartX.current == null) return
     const dx = e.changedTouches[0].clientX - touchStartX.current
     touchStartX.current = null
-    if (dx > 50) goTo(index - 1)
-    else if (dx < -50) goTo(index + 1)
+    if (dx > 50) goToBeat(index - 1)
+    else if (dx < -50) goToBeat(index + 1)
   }
 
+  const cardProgress = sentences.length ? Math.min(sentenceIndex / sentences.length, 1) : 0
+  const overallProgress = (index + (ended ? 1 : speaking ? cardProgress : 0)) / cards.length
+
+  function onScrub(e) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const ratio = (e.clientX - rect.left) / rect.width
+    goToBeat(Math.floor(ratio * cards.length))
+  }
+
+  const active = playing || speaking
+
   return (
-    <div className="space-y-4">
-      <button onClick={onBack} className="text-sm opacity-60 hover:opacity-100">
+    <div className="space-y-3">
+      <button onClick={leave} className="text-sm opacity-60 hover:opacity-100">
         ← Topics
       </button>
       <h1 className="text-2xl font-serif">{lessonTitle || topic.title}</h1>
@@ -115,7 +167,6 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
               <VisualCard spec={visualSpec} />
             ) : displayedImage ? (
               <>
-                {/* Blurred fill so wide paintings aren't cropped to unrecognizable */}
                 <img
                   src={displayedImage.url}
                   alt=""
@@ -125,7 +176,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
                 <img
                   src={displayedImage.url}
                   alt={card.headline || topic.title}
-                  className={`relative w-full h-full object-contain ${speaking ? 'ken-burns' : ''}`}
+                  className={`relative w-full h-full object-contain ${active ? 'ken-burns' : ''}`}
                 />
               </>
             ) : (
@@ -139,6 +190,11 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent pointer-events-none" />
 
+            {card.headline && (
+              <div className="absolute top-3 left-3 text-[#F1E4CF] text-sm font-medium drop-shadow">
+                {card.headline}
+              </div>
+            )}
             <div className="absolute top-3 right-3">
               <Equalizer active={speaking} />
             </div>
@@ -155,7 +211,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             )}
 
             {showText && (
-              <div className="absolute inset-x-0 bottom-0 p-4 text-white space-y-1 bg-black/40">
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white space-y-1 bg-black/45">
                 {card.headline && <h2 className="font-medium">{card.headline}</h2>}
                 <p className="text-sm leading-relaxed">{card.body}</p>
               </div>
@@ -165,92 +221,96 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
           {card.sources.length > 0 && (
             <div className="text-xs opacity-70 space-x-2 text-center">
               {card.sources.map(s => (
-                <a
-                  key={s.url}
-                  href={s.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline hover:opacity-100"
-                >
+                <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="underline hover:opacity-100">
                   Source: {s.publisher || s.title}
                 </a>
               ))}
             </div>
           )}
 
-          <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={() => goTo(index - 1)}
-              disabled={index === 0}
-              className="px-3 py-2 rounded-lg bg-white/40 hover:bg-white/60 disabled:opacity-30 transition-colors"
-              aria-label="Previous card"
+          {/* Scrubber */}
+          <div className="space-y-1">
+            <div
+              onClick={onScrub}
+              className="h-2 rounded-full bg-[#6B4226]/20 cursor-pointer relative"
+              role="progressbar"
+              aria-valuenow={Math.round(overallProgress * 100)}
             >
-              ←
+              <div
+                className="h-full rounded-full bg-[#6B4226] transition-[width] duration-200"
+                style={{ width: `${overallProgress * 100}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] opacity-50">
+              <span>Beat {index + 1} of {cards.length}</span>
+              {ended && <span>End — press play to replay</span>}
+            </div>
+          </div>
+
+          {/* Transport */}
+          <div className="flex items-center justify-center gap-6">
+            <button
+              onClick={() => goToBeat(index - 1)}
+              disabled={index === 0}
+              className="p-2 rounded-full disabled:opacity-25 hover:bg-black/5"
+              aria-label="Previous beat"
+            >
+              <Icon path={ICONS.prev} />
             </button>
-            {supported && (
-              <button
-                onClick={handlePlayPause}
-                className="px-5 py-2 rounded-lg bg-[#6B4226] hover:bg-[#59371f] text-[#F1E4CF] font-medium transition-colors"
-              >
-                {speaking ? '⏸ Pause' : canResume ? '▶ Resume' : '▶ Play'}
-              </button>
-            )}
+            <button
+              onClick={handlePlayToggle}
+              className="p-3 rounded-full bg-[#6B4226] text-[#F1E4CF] hover:bg-[#59371f]"
+              aria-label={playing ? 'Pause' : ended ? 'Replay' : 'Play'}
+            >
+              <Icon path={ended && !playing ? ICONS.replay : playing ? ICONS.pause : ICONS.play} className="w-7 h-7" />
+            </button>
+            <button
+              onClick={() => goToBeat(index + 1)}
+              disabled={index === cards.length - 1}
+              className="p-2 rounded-full disabled:opacity-25 hover:bg-black/5"
+              aria-label="Next beat"
+            >
+              <Icon path={ICONS.next} />
+            </button>
+          </div>
+
+          {/* Secondary controls */}
+          <div className="flex items-center justify-center gap-4 text-xs">
             <button
               onClick={() => setShowText(s => !s)}
               aria-pressed={showText}
-              className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                showText ? 'bg-[#6B4226] text-[#F1E4CF]' : 'bg-white/40 hover:bg-white/60'
-              }`}
+              className={`px-2 py-1 rounded font-medium ${showText ? 'bg-[#6B4226] text-[#F1E4CF]' : 'opacity-60 hover:opacity-100'}`}
             >
-              Aa
+              Transcript
             </button>
-            <button
-              onClick={() => goTo(index + 1)}
-              disabled={index === cards.length - 1}
-              className="px-3 py-2 rounded-lg bg-white/40 hover:bg-white/60 disabled:opacity-30 transition-colors"
-              aria-label="Next card"
-            >
-              →
-            </button>
+            {supported && (
+              <button
+                onClick={() => setShowSettings(s => !s)}
+                aria-pressed={showSettings}
+                className={`px-2 py-1 rounded font-medium ${showSettings ? 'bg-[#6B4226] text-[#F1E4CF]' : 'opacity-60 hover:opacity-100'}`}
+              >
+                Voice &amp; speed
+              </button>
+            )}
           </div>
 
-          <div className="flex justify-center gap-1.5">
-            {cards.map((_, i) => (
-              <span
-                key={i}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === index ? 'w-4 bg-[#6B4226]' : 'w-1.5 bg-[#6B4226]/30'
-                }`}
-              />
-            ))}
-          </div>
-
-          {voices.length > 0 && (
-            <div className="flex flex-col items-center gap-2">
+          {showSettings && voices.length > 0 && (
+            <div className="flex flex-col items-center gap-2 pt-1">
               <select
                 value={selectedVoiceURI || ''}
                 onChange={e => selectVoice(e.target.value)}
-                className="text-[11px] bg-transparent opacity-60 hover:opacity-100 max-w-full"
+                className="text-[11px] bg-transparent opacity-70 hover:opacity-100 max-w-full"
               >
-                {voices
-                  .filter(v => v.lang?.startsWith('en'))
-                  .map(v => (
-                    <option key={v.voiceURI} value={v.voiceURI}>
-                      {v.name} ({v.lang})
-                    </option>
-                  ))}
+                {voices.filter(v => v.lang?.startsWith('en')).map(v => (
+                  <option key={v.voiceURI} value={v.voiceURI}>{v.name} ({v.lang})</option>
+                ))}
               </select>
-
               <div className="flex items-center gap-2">
                 <span className="text-[11px] opacity-60">Speed</span>
                 <input
-                  type="range"
-                  min="0.5"
-                  max="2"
-                  step="0.1"
-                  value={rate}
-                  onChange={e => handleRateChange(Number(e.target.value))}
-                  className="w-28 accent-[#6B4226]"
+                  type="range" min="0.5" max="2" step="0.1" value={rate}
+                  onChange={e => { setRate(Number(e.target.value)); if (speaking) resume({ onDone: advance }) }}
+                  className="w-32 accent-[#6B4226]"
                   aria-label="Narration speed"
                 />
                 <span className="text-[11px] opacity-60 w-8 tabular-nums">{rate.toFixed(1)}x</span>
