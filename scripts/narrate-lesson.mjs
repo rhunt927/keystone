@@ -11,14 +11,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import initSqlJs from 'sql.js'
-import { runMigrations } from '../src/lib/migrate.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..')
-const SCHEMA_PATH = path.join(REPO_ROOT, 'db', 'schema.sql')
 const DRIVE_BASE = '/Users/rhunt/Library/CloudStorage/GoogleDrive-rghunt@gmail.com/My Drive/keystone'
-const DB_PATH = path.join(DRIVE_BASE, 'keystone.db')
 
 const DEFAULT_VOICE = 'en-US-Studio-Q' // warm male narrator; override per lesson with topic.voice
 
@@ -87,27 +83,8 @@ async function main() {
     console.log(`  beat ${i}: ${text.length} chars -> ${(mp3.length / 1024).toFixed(0)} KB`)
   }
 
-  // Mark the beats as having audio (by convention, path relative to keystone/audio/).
-  const SQL = await initSqlJs({
-    locateFile: f => path.join(REPO_ROOT, 'node_modules', 'sql.js', 'dist', f),
-  })
-  const db = new SQL.Database(fs.readFileSync(DB_PATH))
-  db.run(fs.readFileSync(SCHEMA_PATH, 'utf8'))
-  runMigrations(db)
-  const lessonId = db.exec(
-    `SELECT l.id FROM lessons l JOIN topics t ON t.id = l.topic_id
-     WHERE t.slug = ? AND l.kind = 'overview'`,
-    [slug]
-  )[0]?.values[0][0]
-  if (lessonId) {
-    const cards = db.exec('SELECT id, position FROM cards WHERE lesson_id = ? ORDER BY position', [lessonId])[0]
-    for (const [id, position] of cards?.values || []) {
-      db.run('UPDATE cards SET audio_path = ? WHERE id = ?', [`${slug}/beat-${position}.mp3`, id])
-    }
-    fs.writeFileSync(DB_PATH, Buffer.from(db.export()))
-  }
-  db.close()
-
+  // No DB write — the app discovers audio by checking Drive for
+  // keystone/audio/<slug>/beat-N.mp3 directly, so nothing races keystone.db.
   console.log(`\n✔ ${generated} beat(s) generated, ${charsUsed} characters used`)
   console.log(`  MP3s: ${outDir}`)
   console.log(`  (Google TTS free tier is ~1,000,000 characters/month — spent once, never on playback)`)

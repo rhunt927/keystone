@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { fetchAudioUrl } from './useGoogleDrive'
 
-// Plays a lesson's pre-generated narration MP3s (from Drive) through a single
-// <audio> element. Exposes the shape LessonViewer needs from a playback engine
-// so the viewer can use this or the browser speech engine. `ready` is true only
-// once every beat's audio has resolved.
-export function useAudioLesson(accessToken, cards, rate) {
+// Plays a lesson's pre-generated narration MP3s through a single <audio>
+// element. It discovers them by convention — keystone/audio/<slug>/beat-N.mp3
+// in Drive — so nothing has to be recorded in keystone.db (no writer race).
+// `ready` is true only once every beat's audio has resolved.
+export function useAudioLesson(accessToken, slug, beatCount, rate) {
   const [resolved, setResolved] = useState({ sig: null, urls: [] })
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -13,8 +13,6 @@ export function useAudioLesson(accessToken, cards, rate) {
   const doneRef = useRef(null)
   const rateRef = useRef(rate)
 
-  // Lazily create the <audio> element the first time an effect/handler needs it
-  // (never during render).
   function getAudio() {
     if (audioRef.current === null && typeof Audio !== 'undefined') {
       audioRef.current = new Audio()
@@ -23,17 +21,17 @@ export function useAudioLesson(accessToken, cards, rate) {
     return audioRef.current
   }
 
-  const sig = useMemo(() => cards.map(c => c.audio_path || '').join('|'), [cards])
+  const sig = `${slug}:${beatCount}`
 
   useEffect(() => {
-    const paths = sig.split('|')
-    if (!accessToken || paths.length === 0 || paths.some(p => !p)) return
+    if (!accessToken || !slug || !beatCount) return
     let cancelled = false
+    const paths = Array.from({ length: beatCount }, (_, i) => `${slug}/beat-${i}.mp3`)
     Promise.all(paths.map(p => fetchAudioUrl(accessToken, p).catch(() => null))).then(urls => {
       if (!cancelled) setResolved({ sig, urls })
     })
     return () => { cancelled = true }
-  }, [accessToken, sig])
+  }, [accessToken, sig, slug, beatCount])
 
   const ready = resolved.sig === sig && resolved.urls.length > 0 && resolved.urls.every(Boolean)
   const urls = ready ? resolved.urls : []

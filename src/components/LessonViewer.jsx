@@ -52,7 +52,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
     speak, resume, pause, stop, speaking, sentenceIndex, canResume, loadedText,
     supported, voices, voiceName, selectedVoiceURI, selectVoice, refreshVoices, rate, setRate,
   } = useSpeech()
-  const { ready: audioReady, engine: audio } = useAudioLesson(accessToken, cards, rate)
+  const { ready: audioReady, engine: audio } = useAudioLesson(accessToken, topic.slug, cards.length, rate)
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
 
@@ -63,7 +63,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
 
   // If every beat has pre-generated audio, play that (studio voice, consistent
   // everywhere). Otherwise fall back to the browser's speech synthesis.
-  const audioMode = cards.length > 0 && cards.every(c => c.audio_path) && audioReady
+  const audioMode = audioReady
 
   const visualSpec = useMemo(() => {
     if (!card?.visual_spec) return null
@@ -268,11 +268,9 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
             <div className="text-center text-[10px] opacity-40">
               {audioMode
                 ? 'narration: studio audio'
-                : cards.every(c => c.audio_path)
-                  ? 'narration: studio audio queued in Drive — reopen once it finishes syncing'
-                  : supported
-                    ? `voice: ${voiceName || 'default'}${speaking ? ` · ${sentenceIndex + 1}/${sentences.length}` : ''}`
-                    : 'speech synthesis not available'}
+                : supported
+                  ? `voice: ${voiceName || 'default'}${speaking ? ` · ${sentenceIndex + 1}/${sentences.length}` : ''}`
+                  : 'speech synthesis not available'}
             </div>
           </div>
 
