@@ -301,23 +301,42 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, onBack }) {
             )}
           </div>
 
-          {showSettings && voices.length > 0 && (
+          {showSettings && (
             <div className="flex flex-col items-center gap-2 pt-1">
-              <select
-                value={selectedVoiceURI || ''}
-                onChange={e => selectVoice(e.target.value)}
-                className="text-[11px] bg-transparent opacity-70 hover:opacity-100 max-w-full"
-              >
-                {voices
-                  .filter(v => v.lang?.toLowerCase().startsWith('en'))
-                  .slice()
-                  .sort((a, b) => (a.localService === b.localService ? 0 : a.localService ? -1 : 1))
-                  .map(v => (
-                    <option key={v.voiceURI} value={v.voiceURI}>
-                      {v.name} ({v.lang}){v.localService ? '' : ' — online'}
-                    </option>
-                  ))}
-              </select>
+              {(() => {
+                const enVoices = voices.filter(v => v.lang?.toLowerCase().startsWith('en'))
+                const tierOf = v =>
+                  /premium/i.test(v.name) ? 'Premium' : /enhanced/i.test(v.name) ? 'Enhanced' : 'Standard'
+                return (
+                  <>
+                    <select
+                      value={selectedVoiceURI || ''}
+                      onChange={e => selectVoice(e.target.value)}
+                      className="text-[11px] bg-transparent opacity-80 hover:opacity-100 max-w-full"
+                    >
+                      {['Premium', 'Enhanced', 'Standard'].map(tier => {
+                        const group = enVoices.filter(v => tierOf(v) === tier)
+                        if (!group.length) return null
+                        return (
+                          <optgroup key={tier} label={tier}>
+                            {group.map(v => (
+                              <option key={v.voiceURI} value={v.voiceURI}>
+                                {v.name.replace(/\s*\((premium|enhanced)\)/i, '')}
+                                {v.localService ? '' : ' — online'}
+                              </option>
+                            ))}
+                          </optgroup>
+                        )
+                      })}
+                    </select>
+                    <div className="text-[10px] opacity-40 text-center">
+                      {voices.length} voice{voices.length === 1 ? '' : 's'} on this device
+                      {' · '}
+                      {enVoices.filter(v => tierOf(v) !== 'Standard').length} enhanced/premium
+                    </div>
+                  </>
+                )
+              })()}
               <div className="flex items-center gap-2">
                 <span className="text-[11px] opacity-60">Speed</span>
                 <input
