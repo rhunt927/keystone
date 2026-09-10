@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs the-octopus",
+  "topic": {
+    "slug": "the-octopus",
+    "title": "The Octopus",
+    "domain": "science",
+    "one_line_summary": "A large brain and real intelligence that evolved on a branch of life almost entirely separate from ours — the closest thing to an alien mind we can actually study",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-oct",
+      "url": "https://en.wikipedia.org/wiki/Octopus",
+      "title": "Octopus — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-cog",
+      "url": "https://en.wikipedia.org/wiki/Cephalopod_intelligence",
+      "title": "Cephalopod intelligence — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-cam",
+      "url": "https://en.wikipedia.org/wiki/Cephalopod_camouflage",
+      "title": "Cephalopod camouflage — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-sent",
+      "url": "https://en.wikipedia.org/wiki/Animal_Welfare_(Sentience)_Act_2022",
+      "title": "Animal Welfare (Sentience) Act 2022 — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Intelligence, invented twice",
+      "body": "If you want to know whether intelligence can arise in a form utterly unlike ours, the octopus is the experiment nature already ran. Our last common ancestor with it was a small, probably wormlike creature that lived around 600 million years ago, before brains as we know them. Everything clever about an octopus — its problem-solving, its memory, its curiosity — evolved completely independently of ours.",
+      "source_ids": ["wp-oct", "wp-cog"],
+      "image_file": "File:Octopus cyaneain Kona.jpg"
+    },
+    {
+      "headline": "A mollusk that gave up its shell",
+      "body": "An octopus is a mollusk — the same broad group as snails, clams and oysters — but its ancestors abandoned the protective shell in exchange for speed and flexibility. The only hard part left is the parrot-like beak, so an octopus can pour its entire body through any hole the beak fits through. It also runs on three hearts and blue, copper-based blood.",
+      "source_ids": ["wp-oct"],
+      "image_file": "File:Octopus vulgaris - Madeira.jpg"
+    },
+    {
+      "headline": "A mind in the arms",
+      "body": "An octopus has around 500 million neurons — comparable to a dog. But roughly two-thirds of them are not in the central brain; they're distributed along the eight arms. Each arm has a measure of independence: it can taste and feel what it touches and respond locally, without checking in. A severed arm will still reach out and grab at food for a while.",
+      "source_ids": ["wp-cog", "wp-oct"],
+      "image_file": "File:Octopus arm showing suckers 0451.jpg"
+    },
+    {
+      "headline": "What they can do",
+      "body": "In captivity, octopuses open screw-top jars, run mazes, and tell individual keepers apart — sometimes squirting the ones they dislike. Some carry halved coconut shells across the seabed to reassemble as portable armor, one of the clearest cases of tool use in an invertebrate. And they are notorious escape artists, squeezing out of tanks and across the floor to raid a neighboring one.",
+      "source_ids": ["wp-cog"],
+      "image_file": "File:Coconut octopus (Amphioctopus marginatus) (45031078485).jpg"
+    },
+    {
+      "headline": "Skin like a screen",
+      "body": "Octopus skin carries millions of tiny pigment sacs that muscles can open and close, layered over reflective cells, plus muscles that push the skin up into spiky 3D bumps. The brain drives all of it directly, changing color and texture in a fraction of a second. The mimic octopus goes further, impersonating the shape and swimming style of sea snakes, lionfish and flatfish. And octopuses are very likely colorblind while doing it.",
+      "source_ids": ["wp-cam", "wp-oct"],
+      "image_file": "File:Mimic octopus (Thaumoctopus mimicus) (41607220955).jpg"
+    },
+    {
+      "headline": "One shot at life",
+      "body": "Here is the catch. Almost every octopus breeds exactly once and then dies. The female stops eating to guard her eggs — one deep-sea octopus was watched brooding a single clutch for about 53 months, the longest known of any animal — and dies as they hatch. Males die within months of mating. So all that intelligence is almost never passed on. Each octopus works the world out essentially alone.",
+      "source_ids": ["wp-oct", "wp-cog"],
+      "image_file": "File:Baby Octopus - Graneledone verrucosa.jpg"
+    },
+    {
+      "headline": "Strange in the genes, too",
+      "body": "Octopuses are unusual well below the level of behavior. They routinely rewrite their own RNA — the working copies of their genetic instructions — on a scale seen almost nowhere else, possibly as a way of fine-tuning nerve function to temperature. Their genome is large and heavily reshuffled compared with other mollusks. This is a body plan that has been experimenting for a very long time; cephalopods have existed for roughly half a billion years.",
+      "source_ids": ["wp-oct"],
+      "image_file": "File:Enteroctopus dofleini in aquarium rotated.jpg"
+    },
+    {
+      "headline": "The consciousness question",
+      "body": "Because the octopus clearly thinks while sharing almost none of our neural wiring, it sits at the center of the scientific debate over animal minds. A major review of the evidence for cephalopod feeling helped persuade the United Kingdom to add octopuses, squid and crabs to its animal-welfare law in 2022. The octopus keeps forcing the same question: how many completely different ways are there to build a mind?",
+      "source_ids": ["wp-sent", "wp-cog"],
+      "image_file": "File:Day Octopus (31041167298).jpg"
+    }
+  ]
+}

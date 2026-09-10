@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs antibiotics",
+  "topic": {
+    "slug": "antibiotics",
+    "title": "Antibiotics",
+    "domain": "science",
+    "one_line_summary": "For all of history a scratch could kill you; two decades of the 20th century changed that — and the change may not be permanent",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-ab",
+      "url": "https://en.wikipedia.org/wiki/Antibiotic",
+      "title": "Antibiotic — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-pen",
+      "url": "https://en.wikipedia.org/wiki/History_of_penicillin",
+      "title": "History of penicillin — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-amr",
+      "url": "https://en.wikipedia.org/wiki/Antimicrobial_resistance",
+      "title": "Antimicrobial resistance — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-fleming",
+      "url": "https://en.wikipedia.org/wiki/Alexander_Fleming",
+      "title": "Alexander Fleming — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "The scratch that killed you",
+      "body": "For nearly all of human history, a bacterial infection was a coin toss with death. A scraped knee, an infected tooth, a chest cold that settled in, a wound from childbirth or surgery — any of them could turn septic and kill an otherwise healthy person in days. Then, over roughly two decades in the middle of the 20th century, medicine got a genuine cure. It is one of the largest single improvements in human life ever recorded — and it is not guaranteed to last.",
+      "source_ids": ["wp-ab"],
+      "image_file": "File:Antibiotic pills.jpg"
+    },
+    {
+      "headline": "Life before",
+      "body": "In 1900, the leading causes of death in the industrialized world were pneumonia, tuberculosis and gut infections. Hospitals had whole wards for people slowly dying of sepsis. Surgeons operated knowing infection might kill a patient the operation had saved. Tuberculosis alone — 'consumption' — accounted for something like one in seven deaths.",
+      "source_ids": ["wp-ab"],
+      "image_file": "File:(Tuberculosis ward of the Hasköy Hospital for Women) (LOC) (4483943513).jpg"
+    },
+    {
+      "headline": "The contaminated dish",
+      "body": "In September 1928, Alexander Fleming came back from holiday to a messy lab bench at St Mary's Hospital in London. One culture plate of Staphylococcus bacteria had been spoiled by a blue-green mould — and in a clear ring around the mould, the bacteria were dead. The mould was a Penicillium. Fleming named the substance it released penicillin and published his finding, but he couldn't extract enough of it to be useful, and largely set it aside.",
+      "source_ids": ["wp-fleming", "wp-pen"],
+      "image_file": "File:Culture plate of penicillium mould, London, England Wellcome L0059175.jpg"
+    },
+    {
+      "headline": "The Oxford rescue",
+      "body": "A decade later, a team at Oxford led by Howard Florey and Ernst Chain, with the biochemist Norman Heatley, worked out how to purify and concentrate it. In 1941 they treated their first patient, a policeman dying from an infection that started with a scratch from a rose bush. He improved dramatically — then relapsed and died when the tiny supply ran out. They had been so short of the drug they recovered it from his urine to re-use.",
+      "source_ids": ["wp-pen"],
+      "image_file": "File:Professor Alexander Fleming at work in his laboratory at St Mary's Hospital, London, during the Second World War. D17801 (cropped).jpg"
+    },
+    {
+      "headline": "Making it by the ton",
+      "body": "With Britain at war, the work moved to the United States. A government lab in Peoria, Illinois developed deep-tank fermentation, and a more productive mould strain was found — on a mouldy cantaloupe in a Peoria market. Drug companies scaled up fast. By the D-Day landings in June 1944 there was enough penicillin to treat the Allied wounded. Fleming, Florey and Chain shared the Nobel Prize in 1945.",
+      "source_ids": ["wp-pen"],
+      "image_file": "File:Penicillin Past, Present and Future- the Development and Production of Penicillin, England, 1944 D17806.jpg"
+    },
+    {
+      "headline": "The golden age",
+      "body": "Penicillin opened a floodgate. Streptomycin, the first real cure for tuberculosis, arrived in 1943, mostly from soil bacteria. Through the 1950s came tetracyclines, erythromycin and most of the other antibiotic families still in use — nearly all discovered in that one burst, mostly by screening microbes from dirt. Average life expectancy in wealthy countries climbed steeply.",
+      "source_ids": ["wp-ab"],
+      "image_file": "File:Selman Waksman NYWTScrop.jpg"
+    },
+    {
+      "headline": "Fleming's warning",
+      "body": "In his Nobel lecture, Fleming himself warned what would happen: use the drugs carelessly, at too low a dose, and you would breed bacteria that shrugged them off. Bacteria reproduce in minutes, mutate constantly, and can pass resistance genes directly to unrelated bacteria. Every course of antibiotics kills the susceptible bugs and leaves the resistant ones to multiply. Heavy use in medicine — and far heavier use in farm animals — pushed that process hard.",
+      "source_ids": ["wp-amr", "wp-fleming"],
+      "image_file": "File:Howard Walter Florey 1945.jpg"
+    },
+    {
+      "headline": "The clock running back",
+      "body": "Now there are infections that resist almost everything: MRSA, drug-resistant tuberculosis and gonorrhea, gut bacteria untouched by last-resort drugs. Antibiotic-resistant infections are linked to well over a million deaths a year worldwide. Meanwhile new antibiotics are barely profitable, so for decades almost none were developed. This is the one class of medicine that works less well the more we use it — which makes using the ones we have carefully a matter of keeping modern medicine functioning at all.",
+      "source_ids": ["wp-amr", "wp-ab"],
+      "image_file": "File:Scanning electron micrograph of Methicillin-resistant Staphylococcus aureus (MRSA) and a dead Human neutrophil - NIAID.jpg"
+    }
+  ]
+}

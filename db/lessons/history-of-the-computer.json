@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs history-of-the-computer",
+  "topic": {
+    "slug": "history-of-the-computer",
+    "title": "A History of the Computer",
+    "domain": "science",
+    "one_line_summary": "One idea — a machine that stores its own instructions — running from a Victorian design that was never built to the phone in your pocket",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-hc",
+      "url": "https://en.wikipedia.org/wiki/History_of_computing_hardware",
+      "title": "History of computing hardware — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-ae",
+      "url": "https://en.wikipedia.org/wiki/Analytical_engine",
+      "title": "Analytical engine — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-turing",
+      "url": "https://en.wikipedia.org/wiki/Turing_machine",
+      "title": "Turing machine — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-vn",
+      "url": "https://en.wikipedia.org/wiki/Von_Neumann_architecture",
+      "title": "Von Neumann architecture — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "One idea",
+      "body": "The phone in your pocket, a 1970s mainframe and a wartime codebreaking machine are all the same kind of device. The idea that unites them is older than electronics: a general-purpose machine that holds its own list of instructions in memory, and can be told to do something completely different just by changing that list. This is the story of that idea.",
+      "source_ids": ["wp-hc"],
+      "image_file": "File:ENIAC Penn1.jpg"
+    },
+    {
+      "headline": "The engine that wasn't built",
+      "body": "In the 1830s the English mathematician Charles Babbage designed the Analytical Engine: a mechanical, general-purpose computer with a processing unit he called the 'mill,' a memory he called the 'store,' and programs fed in on punched cards. It was never completed. His collaborator Ada Lovelace wrote a set of notes on it that included a step-by-step method for the machine to compute a sequence of numbers — often described as the first published computer program — and speculated it could one day manipulate symbols and music, not just arithmetic.",
+      "source_ids": ["wp-ae", "wp-hc"],
+      "image_file": "File:Analytical engine trial model, Charles Babbage, 1834-1871 - Science Museum, London - DSC05565.jpg"
+    },
+    {
+      "headline": "The universal machine",
+      "body": "In 1936 Alan Turing, then 24, published a paper describing an imaginary device that read and wrote symbols on an endless tape according to a table of rules. Its power was this: one such machine, given a description of any other, could imitate it exactly. That 'universal machine' is the theoretical blueprint for every general-purpose computer — the reason one device can be a calculator, a typewriter and a camera depending only on its software.",
+      "source_ids": ["wp-turing", "wp-hc"],
+      "image_file": "File:Alan Turing (1912-1954) in 1936 at Princeton University.jpg"
+    },
+    {
+      "headline": "War machines",
+      "body": "The theory met electronics during the Second World War. At Bletchley Park in Britain, the Colossus machines of 1943 and 1944 — the first large-scale programmable electronic digital computers — were built to break German cipher traffic, and stayed secret for thirty years. In the United States, ENIAC was unveiled in 1945: 18,000 vacuum tubes, filling a room, and reprogrammed by physically rewiring it, a job that could take days.",
+      "source_ids": ["wp-hc"],
+      "image_file": "File:Colossus Computer, Bletchley Park - geograph.org.uk - 1590865.jpg"
+    },
+    {
+      "headline": "Put the program in memory",
+      "body": "The last conceptual piece arrived in 1945, in a report drafted by John von Neumann summarizing the ENIAC team's thinking: store the program in the same memory as the data it works on. A computer could then modify its own instructions and be reprogrammed in seconds instead of days. This 'stored-program' design — the von Neumann architecture — is still, in essence, how nearly every computer works. The first one to run, in Manchester in 1948, was nicknamed the Baby.",
+      "source_ids": ["wp-vn", "wp-hc"],
+      "image_file": "File:ENIAC-changing a tube.jpg"
+    },
+    {
+      "headline": "Smaller, and solid",
+      "body": "Vacuum tubes were hot, bulky and failure-prone. In 1947 Bell Labs invented the transistor, which did the same switching job in solid material and a fraction of the space. In 1958 and 1959 the integrated circuit put many transistors onto a single sliver of silicon. And in 1971 Intel's 4004 packed an entire processor onto one chip — the first microprocessor. The computer could now fit on a desk.",
+      "source_ids": ["wp-hc"],
+      "image_file": "File:A replica of the first working transistor 02.jpg"
+    },
+    {
+      "headline": "A computer of your own",
+      "body": "In the mid-1970s hobbyists bought the Altair 8800 as a kit. In 1977 the Apple II, Commodore PET and TRS-80 arrived ready to use. IBM legitimized the category with its PC in 1981, and the 1984 Macintosh brought the mouse and on-screen windows — ideas from Xerox's research lab — to a mass market. Underneath, transistor counts kept roughly doubling every couple of years, a trend named Moore's Law, and held for half a century.",
+      "source_ids": ["wp-hc"],
+      "image_file": "File:Apple II at Musée Bolo.jpg"
+    },
+    {
+      "headline": "Connected, and in your pocket",
+      "body": "In 1969 the first message was sent between two computers on the ARPANET, the network that grew into the internet. In 1989 Tim Berners-Lee designed the World Wide Web on top of it. And in 2007 the smartphone folded a full computer, a camera and a constant network connection into something the size of a wallet — more computing power than a 1990s supercomputer, running the same stored-program idea Babbage sketched in iron.",
+      "source_ids": ["wp-hc"],
+      "image_file": "File:Original iPhone docked.jpg"
+    }
+  ]
+}

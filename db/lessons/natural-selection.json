@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes. Load: node scripts/load-lesson.mjs natural-selection",
+  "topic": {
+    "slug": "natural-selection",
+    "title": "Evolution by Natural Selection",
+    "domain": "science",
+    "one_line_summary": "How Darwin explained the apparent design of living things with a process that requires no designer — and how a century of genetics confirmed it",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-ns",
+      "url": "https://en.wikipedia.org/wiki/Natural_selection",
+      "title": "Natural selection — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-evo",
+      "url": "https://en.wikipedia.org/wiki/Evolution",
+      "title": "Evolution — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-darwin",
+      "url": "https://en.wikipedia.org/wiki/Charles_Darwin",
+      "title": "Charles Darwin — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-synth",
+      "url": "https://en.wikipedia.org/wiki/Modern_synthesis_(20th_century)",
+      "title": "Modern synthesis (20th century) — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "A watch without a watchmaker",
+      "body": "Living things fit their environments with uncanny precision — the eye, the wing, the way a seed travels. For most of history the obvious explanation was that someone designed them that way. In 1859 Charles Darwin published a different answer: a blind, automatic process that produces the appearance of design with no designer involved. It is now the single organizing principle of all of biology.",
+      "source_ids": ["wp-ns", "wp-evo"],
+      "image_file": "File:Charles Darwin seated crop.jpg"
+    },
+    {
+      "headline": "The wrong mechanism",
+      "body": "Earlier naturalists had accepted that species change, but couldn't say how. The best-known guess, from Lamarck, was that traits acquired during life are inherited — a giraffe stretches for high leaves, and its offspring are born with slightly longer necks. That turned out to be the wrong mechanism. What was missing was an explanation that didn't require the organism to try.",
+      "source_ids": ["wp-ns", "wp-evo"],
+      "image_file": "File:Gregor Mendel.png"
+    },
+    {
+      "headline": "The voyage",
+      "body": "From 1831 to 1836 Darwin sailed around the world as naturalist on HMS Beagle. In the Galápagos Islands he noticed that mockingbirds — and, it later emerged, finches — differed from one island to the next. On the mainland he dug up fossils of gigantic extinct animals that closely resembled smaller living ones nearby. The pattern nagged at him for twenty years.",
+      "source_ids": ["wp-darwin"],
+      "image_file": "File:HMS Beagle (1854).jpg"
+    },
+    {
+      "headline": "Four simple facts",
+      "body": "The argument comes down to four observations. Organisms produce far more offspring than can possibly survive. Individuals in a population vary. Some of that variation is passed to offspring. Therefore the variants that happen to survive and reproduce best leave more descendants, and the population gradually shifts in their direction. Darwin called it natural selection. The variation arises undirected; the environment does the sorting.",
+      "source_ids": ["wp-ns"],
+      "image_file": "File:Darwin's finches by Gould.jpg"
+    },
+    {
+      "headline": "Two men, one idea",
+      "body": "In 1858 Darwin received a letter from Alfred Russel Wallace, a naturalist working in Southeast Asia, laying out essentially the same theory. Their work was presented together that year, and Darwin rushed On the Origin of Species into print in 1859. The first run sold out on the first day.",
+      "source_ids": ["wp-darwin", "wp-ns"],
+      "image_file": "File:Alfred-Russel-Wallace-c1895.jpg"
+    },
+    {
+      "headline": "The missing half",
+      "body": "Darwin had no idea how inheritance actually worked, which left a real hole in the theory. Unknown to him, a monk named Gregor Mendel was breeding pea plants in the 1860s and showing that traits pass in discrete units. Mendel's work was ignored for 35 years. When genetics and Darwin's selection were finally combined, in the 'modern synthesis' of the 1930s and 40s, evolutionary biology became a rigorous, quantitative science.",
+      "source_ids": ["wp-synth", "wp-evo"],
+      "image_file": "File:Gregor Mendel with cross.jpg"
+    },
+    {
+      "headline": "The evidence now",
+      "body": "The confirmation since has been overwhelming. Every living thing uses nearly the same genetic code, and the branching tree of common ancestry is written directly in the DNA. The fossil record has filled in transitional forms, including the land mammals that became whales. And selection is watched in real time: bacteria evolving resistance to antibiotics, insects to pesticides, and Galápagos finch beaks measurably changing shape from one drought year to the next.",
+      "source_ids": ["wp-evo", "wp-ns"],
+      "image_file": "File:Adaptive radiation of Darwin's finches. revised.jpg"
+    },
+    {
+      "headline": "Why it matters",
+      "body": "This is not an abstract debate. Understanding selection is why doctors rotate antibiotics, why farmers manage pesticide use, and how conservationists think about small populations. It explains where new diseases come from and why cancer is so hard to cure. And it places humans firmly within the same family tree as every other organism on Earth — not the goal of the process, just one more twig.",
+      "source_ids": ["wp-evo", "wp-ns"],
+      "image_file": "File:Galápagos giant tortoise, head profile (Chelonoidis niger hoodensis).jpg"
+    }
+  ]
+}
