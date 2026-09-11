@@ -9,6 +9,10 @@
 // can run from any machine with network access, not just this Mac.
 //
 // Usage: node scripts/narrate-lesson.mjs black-death [--force]
+//        node scripts/narrate-lesson.mjs sagrada-familia hanging-chain-model [--force]
+//   (second form narrates one deep dive from db/lessons/<slug>.json's
+//   deep_dives array — audio is stored under its own lesson slug, matching
+//   how the app looks it up for a deep-dive lesson)
 
 import fs from 'node:fs'
 import path from 'node:path'
@@ -44,9 +48,11 @@ async function synthesize(text, voiceName, apiKey) {
 
 async function main() {
   const slug = process.argv[2]
+  const rest = process.argv.slice(3).filter(a => a !== '--force')
+  const deepDiveSlug = rest[0]
   const force = process.argv.includes('--force')
   if (!slug) {
-    console.error('Usage: node scripts/narrate-lesson.mjs <lesson-slug> [--force]')
+    console.error('Usage: node scripts/narrate-lesson.mjs <lesson-slug> [deep-dive-slug] [--force]')
     process.exit(1)
   }
 
@@ -56,22 +62,33 @@ async function main() {
   const doc = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'db', 'lessons', `${slug}.json`), 'utf8'))
   const voiceName = doc.topic.voice || DEFAULT_VOICE
 
+  let beats = doc.beats
+  let title = doc.topic.title
+  let audioSlug = slug
+  if (deepDiveSlug) {
+    const dd = (doc.deep_dives || []).find(d => d.slug === deepDiveSlug)
+    if (!dd) throw new Error(`No deep dive "${deepDiveSlug}" in db/lessons/${slug}.json`)
+    beats = dd.beats
+    title = dd.title
+    audioSlug = dd.slug
+  }
+
   console.log('Connecting to Drive…')
   const token = await getAccessToken()
-  const audioFolderId = await ensureFolderPath(token, ['keystone', 'audio', slug])
+  const audioFolderId = await ensureFolderPath(token, ['keystone', 'audio', audioSlug])
 
-  console.log(`Narrating "${doc.topic.title}" — ${doc.beats.length} beat(s), voice ${voiceName}`)
+  console.log(`Narrating "${title}" — ${beats.length} beat(s), voice ${voiceName}`)
 
   let charsUsed = 0
   let generated = 0
-  for (let i = 0; i < doc.beats.length; i++) {
+  for (let i = 0; i < beats.length; i++) {
     const filename = `beat-${i}.mp3`
     const existingFileId = await findFile(token, filename, audioFolderId)
     if (existingFileId && !force) {
       console.log(`  beat ${i}: exists, skipping`)
       continue
     }
-    const text = doc.beats[i].body
+    const text = beats[i].body
     const mp3 = await synthesize(text, voiceName, apiKey)
     await uploadFile(token, {
       fileId: existingFileId || undefined,
@@ -88,7 +105,7 @@ async function main() {
   // No DB write — the app discovers audio by checking Drive for
   // keystone/audio/<slug>/beat-N.mp3 directly, so nothing races keystone.db.
   console.log(`\n✔ ${generated} beat(s) generated, ${charsUsed} characters used`)
-  console.log(`  MP3s: Drive keystone/audio/${slug}/`)
+  console.log(`  MP3s: Drive keystone/audio/${audioSlug}/`)
   console.log(`  (Google TTS free tier is ~1,000,000 characters/month — spent once, never on playback)`)
 }
 

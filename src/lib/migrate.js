@@ -51,9 +51,31 @@ function migrateCards(db) {
       return true
     } catch { /* already there */ }
   }
+
+  if (!cols.includes('thread_refs')) {
+    try {
+      db.run('ALTER TABLE cards ADD COLUMN thread_refs TEXT')
+      return true
+    } catch { /* already there */ }
+  }
   return false
 }
 
+// lessons: add slug, so a "pull a thread" link can point straight at a
+// specific deep-dive lesson rather than only "the overview lesson for topic
+// X". Unique only among non-null slugs (overview lessons stay NULL).
+function migrateLessons(db) {
+  const cols = columnNames(db, 'lessons')
+  if (cols.length === 0) return false
+  if (cols.includes('slug')) return false
+
+  db.run('ALTER TABLE lessons ADD COLUMN slug TEXT')
+  db.run('CREATE UNIQUE INDEX IF NOT EXISTS idx_lessons_slug ON lessons(slug) WHERE slug IS NOT NULL')
+  return true
+}
+
 export function runMigrations(db) {
-  return migrateCards(db)
+  const a = migrateCards(db)
+  const b = migrateLessons(db)
+  return a || b
 }

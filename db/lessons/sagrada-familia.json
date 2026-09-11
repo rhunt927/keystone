@@ -1,0 +1,125 @@
+{
+  "_note": "Hand-authored, source-grounded narrative. No invented quotes (Hooke's line in the deep dive is verbatim, correctly attributed). First lesson with a real 'pull a thread' — beat 3 links to the hanging-chain-model deep dive. Load: node scripts/load-lesson.mjs sagrada-familia",
+  "topic": {
+    "slug": "sagrada-familia",
+    "title": "The Sagrada Família",
+    "domain": "arts-culture",
+    "one_line_summary": "Not a cathedral, not finished until this year — and designed, in part, upside down",
+    "voice": "en-US-Studio-Q"
+  },
+  "sources": [
+    {
+      "id": "wp-sf",
+      "url": "https://en.wikipedia.org/wiki/Sagrada_Fam%C3%ADlia",
+      "title": "Sagrada Família — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-gaudi",
+      "url": "https://en.wikipedia.org/wiki/Antoni_Gaud%C3%AD",
+      "title": "Antoni Gaudí — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-funicular",
+      "url": "https://en.wikipedia.org/wiki/Funicular_curve",
+      "title": "Funicular curve — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    },
+    {
+      "id": "wp-subirachs",
+      "url": "https://en.wikipedia.org/wiki/Josep_Maria_Subirachs",
+      "title": "Josep Maria Subirachs — Wikipedia",
+      "publisher": "Wikipedia",
+      "source_type": "encyclopedic"
+    }
+  ],
+  "beats": [
+    {
+      "headline": "Not a cathedral",
+      "body": "Most people call it a cathedral. It isn't one — Barcelona's actual cathedral is a different building across town. And until this year, after 144 years of construction, it wasn't even finished: the Sagrada Família's tallest tower only reached its full height in February 2026, and was blessed by the pope that June, on the exact hundredth anniversary of the death of the man who designed it.",
+      "source_ids": ["wp-sf"],
+      "image_file": "File:Sagrada Familia - Exterior - 001.jpg"
+    },
+    {
+      "headline": "Not his idea, either",
+      "body": "Ground broke in 1882 under a conventional architect, Francisco de Paula del Villar, who envisioned a fairly ordinary Gothic-revival church. He resigned after a dispute a year in. His replacement was a 31-year-old local architect named Antoni Gaudí — who threw out almost everything and started over.",
+      "source_ids": ["wp-sf", "wp-gaudi"],
+      "image_file": "File:Antoni Gaudí i Cornet, 1878 colorized portrait.jpg"
+    },
+    {
+      "headline": "Designed upside down",
+      "body": "Gothic cathedrals solve one big structural problem — the outward push of a heavy stone vault — with flying buttresses, the external stone arms braced against the walls. Sagrada Família has none. Gaudí worked out a way for every column and vault to carry its load through pure compression alone, using a technique he built and photographed upside down before a single stone was cut for it. Inside, his columns branch as they rise — a square base twisting into an octagon, then sixteen sides, then a circle — like a forest of stone trees holding up a stone canopy.",
+      "source_ids": ["wp-sf"],
+      "image_file": "File:Sagrada Familia columns.jpg",
+      "threads": [
+        { "label": "The hanging chain model", "lesson_slug": "hanging-chain-model" }
+      ]
+    },
+    {
+      "headline": "Shorter than the hill on purpose",
+      "body": "The tallest spire, crowned with a cross for Jesus Christ, reached its full height of 172.5 meters this year, making Sagrada Família the tallest church building in the world. Gaudí fixed that number himself, keeping it just under the height of Montjuïc, the hill overlooking Barcelona — he believed nothing he built should rise higher than what God had already made.",
+      "source_ids": ["wp-sf"],
+      "image_file": "File:Barcelona, Spain - Basilica and Expiatory Church of the Holy Family - Basílica y Templo Expiatorio de la Sagrada Familia - Spires.jpg"
+    },
+    {
+      "headline": "Paid for one ticket at a time",
+      "body": "No government and no branch of the Catholic Church has ever funded it. From the start, construction ran on private donations, and today mostly on ticket sales from the millions of tourists who visit every year, making it the most-visited monument in Spain. It was also, technically, unlicensed the entire time: the city of Barcelona didn't issue Sagrada Família an actual building permit until 2019, 136 years in, after its trustees agreed to pay the city €36 million toward the metro access the site had disrupted.",
+      "source_ids": ["wp-sf", "wp-gaudi"],
+      "image_file": "File:Massacre of the Innocents - Nativity Facade - Sagrada Família - Barcelona 2014.JPG"
+    },
+    {
+      "headline": "Burned, and rebuilt from photographs",
+      "body": "In July 1936, at the start of the Spanish Civil War, anarchist militants set fire to the crypt and broke into Gaudí's workshop, destroying most of his original plans, drawings and plaster models. Everyone who worked on it afterward — including, decades later, the sculptor Josep Maria Subirachs, whose stark, angular figures on the Passion Façade abandoned Gaudí's flowing style entirely and divided public opinion — has had to reconstruct or reinterpret his intentions from whatever fragments and photographs survived.",
+      "source_ids": ["wp-sf", "wp-subirachs"],
+      "image_file": "File:Passion Facade of the Sagrada Familia sculpted by Josep Subirachs.jpg"
+    },
+    {
+      "headline": "Mistaken for a beggar",
+      "body": "Gaudí never saw most of it finished. On his daily walk to confession on 7 June 1926, he was struck by a passing tram. By then he had grown so indifferent to his own appearance that bystanders assumed he was a beggar and left him where he lay; a taxi eventually took him to a hospital for the poor, where he went unrecognized until the next day, when a Sagrada Família chaplain identified him. He died three days after the accident, at 73, and was buried in the crypt of the church he had spent 43 years building.",
+      "source_ids": ["wp-gaudi"],
+      "image_file": "File:Barcelona - Crypt of La Sagrada Família - 1900-1906.jpg"
+    },
+    {
+      "headline": "A century later, almost to the day",
+      "body": "The building finally caught up with him. Its central tower topped out in February 2026, and Pope Leo XIV blessed it that June — the exact hundredth anniversary of Gaudí's death — making Sagrada Família, at 172.5 meters, the tallest church in the world. Several of its façades are still unfinished. The not-quite-cathedral that was never supposed to be done in his lifetime still, in its way, isn't.",
+      "source_ids": ["wp-sf"],
+      "image_file": "File:Sagrada Familia - Exterior - 002.jpg"
+    }
+  ],
+  "deep_dives": [
+    {
+      "slug": "hanging-chain-model",
+      "title": "The Hanging Chain Model",
+      "beats": [
+        {
+          "headline": "A chain, and a rule",
+          "body": "In 1675 the English scientist Robert Hooke noticed something about a chain left to hang under its own weight: settled that way, every link is purely in tension — nothing in it is being crushed or bent, only pulled. He stated the flip side of that as a rule: \"as hangs the flexible line, so, but inverted, will stand the rigid arch.\" Turn that sagging shape upside down, and you get the ideal shape for an arch under pure compression — one that needs no external bracing to keep it from collapsing outward.",
+          "source_ids": ["wp-funicular"],
+          "image_file": "File:13 Portrait of Robert Hooke.JPG"
+        },
+        {
+          "headline": "Gaudí takes it into three dimensions",
+          "body": "Gaudí pushed that idea further than anyone before him. For a chapel on a textile-workers' estate outside Barcelona, the Colònia Güell, he built a large model out of ropes and small sacks of lead shot, hung from a wooden frame at roughly one-tenth scale — letting gravity work out the ideal compression shape for an entire three-dimensional building, columns, arches and vaults together, not just a single arch.",
+          "source_ids": ["wp-funicular", "wp-gaudi"],
+          "image_file": "File:Cripta de la Colònia Güell 1.jpg"
+        },
+        {
+          "headline": "Photographed, then flipped",
+          "body": "He photographed the hanging model and used the picture, turned upside down, to trace the actual stone geometry — inclined columns, branching vaults — the finished crypt would need. It was an outlandish way to do engineering, rarely attempted at this scale before. The original model didn't survive, but a smaller copy Gaudí kept is on display today in the Sagrada Família's own museum — and looks so unfamiliar that visitors often assume it's a model of the basilica itself, when it's actually the machine that helped design it.",
+          "source_ids": ["wp-funicular"],
+          "image_file": "File:Maqueta funicular de la iglesia de la colonia Güell usada por Gaudí.jpg"
+        },
+        {
+          "headline": "Why it mattered",
+          "body": "That same logic runs through the finished Sagrada Família: its inclined, branching columns and vaults carry their loads in compression alone, the same shapes the hanging ropes traced in reverse. It's why the building never needed flying buttresses, the external stone braces that hold up nearly every Gothic cathedral in Europe — Gaudí's design was worked out, from the very start, to hold itself up.",
+          "source_ids": ["wp-sf", "wp-funicular"],
+          "image_file": "File:Sagrada Familia columns.jpg"
+        }
+      ]
+    }
+  ]
+}

@@ -42,7 +42,9 @@ function Equalizer({ active }) {
   )
 }
 
-export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, onBack }) {
+export function LessonViewer({
+  topic, domain, lessonTitle, audioSlug, cards, accessToken, onBack, backLabel, onOpenThread,
+}) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [ended, setEnded] = useState(false)
@@ -52,7 +54,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
     speak, resume, pause, stop, speaking, sentenceIndex, canResume, loadedText,
     supported, voices, voiceName, selectedVoiceURI, selectVoice, refreshVoices, rate, setRate,
   } = useSpeech()
-  const { ready: audioReady, engine: audio } = useAudioLesson(accessToken, topic.slug, cards.length, rate)
+  const { ready: audioReady, engine: audio } = useAudioLesson(accessToken, audioSlug || topic.slug, cards.length, rate)
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
 
@@ -68,6 +70,14 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
   const visualSpec = useMemo(() => {
     if (!card?.visual_spec) return null
     try { return JSON.parse(card.visual_spec) } catch { return null }
+  }, [card])
+
+  // Hand-picked at authoring time (see thread_refs in schema.sql) — every
+  // entry here already points at a real, finished lesson or topic. Never a
+  // live search, never a "not built yet" placeholder.
+  const threads = useMemo(() => {
+    if (!card?.thread_refs) return []
+    try { return JSON.parse(card.thread_refs) } catch { return [] }
   }, [card])
 
   const curatedImage = card?.image_url
@@ -178,7 +188,7 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
   return (
     <div className="space-y-3">
       <button onClick={leave} className="text-sm opacity-60 hover:opacity-100">
-        ← Topics
+        ← {backLabel || 'Topics'}
       </button>
       <h1 className="text-2xl font-serif">{lessonTitle || topic.title}</h1>
 
@@ -245,6 +255,21 @@ export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, o
                 <a key={s.url} href={s.url} target="_blank" rel="noreferrer" className="underline hover:opacity-100">
                   Source: {s.publisher || s.title}
                 </a>
+              ))}
+            </div>
+          )}
+
+          {onOpenThread && threads.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
+              <span className="text-[10px] opacity-40">Pull a thread:</span>
+              {threads.map(t => (
+                <button
+                  key={t.lesson_slug || t.topic_slug}
+                  onClick={() => { audio.stop(); stop(); setPlaying(false); onOpenThread(t) }}
+                  className="text-xs rounded-full bg-[#6B4226]/10 hover:bg-[#6B4226]/20 px-3 py-1 font-medium"
+                >
+                  🧵 {t.label}
+                </button>
               ))}
             </div>
           )}

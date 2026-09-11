@@ -76,13 +76,14 @@ function App() {
       />
     )
   } else if (view.screen === 'lesson') {
-    const lesson = query(
-      "SELECT id, title FROM lessons WHERE topic_id = ? AND kind = 'overview' LIMIT 1",
-      [view.topic.id]
-    )[0]
+    // A thread can open a specific deep-dive lesson by its own slug; absent
+    // that, it's the topic's normal overview lesson.
+    const lesson = view.lessonSlug
+      ? query('SELECT id, slug, title FROM lessons WHERE slug = ?', [view.lessonSlug])[0]
+      : query("SELECT id, slug, title FROM lessons WHERE topic_id = ? AND kind = 'overview' LIMIT 1", [view.topic.id])[0]
     const rawCards = lesson
       ? query(
-          `SELECT c.id, c.position, c.card_type, c.headline, c.body, c.visual_spec,
+          `SELECT c.id, c.position, c.card_type, c.headline, c.body, c.visual_spec, c.thread_refs,
                   i.url AS image_url, i.attribution AS image_attribution, i.source_url AS image_source_url
            FROM cards c
            LEFT JOIN images i ON i.id = c.image_id
@@ -100,14 +101,64 @@ function App() {
         [c.id]
       ),
     }))
+
+    // Resolves a thread's target (another lesson, or another topic's
+    // overview) to a full view object, always pointing "back" at where we
+    // came from. Both kinds of reference already point at real, existing,
+    // already-authored content — never a live lookup or a placeholder.
+    function resolveThread(ref) {
+      if (ref.lesson_slug) {
+        const row = query(
+          `SELECT l.slug AS lesson_slug, t.id AS topic_id, t.slug AS topic_slug, t.title AS topic_title,
+                  d.id AS domain_id, d.slug AS domain_slug, d.name AS domain_name
+           FROM lessons l JOIN topics t ON t.id = l.topic_id JOIN domains d ON d.id = t.domain_id
+           WHERE l.slug = ?`,
+          [ref.lesson_slug]
+        )[0]
+        if (!row) return null
+        return {
+          screen: 'lesson',
+          domain: { id: row.domain_id, slug: row.domain_slug, name: row.domain_name },
+          topic: { id: row.topic_id, slug: row.topic_slug, title: row.topic_title },
+          lessonSlug: row.lesson_slug,
+          backTo: view,
+        }
+      }
+      if (ref.topic_slug) {
+        const row = query(
+          `SELECT t.id, t.slug, t.title, d.id AS domain_id, d.slug AS domain_slug, d.name AS domain_name
+           FROM topics t JOIN domains d ON d.id = t.domain_id WHERE t.slug = ?`,
+          [ref.topic_slug]
+        )[0]
+        if (!row) return null
+        return {
+          screen: 'lesson',
+          domain: { id: row.domain_id, slug: row.domain_slug, name: row.domain_name },
+          topic: { id: row.id, slug: row.slug, title: row.title },
+          backTo: view,
+        }
+      }
+      return null
+    }
+
     body = (
       <LessonViewer
+        // Forces a fresh mount (reset index/playback state) whenever the
+        // actual lesson changes — including a thread jumping straight into a
+        // deep dive mid-beat, or coming back from one.
+        key={lesson?.id ?? `${view.topic.id}-empty`}
         topic={view.topic}
         domain={view.domain}
         lessonTitle={lesson?.title}
+        audioSlug={lesson?.slug || view.topic.slug}
         cards={cards}
         accessToken={accessToken}
-        onBack={() => setView({ screen: 'topics', domain: view.domain })}
+        onBack={() => setView(view.backTo || { screen: 'topics', domain: view.domain })}
+        backLabel={view.backTo ? (view.backTo.topic?.title || 'Back') : 'Topics'}
+        onOpenThread={ref => {
+          const next = resolveThread(ref)
+          if (next) setView(next)
+        }}
       />
     )
   }

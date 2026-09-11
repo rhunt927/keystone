@@ -94,12 +94,20 @@ CREATE TABLE IF NOT EXISTS lessons (
   topic_id    INTEGER NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
   kind        TEXT NOT NULL DEFAULT 'overview'
                  CHECK (kind IN ('overview', 'deep_dive')),
+  -- Addressable by slug so a beat's thread can link straight to a specific
+  -- deep-dive lesson (rather than "the overview lesson for topic X"). NULL
+  -- for overview lessons, which are looked up by topic_id instead.
+  slug        TEXT,
   title       TEXT NOT NULL,
   position    INTEGER NOT NULL DEFAULT 0,
   created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_lessons_topic ON lessons(topic_id);
+-- idx_lessons_slug is created in src/lib/migrate.js, not here — see the note
+-- on idx_topics_origin_card above for why (a pre-existing DB's CREATE TABLE
+-- here is a no-op, so an index on a brand-new column must wait for the
+-- migration that actually adds it).
 
 -- ---------------------------------------------------------------------------
 -- Cards — the short-form swipeable content unit within a lesson.
@@ -120,6 +128,11 @@ CREATE TABLE IF NOT EXISTS cards (
   -- `keystone/audio/` folder (e.g. "black-death/beat-3.mp3"). When present the
   -- app plays this instead of browser text-to-speech.
   audio_path   TEXT,
+  -- Optional "pull a thread" links (JSON array of {label, lesson_slug} and/or
+  -- {label, topic_slug}) — hand-picked at authoring time, pointing only at
+  -- already-written, already-cited lessons/topics. Never a live search, never
+  -- a placeholder for something not yet built.
+  thread_refs  TEXT,
   created_at   TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

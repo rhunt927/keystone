@@ -86,6 +86,55 @@ function upsertImage(db, image, altText, now) {
   return db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
 }
 
+// Writes one lesson's beats as cards (used for both the overview lesson and
+// any deep dives) — image/visual resolution, thread_refs, and source links.
+// `sourceIdByKey` is the whole doc's shared source registry (both the
+// overview and every deep dive cite from the same pool).
+async function writeBeats(db, { lessonId, beats, sourceIdByKey, altText, now }) {
+  let withImage = 0
+  let withVisual = 0
+  for (let i = 0; i < beats.length; i++) {
+    const beat = beats[i]
+    let imageId = null
+    if (!beat.visual) {
+      const image = await resolveBeatImage(beat).catch(() => null)
+      if (image) {
+        imageId = upsertImage(db, image, beat.headline || altText, now)
+        withImage++
+      } else {
+        console.warn(`  beat ${i} ("${beat.headline || ''}") — no image resolved`)
+      }
+    } else {
+      withVisual++
+    }
+
+    const threadRefs = (beat.threads || []).map(t => ({
+      label: t.label,
+      ...(t.lesson_slug ? { lesson_slug: t.lesson_slug } : {}),
+      ...(t.topic_slug ? { topic_slug: t.topic_slug } : {}),
+    }))
+
+    db.run(
+      `INSERT INTO cards (lesson_id, position, card_type, headline, body, image_id, visual_spec, thread_refs, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        lessonId, i, beat.visual ? 'visual' : 'text',
+        beat.headline || null, beat.body, imageId,
+        beat.visual ? JSON.stringify(beat.visual) : null,
+        threadRefs.length ? JSON.stringify(threadRefs) : null,
+        now,
+      ]
+    )
+    const cardId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
+    for (const key of beat.source_ids || []) {
+      if (sourceIdByKey[key]) {
+        db.run('INSERT OR IGNORE INTO card_sources (card_id, source_id) VALUES (?, ?)', [cardId, sourceIdByKey[key]])
+      }
+    }
+  }
+  return { withImage, withVisual }
+}
+
 async function main() {
   const slug = process.argv[2]
   if (!slug) {
@@ -95,8 +144,8 @@ async function main() {
 
   const lessonPath = path.join(REPO_ROOT, 'db', 'lessons', `${slug}.json`)
   const doc = JSON.parse(fs.readFileSync(lessonPath, 'utf8'))
-  const { topic, sources, beats } = doc
-  console.log(`Loading "${topic.title}" — ${beats.length} beat(s), ${sources.length} source(s)`)
+  const { topic, sources, beats, deep_dives = [] } = doc
+  console.log(`Loading "${topic.title}" — ${beats.length} beat(s), ${sources.length} source(s), ${deep_dives.length} deep dive(s)`)
 
   console.log('Connecting to Drive…')
   const token = await getAccessToken()
@@ -146,38 +195,25 @@ async function main() {
     sourceIdByKey[s.id] = db.exec('SELECT id FROM sources WHERE url = ?', [s.url])[0].values[0][0]
   }
 
-  let withImage = 0
-  let withVisual = 0
-  for (let i = 0; i < beats.length; i++) {
-    const beat = beats[i]
-    let imageId = null
-    if (!beat.visual) {
-      const image = await resolveBeatImage(beat).catch(() => null)
-      if (image) {
-        imageId = upsertImage(db, image, beat.headline || topic.title, now)
-        withImage++
-      } else {
-        console.warn(`  beat ${i} ("${beat.headline || ''}") — no image resolved`)
-      }
-    } else {
-      withVisual++
-    }
+  const { withImage, withVisual } = await writeBeats(db, {
+    lessonId, beats, sourceIdByKey, altText: topic.title, now,
+  })
+
+  // Deep dives — each is its own addressable (by slug) lesson, cited from the
+  // same shared source pool. Replaced by slug on re-run, same as the overview.
+  let deepDiveCount = 0
+  for (const dd of deep_dives) {
+    const existingDd = db.exec('SELECT id FROM lessons WHERE slug = ?', [dd.slug])[0]
+    if (existingDd) db.run('DELETE FROM lessons WHERE id = ?', [existingDd.values[0][0]])
 
     db.run(
-      `INSERT INTO cards (lesson_id, position, card_type, headline, body, image_id, visual_spec, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        lessonId, i, beat.visual ? 'visual' : 'text',
-        beat.headline || null, beat.body, imageId,
-        beat.visual ? JSON.stringify(beat.visual) : null, now,
-      ]
+      "INSERT INTO lessons (topic_id, kind, slug, title, position, created_at) VALUES (?, 'deep_dive', ?, ?, ?, ?)",
+      [topicId, dd.slug, dd.title, deepDiveCount + 1, now]
     )
-    const cardId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
-    for (const key of beat.source_ids || []) {
-      if (sourceIdByKey[key]) {
-        db.run('INSERT OR IGNORE INTO card_sources (card_id, source_id) VALUES (?, ?)', [cardId, sourceIdByKey[key]])
-      }
-    }
+    const ddLessonId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0]
+    await writeBeats(db, { lessonId: ddLessonId, beats: dd.beats, sourceIdByKey, altText: dd.title, now })
+    deepDiveCount++
+    console.log(`  deep dive "${dd.title}" (slug "${dd.slug}") — ${dd.beats.length} beat(s)`)
   }
 
   db.run(
@@ -198,6 +234,7 @@ async function main() {
 
   console.log(`\n✔ Loaded "${topic.title}" (topic ${topicId}, lesson ${lessonId})`)
   console.log(`  ${beats.length} beats — ${withImage} with a photo, ${withVisual} with a motion graphic`)
+  if (deepDiveCount) console.log(`  ${deepDiveCount} deep dive(s) loaded`)
   console.log(`  Saved to Drive: keystone/${DB_FILENAME}`)
 }
 
