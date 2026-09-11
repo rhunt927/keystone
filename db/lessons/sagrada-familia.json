@@ -4,7 +4,7 @@
     "slug": "sagrada-familia",
     "title": "The Sagrada Família",
     "domain": "arts-culture",
-    "one_line_summary": "Not a cathedral, not finished until this year — and designed, in part, upside down",
+    "one_line_summary": "Not a cathedral, not finished until 2026 — and designed, in part, upside down",
     "voice": "en-US-Studio-Q"
   },
   "sources": [
@@ -40,7 +40,7 @@
   "beats": [
     {
       "headline": "Not a cathedral",
-      "body": "Most people call it a cathedral. It isn't one — Barcelona's actual cathedral is a different building across town. And until this year, after 144 years of construction, it wasn't even finished: the Sagrada Família's tallest tower only reached its full height in February 2026, and was blessed by the pope that June, on the exact hundredth anniversary of the death of the man who designed it.",
+      "body": "Most people call it a cathedral. It isn't one — Barcelona's actual cathedral is a different building across town. And until 2026, after 144 years of construction, it wasn't even finished: the Sagrada Família's tallest tower only reached its full height that February, and was blessed by the pope that June, on the exact hundredth anniversary of the death of the man who designed it.",
       "source_ids": ["wp-sf"],
       "image_file": "File:Sagrada Familia - Exterior - 001.jpg"
     },
@@ -61,7 +61,7 @@
     },
     {
       "headline": "Shorter than the hill on purpose",
-      "body": "The tallest spire, crowned with a cross for Jesus Christ, reached its full height of 172.5 meters this year, making Sagrada Família the tallest church building in the world. Gaudí fixed that number himself, keeping it just under the height of Montjuïc, the hill overlooking Barcelona — he believed nothing he built should rise higher than what God had already made.",
+      "body": "The tallest spire, crowned with a cross for Jesus Christ, reached its full height of 172.5 meters in 2026, making Sagrada Família the tallest church building in the world. Gaudí fixed that number himself, keeping it just under the height of Montjuïc, the hill overlooking Barcelona — he believed nothing he built should rise higher than what God had already made.",
       "source_ids": ["wp-sf"],
       "image_file": "File:Barcelona, Spain - Basilica and Expiatory Church of the Holy Family - Basílica y Templo Expiatorio de la Sagrada Familia - Spires.jpg"
     },
