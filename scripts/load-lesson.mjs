@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url'
 import initSqlJs from 'sql.js'
 import { runMigrations } from '../src/lib/migrate.js'
 import { readEnv } from './lib/env.mjs'
-import { getAccessToken } from './lib/driveAuth.mjs'
+import { getValidAccessToken } from './lib/driveAuth.mjs'
 import { findFile, downloadFile, uploadFile } from './lib/drive.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -149,7 +149,7 @@ async function main() {
   console.log(`Loading "${topic.title}" — ${beats.length} beat(s), ${sources.length} source(s), ${deep_dives.length} deep dive(s)`)
 
   console.log('Connecting to Drive…')
-  const token = await getAccessToken()
+  const token = await getValidAccessToken()
   // Under the narrow drive.file scope, the folder must be the one explicitly
   // granted via the one-time scripts/drive-auth.mjs picker step — never
   // discovered by a name search (that search can't see a picker-granted

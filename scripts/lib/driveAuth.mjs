@@ -39,10 +39,33 @@ export async function getAccessToken(refreshTokenOverride) {
   })
   const data = await res.json()
   if (!res.ok) {
-    throw new Error(
+    const err = new Error(
       `Couldn't refresh a Drive access token (${res.status}): ${data.error_description || data.error || JSON.stringify(data)}. ` +
       `If this says the token is invalid/expired, re-run \`node scripts/drive-auth.mjs\`.`
     )
+    // Google's specific signal for "this refresh token is dead" (expired,
+    // revoked, or — most commonly for this app — the 7-day Testing-status
+    // limit) rather than some other failure (network, bad client id, etc.).
+    err.isExpiredGrant = data.error === 'invalid_grant'
+    throw err
   }
   return data.access_token
+}
+
+// Like getAccessToken, but if the refresh token has died, automatically runs
+// the interactive re-authorization flow (one click through Google's consent
+// screen — the folder is already known, so no picker needed again) and
+// retries once. Only works where a browser is actually reachable (this Mac);
+// elsewhere it surfaces a clear error instead of hanging.
+export async function getValidAccessToken() {
+  try {
+    return await getAccessToken()
+  } catch (e) {
+    if (!e.isExpiredGrant) throw e
+    console.log('\n⚠ Drive credential expired (the ~7-day limit while the app is in "Testing" status).')
+    console.log('  Attempting to renew it automatically — check for a browser tab...')
+    const { runInteractiveDriveAuth } = await import('./interactiveDriveAuth.mjs')
+    await runInteractiveDriveAuth()
+    return await getAccessToken()
+  }
 }

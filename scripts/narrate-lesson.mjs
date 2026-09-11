@@ -18,7 +18,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readEnv } from './lib/env.mjs'
-import { getAccessToken } from './lib/driveAuth.mjs'
+import { getValidAccessToken } from './lib/driveAuth.mjs'
 import { ensureFolderPath, findFile, uploadFile } from './lib/drive.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -77,7 +77,7 @@ async function main() {
   if (!keystoneFolderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID not in .env — run `node scripts/drive-auth.mjs` first.')
 
   console.log('Connecting to Drive…')
-  const token = await getAccessToken()
+  const token = await getValidAccessToken()
   const audioFolderId = await ensureFolderPath(token, ['audio', audioSlug], keystoneFolderId)
 
   console.log(`Narrating "${title}" — ${beats.length} beat(s), voice ${voiceName}`)
