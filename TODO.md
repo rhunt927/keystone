@@ -283,6 +283,41 @@ Questions) — content breadth is no longer the blocker.
         how-a-bill-becomes-law, why-scotus-is-powerful, gerrymandering —
         deliberately evergreen, non-partisan "how it works" explainers
       With Black Death + Rosa Parks that's **23 lessons** total.
+- [x] **Search-for-a-subject + "pull a thread" (2026-09-11)** — two related
+      features, both client-only/serverless/free (no new secrets, no server):
+      - **New domain: Explore** (`db/schema.sql` seed) — anything built on
+        demand lands here, kept separate from the 24 hand-authored lessons.
+        `topics.source_kind` ('authored' | 'generated') and
+        `topics.origin_card_id` (lineage) added via `src/lib/migrate.js`.
+      - **`src/lib/wikiLesson.js`** — the Wikipedia fetch/chunk/image-match
+        pipeline, extracted out of `generate-lesson.mjs` into an isomorphic
+        (Node + browser) module so the CLI script and the app share one
+        implementation. `scripts/generate-lesson.mjs` now just calls it and
+        defaults to the `explore` domain. `src/lib/topicWriter.js` holds the
+        shared sql.js write (`writeGeneratedTopic`).
+      - **"+ Explore a topic"** button (Domains screen and every TopicList) →
+        `AddTopicScreen.jsx` → search Wikipedia, pick a result, lesson is
+        built and saved on the spot, then opens.
+      - **Pull a thread** — `useThreads.js` extracts proper-noun-ish phrases
+        from the beat currently on screen and resolves each against
+        Wikipedia's REST summary API (free, cached per phrase for the
+        session), filtered against false positives (sentence-initial
+        capitals, redirect drift). Real, distinct topics show as tappable
+        chips under the beat ("Pull a thread: Charlemagne · Papal States").
+        Tapping one reuses an existing topic if the slug already matches
+        (including a hand-authored one — pulling a thread that happens to
+        name e.g. Rosa Parks lands on the curated lesson, not a regenerated
+        one) or builds a new Explore topic, recording `origin_card_id` for a
+        "🧵 Spun off from ..." breadcrumb back on the new lesson.
+      - Narration for anything in Explore is the browser's voice (`useSpeech`
+        fallback), not pre-generated Studio audio — that's what keeps this
+        free and instant; the lesson viewer labels these "Auto-generated."
+      - `useDatabase.mutate(fn)` added — runs a multi-statement write against
+        the live sql.js `db`, then persists to Drive, same pattern the schema
+        migration save already used.
+      - Proved end-to-end against a scratch copy of the real DB, then for
+        real via the CLI (`node scripts/generate-lesson.mjs "Hannibal"`) —
+        now live as the first Explore topic.
 - [ ] **← NEXT:**
       - **Feed / continuous-scroll navigation** — the stated product goal
         ("replace my doom scrolling"). Open app → content just plays, swipe for

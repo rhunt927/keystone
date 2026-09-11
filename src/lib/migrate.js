@@ -54,6 +54,28 @@ function migrateCards(db) {
   return false
 }
 
+// topics: add source_kind ('authored' | 'generated') and origin_card_id (set
+// when a topic was spun off by pulling a thread on another lesson's card).
+// Both are plain ADD COLUMN — no CHECK/FK rebuild needed like cards required.
+function migrateTopics(db) {
+  const cols = columnNames(db, 'topics')
+  if (cols.length === 0) return false
+  let changed = false
+
+  if (!cols.includes('source_kind')) {
+    db.run("ALTER TABLE topics ADD COLUMN source_kind TEXT NOT NULL DEFAULT 'authored'")
+    changed = true
+  }
+  if (!cols.includes('origin_card_id')) {
+    db.run('ALTER TABLE topics ADD COLUMN origin_card_id INTEGER REFERENCES cards(id) ON DELETE SET NULL')
+    db.run('CREATE INDEX IF NOT EXISTS idx_topics_origin_card ON topics(origin_card_id)')
+    changed = true
+  }
+  return changed
+}
+
 export function runMigrations(db) {
-  return migrateCards(db)
+  const a = migrateCards(db)
+  const b = migrateTopics(db)
+  return a || b
 }

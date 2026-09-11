@@ -41,11 +41,22 @@ CREATE TABLE IF NOT EXISTS topics (
   one_line_summary  TEXT,
   status            TEXT NOT NULL DEFAULT 'draft'
                        CHECK (status IN ('draft', 'ready', 'archived')),
+  -- 'authored' = hand-written narrative + curated images + Studio narration
+  -- (the default). 'generated' = built on demand in-app from Wikipedia prose,
+  -- read aloud by the device's own voice — a different, clearly-labeled tier.
+  source_kind       TEXT NOT NULL DEFAULT 'authored'
+                       CHECK (source_kind IN ('authored', 'generated')),
+  -- Set when this topic was spun off by "pulling a thread" on a card in
+  -- another lesson, so the app can show a "spun off from ..." breadcrumb.
+  origin_card_id    INTEGER REFERENCES cards(id) ON DELETE SET NULL,
   created_at        TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at        TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_topics_domain ON topics(domain_id);
+-- idx_topics_origin_card is created in src/lib/migrate.js, not here — on an
+-- existing (pre-migration) DB this CREATE TABLE is a no-op, so an unconditional
+-- index on origin_card_id here would fail before the column migration runs.
 
 -- ---------------------------------------------------------------------------
 -- Paths — themed, ordered sequences of topics (e.g. "Civil Rights Movement").
@@ -211,4 +222,9 @@ INSERT OR IGNORE INTO domains (slug, name, description) VALUES
   ('history',        'History',        'People, events, and eras'),
   ('science',        'Science',        'Concepts, discoveries, and how things work'),
   ('current-events',  'Current Events', 'Recent and ongoing developments'),
-  ('arts-culture',   'Arts & Culture', 'Art, literature, music, and cultural movements');
+  ('arts-culture',   'Arts & Culture', 'Art, literature, music, and cultural movements'),
+  -- Anything built on demand (searched for, or spun off by pulling a thread)
+  -- lands here rather than mixed into the curated domains above — it's a
+  -- different tier of content (Wikipedia prose, device voice, no hand
+  -- authoring) and is labeled as such in the UI. See topics.source_kind.
+  ('explore',        'Explore',        'Built on demand from Wikipedia — search for anything, or pull a thread');
