@@ -283,15 +283,64 @@ Questions) — content breadth is no longer the blocker.
         how-a-bill-becomes-law, why-scotus-is-powerful, gerrymandering —
         deliberately evergreen, non-partisan "how it works" explainers
       With Black Death + Rosa Parks that's **23 lessons** total.
+- [x] **Tried, and reverted: in-app live Wikipedia generation (2026-09-10/11)**
+      — built a "search for a subject" + auto-detected "pull a thread" feature
+      that generated lessons on the spot from Wikipedia prose. User feedback:
+      wrong direction entirely — "Wikipedia is not the source of truth," and
+      the whole point of this app is hand-researched, hand-written beats, not
+      an encyclopedia reader. Fully reverted (code via `git revert`, plus the
+      live "Hannibal" topic and schema columns it had written were removed
+      directly from the real `keystone.db`). Correct decision recorded below.
+- [x] **Decision: threads only ever link to real, finished content (2026-09-11)**
+      — "pull a thread" means: while authoring a lesson, I deliberately flag a
+      couple of the most non-obvious, worth-digging-into details (the bar:
+      Sagrada Família's hanging-chain model, inverted to get a pure-compression
+      structure so it never needed flying buttresses — the kind of fact that
+      takes real digging, not a lead paragraph) and write a short, fully
+      real, cited deep-dive lesson for each *at the same time* — never a
+      placeholder, never "coming later." `lessons.kind = 'deep_dive'` (already
+      in the schema, previously unused) is how a thread's destination is
+      represented — still not built: giving deep-dive lessons their own slug
+      and a small `thread_refs`-style field on the originating card, plus the
+      tap-to-open UI in `LessonViewer`. No live generation, no wishlist table,
+      no in-app search UI for now — see next item.
+- [x] **Authoring scripts now talk to Drive over the REST API, not a local
+      synced folder (2026-09-11)** — `load-lesson.mjs` and `narrate-lesson.mjs`
+      used to require this Mac's Google Drive Desktop mount
+      (`~/Library/CloudStorage/.../My Drive/keystone/keystone.db`). They now
+      read/write `keystone.db` and the narration MP3s purely via
+      `scripts/lib/drive.mjs` (Drive REST v3: find/create folder, download,
+      multipart upload) authenticated with a refresh token
+      (`scripts/lib/driveAuth.mjs`), minted once via the interactive
+      `scripts/drive-auth.mjs` (loopback OAuth against a new **Desktop app**
+      OAuth client, "Keystone CLI", separate from the browser app's Web
+      client). Verified for real: re-ran `load-lesson.mjs`/`narrate-lesson.mjs`
+      against black-death with zero local file access, no duplicates, no
+      audio re-generated. **Why:** this is the actual unlock for "create on
+      the go" — authoring no longer requires being at this laptop; a Claude
+      Code session from anywhere (claude.ai/code from a phone browser, a
+      cloud/remote session) can run the same pipeline once it has the three
+      `GOOGLE_DRIVE_*` values from `.env` (never committed — copy manually,
+      same trust model as `GOOGLE_TTS_API_KEY`). **Known limitation:** the
+      OAuth consent screen is still in "Testing" status, so Google expires
+      this refresh token after 7 days — re-run `node scripts/drive-auth.mjs`
+      when auth starts failing. `generate-lesson.mjs` (the Wikipedia-verbatim
+      fallback path, already de-emphasized) was **not** updated to match —
+      still local-file-based — since it's not part of the real workflow.
 - [ ] **← NEXT:**
+      - **Build the thread mechanism**: `lessons.slug`, a `thread_refs`-style
+        field on cards (JSON, same pattern as `visual_spec`), and the
+        tap-to-open + "back to the beat you left" UI in `LessonViewer`.
+      - **Author Sagrada Família** as the first lesson built with real
+        threads — the hanging-chain model, why no flying buttresses, plus
+        whatever else earns a spool — using the now-portable authoring
+        pipeline (provable from a non-Mac session).
       - **Feed / continuous-scroll navigation** — the stated product goal
-        ("replace my doom scrolling"). Open app → content just plays, swipe for
-        the next lesson, like a feed. Bigger rework of `App.jsx` navigation.
-        No longer blocked — there are 23 lessons to feed now.
-      - Spot-check the new lessons on device (image fit, narration, visuals),
-        note any beats whose `image_file` resolved to a weak match.
-      - **Re-narrate Black Death** if the Studio voice should be a different one
-        (currently Studio-Q; all 23 lessons now use Studio-Q for consistency).
+        ("replace my doom scrolling"). Open app → content just plays, swipe
+        for the next lesson, like a feed. Bigger rework of `App.jsx`
+        navigation. 23 lessons ready to feed whenever this gets picked up.
+      - Spot-check the 21-lesson batch on device (image fit, narration,
+        visuals), note any beats whose `image_file` resolved to a weak match.
 - [ ] Within-beat scrubbing for audio lessons (the `<audio>` element supports
       real seek; scrubber currently only jumps whole beats)
 - [ ] Rewind button behaviour: >3s into a beat → restart it; <3s → previous beat

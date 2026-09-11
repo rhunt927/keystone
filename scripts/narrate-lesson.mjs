@@ -4,30 +4,23 @@
 // and never again — the app just plays the resulting MP3s (stored in Drive).
 //
 // Needs GOOGLE_TTS_API_KEY in .env (gitignored; NOT VITE_-prefixed so it never
-// reaches the app bundle).
+// reaches the app bundle), and a Drive refresh token — see scripts/drive-auth.mjs.
+// Talks to Drive over the REST API (not a local Drive-synced folder), so this
+// can run from any machine with network access, not just this Mac.
 //
 // Usage: node scripts/narrate-lesson.mjs black-death [--force]
 
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { readEnv } from './lib/env.mjs'
+import { getAccessToken } from './lib/driveAuth.mjs'
+import { ensureFolderPath, findFile, uploadFile } from './lib/drive.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..')
-const DRIVE_BASE = '/Users/rhunt/Library/CloudStorage/GoogleDrive-rghunt@gmail.com/My Drive/keystone'
 
 const DEFAULT_VOICE = 'en-US-Studio-Q' // warm male narrator; override per lesson with topic.voice
-
-function readEnv(key) {
-  try {
-    const line = fs.readFileSync(path.join(REPO_ROOT, '.env'), 'utf8')
-      .split('\n')
-      .find(l => l.startsWith(key + '='))
-    return line ? line.slice(key.length + 1).trim() : null
-  } catch {
-    return null
-  }
-}
 
 async function synthesize(text, voiceName, apiKey) {
   const res = await fetch(
@@ -62,22 +55,31 @@ async function main() {
 
   const doc = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'db', 'lessons', `${slug}.json`), 'utf8'))
   const voiceName = doc.topic.voice || DEFAULT_VOICE
-  const outDir = path.join(DRIVE_BASE, 'audio', slug)
-  fs.mkdirSync(outDir, { recursive: true })
+
+  console.log('Connecting to Drive…')
+  const token = await getAccessToken()
+  const audioFolderId = await ensureFolderPath(token, ['keystone', 'audio', slug])
 
   console.log(`Narrating "${doc.topic.title}" — ${doc.beats.length} beat(s), voice ${voiceName}`)
 
   let charsUsed = 0
   let generated = 0
   for (let i = 0; i < doc.beats.length; i++) {
-    const outPath = path.join(outDir, `beat-${i}.mp3`)
-    if (fs.existsSync(outPath) && !force) {
+    const filename = `beat-${i}.mp3`
+    const existingFileId = await findFile(token, filename, audioFolderId)
+    if (existingFileId && !force) {
       console.log(`  beat ${i}: exists, skipping`)
       continue
     }
     const text = doc.beats[i].body
     const mp3 = await synthesize(text, voiceName, apiKey)
-    fs.writeFileSync(outPath, mp3)
+    await uploadFile(token, {
+      fileId: existingFileId || undefined,
+      name: filename,
+      parentId: audioFolderId,
+      mimeType: 'audio/mpeg',
+      buffer: mp3,
+    })
     charsUsed += text.length
     generated++
     console.log(`  beat ${i}: ${text.length} chars -> ${(mp3.length / 1024).toFixed(0)} KB`)
@@ -86,7 +88,7 @@ async function main() {
   // No DB write — the app discovers audio by checking Drive for
   // keystone/audio/<slug>/beat-N.mp3 directly, so nothing races keystone.db.
   console.log(`\n✔ ${generated} beat(s) generated, ${charsUsed} characters used`)
-  console.log(`  MP3s: ${outDir}`)
+  console.log(`  MP3s: Drive keystone/audio/${slug}/`)
   console.log(`  (Google TTS free tier is ~1,000,000 characters/month — spent once, never on playback)`)
 }
 

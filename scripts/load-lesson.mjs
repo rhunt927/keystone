@@ -6,6 +6,10 @@
 // or events. Authoring happens by hand from the cited sources; this script just
 // writes the result and resolves each beat's Commons image.
 //
+// Talks to keystone.db over the Drive REST API (not a local Drive-synced
+// folder), so this can run from any machine with network access and a valid
+// GOOGLE_DRIVE_REFRESH_TOKEN in .env — see scripts/drive-auth.mjs.
+//
 // Usage: node scripts/load-lesson.mjs black-death
 
 import fs from 'node:fs'
@@ -13,12 +17,13 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import initSqlJs from 'sql.js'
 import { runMigrations } from '../src/lib/migrate.js'
+import { getAccessToken } from './lib/driveAuth.mjs'
+import { findOrCreateFolder, findFile, downloadFile, uploadFile } from './lib/drive.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..')
 const SCHEMA_PATH = path.join(REPO_ROOT, 'db', 'schema.sql')
-const DB_PATH =
-  '/Users/rhunt/Library/CloudStorage/GoogleDrive-rghunt@gmail.com/My Drive/keystone/keystone.db'
+const DB_FILENAME = 'keystone.db'
 const USER_AGENT = 'keystone-app/0.1 (personal learning project; rghunt@gmail.com)'
 
 function stripHtml(html) {
@@ -93,10 +98,16 @@ async function main() {
   const { topic, sources, beats } = doc
   console.log(`Loading "${topic.title}" — ${beats.length} beat(s), ${sources.length} source(s)`)
 
+  console.log('Connecting to Drive…')
+  const token = await getAccessToken()
+  const keystoneFolderId = await findOrCreateFolder(token, 'keystone')
+  const dbFileId = await findFile(token, DB_FILENAME, keystoneFolderId)
+  const dbBytes = dbFileId ? await downloadFile(token, dbFileId) : null
+
   const SQL = await initSqlJs({
     locateFile: file => path.join(REPO_ROOT, 'node_modules', 'sql.js', 'dist', file),
   })
-  const db = new SQL.Database(fs.readFileSync(DB_PATH))
+  const db = dbBytes ? new SQL.Database(dbBytes) : new SQL.Database()
   db.run(fs.readFileSync(SCHEMA_PATH, 'utf8'))
   runMigrations(db)
 
@@ -175,12 +186,19 @@ async function main() {
     [topicId, slug, JSON.stringify(doc), now]
   )
 
-  fs.writeFileSync(DB_PATH, Buffer.from(db.export()))
+  console.log('Saving to Drive…')
+  await uploadFile(token, {
+    fileId: dbFileId,
+    name: DB_FILENAME,
+    parentId: keystoneFolderId,
+    mimeType: 'application/octet-stream',
+    buffer: Buffer.from(db.export()),
+  })
   db.close()
 
   console.log(`\n✔ Loaded "${topic.title}" (topic ${topicId}, lesson ${lessonId})`)
   console.log(`  ${beats.length} beats — ${withImage} with a photo, ${withVisual} with a motion graphic`)
-  console.log(`  Saved to ${DB_PATH}`)
+  console.log(`  Saved to Drive: keystone/${DB_FILENAME}`)
 }
 
 main().catch(err => {
