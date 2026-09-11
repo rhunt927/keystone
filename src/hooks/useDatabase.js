@@ -85,18 +85,5 @@ export function useDatabase(accessToken, onAuthError) {
     setTick(t => t + 1)
   }, [db])
 
-  // For multi-statement writes that need to read back ids mid-transaction
-  // (e.g. writing a whole generated topic/lesson/cards) — callers get the raw
-  // db to run whatever sequence of db.run/db.exec they need, then this
-  // re-renders (new tick) and persists to Drive, same as a schema migration
-  // does. `fn` may be async (network calls happen before touching the db).
-  const mutate = useCallback(async fn => {
-    if (!db) return undefined
-    const result = await fn(db)
-    setTick(t => t + 1)
-    await save()
-    return result
-  }, [db, save])
-
-  return { db, loading, error, save, query, run, mutate }
+  return { db, loading, error, save, query, run }
 }

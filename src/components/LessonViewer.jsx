@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSpeech } from '../hooks/useSpeech'
 import { useAudioLesson } from '../hooks/useAudioLesson'
 import { useSentenceImage } from '../hooks/useSentenceImage'
-import { useThreads } from '../hooks/useThreads'
 import { splitSentences } from '../lib/sentences'
 import { narratorFor } from '../lib/narrators'
 import { VisualCard } from './VisualCard'
@@ -43,17 +42,12 @@ function Equalizer({ active }) {
   )
 }
 
-export function LessonViewer({
-  topic, domain, lessonTitle, cards, accessToken, onBack,
-  originInfo, onOpenOrigin, onFollowThread,
-}) {
+export function LessonViewer({ topic, domain, lessonTitle, cards, accessToken, onBack }) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [ended, setEnded] = useState(false)
   const [showText, setShowText] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
-  const [followingLabel, setFollowingLabel] = useState(null)
-  const [followError, setFollowError] = useState(null)
   const {
     speak, resume, pause, stop, speaking, sentenceIndex, canResume, loadedText,
     supported, voices, voiceName, selectedVoiceURI, selectVoice, refreshVoices, rate, setRate,
@@ -66,7 +60,6 @@ export function LessonViewer({
   const narrationText = card?.body || ''
   const sentences = useMemo(() => splitSentences(narrationText), [narrationText])
   const beatText = useCallback(i => cards[i]?.body || '', [cards])
-  const threads = useThreads(onFollowThread ? narrationText : null, topic.title)
 
   // If every beat has pre-generated audio, play that (studio voice, consistent
   // everywhere). Otherwise fall back to the browser's speech synthesis.
@@ -163,35 +156,6 @@ export function LessonViewer({
     onBack()
   }
 
-  // Reset per-beat thread state whenever the beat changes. Routed through a
-  // resolved promise rather than a synchronous setState call in the effect
-  // body (see useSentenceImage for the same pattern).
-  useEffect(() => {
-    let cancelled = false
-    Promise.resolve().then(() => {
-      if (cancelled) return
-      setFollowingLabel(null)
-      setFollowError(null)
-    })
-    return () => { cancelled = true }
-  }, [index])
-
-  async function handleFollowThread(thread) {
-    if (followingLabel) return
-    setFollowingLabel(thread.label)
-    setFollowError(null)
-    audio.stop()
-    stop()
-    setPlaying(false)
-    try {
-      await onFollowThread(thread.wikiTitle, card.id)
-      // Success navigates away (App.jsx swaps the view) — nothing left to do.
-    } catch (e) {
-      setFollowError(e.message || "Couldn't build that lesson — try again.")
-      setFollowingLabel(null)
-    }
-  }
-
   function onTouchStart(e) { touchStartX.current = e.touches[0].clientX }
   function onTouchEnd(e) {
     if (touchStartX.current == null) return
@@ -216,24 +180,7 @@ export function LessonViewer({
       <button onClick={leave} className="text-sm opacity-60 hover:opacity-100">
         ← Topics
       </button>
-
-      {originInfo && (
-        <button
-          onClick={() => onOpenOrigin(originInfo)}
-          className="block text-xs opacity-60 hover:opacity-100 underline decoration-dotted"
-        >
-          🧵 Spun off from "{originInfo.title}"
-        </button>
-      )}
-
-      <div className="flex items-center gap-2 flex-wrap">
-        <h1 className="text-2xl font-serif">{lessonTitle || topic.title}</h1>
-        {topic.source_kind === 'generated' && (
-          <span className="text-[10px] uppercase tracking-wide opacity-50 border border-current rounded-full px-2 py-0.5">
-            Auto-generated
-          </span>
-        )}
-      </div>
+      <h1 className="text-2xl font-serif">{lessonTitle || topic.title}</h1>
 
       {cards.length === 0 ? (
         <p className="text-sm opacity-70">No cards yet for this lesson.</p>
@@ -301,29 +248,6 @@ export function LessonViewer({
               ))}
             </div>
           )}
-
-          {onFollowThread && (threads.length > 0 || followingLabel) && (
-            <div className="flex flex-wrap items-center justify-center gap-1.5">
-              <span className="text-[10px] opacity-40">Pull a thread:</span>
-              {followingLabel ? (
-                <span className="text-xs rounded-full bg-[#6B4226]/10 px-3 py-1 opacity-70 animate-pulse">
-                  Building "{followingLabel}"…
-                </span>
-              ) : (
-                threads.map(t => (
-                  <button
-                    key={t.wikiTitle}
-                    onClick={() => handleFollowThread(t)}
-                    title={t.description}
-                    className="text-xs rounded-full bg-[#6B4226]/10 hover:bg-[#6B4226]/20 px-3 py-1 font-medium"
-                  >
-                    {t.label}
-                  </button>
-                ))
-              )}
-            </div>
-          )}
-          {followError && <p className="text-xs text-red-700 text-center">{followError}</p>}
 
           <div className="space-y-1">
             <div

@@ -4,9 +4,6 @@ import { useDatabase } from './hooks/useDatabase'
 import { LoginScreen } from './components/LoginScreen'
 import { TopicList } from './components/TopicList'
 import { LessonViewer } from './components/LessonViewer'
-import { AddTopicScreen } from './components/AddTopicScreen'
-import { searchWikipedia, generateLessonFromWikipedia, slugify } from './lib/wikiLesson'
-import { writeGeneratedTopic } from './lib/topicWriter'
 
 function BuildFooter() {
   return (
@@ -18,57 +15,8 @@ function BuildFooter() {
 
 function App() {
   const { user, accessToken, loading: authLoading, gisReady, login, logout, clearAuth } = useAuth()
-  const { loading: dbLoading, error: dbError, query, mutate } = useDatabase(accessToken, clearAuth)
+  const { loading: dbLoading, error: dbError, query } = useDatabase(accessToken, clearAuth)
   const [view, setView] = useState({ screen: 'domains' })
-
-  // Looks up a topic (with its domain) by slug, for both "already exists,
-  // just navigate" and "open the topic this one was spun off from."
-  function findTopicWithDomain(slug) {
-    const row = query(
-      `SELECT t.*, d.id AS domain_id, d.slug AS domain_slug, d.name AS domain_name
-       FROM topics t JOIN domains d ON d.id = t.domain_id
-       WHERE t.slug = ?`,
-      [slug]
-    )[0]
-    if (!row) return null
-    return {
-      topic: row,
-      domain: { id: row.domain_id, slug: row.domain_slug, name: row.domain_name },
-    }
-  }
-
-  // Shared by the search screen ("Explore a topic") and "pull a thread" in
-  // the lesson viewer: reuse an existing generated topic if one already
-  // matches, otherwise build one from Wikipedia and write it into the
-  // Explore domain. Throws on failure — callers show the message inline.
-  async function createTopicFromWikipedia(title, { originCardId = null } = {}) {
-    const guessedSlug = slugify(title)
-    const existing = findTopicWithDomain(guessedSlug)
-    if (existing) {
-      setView({ screen: 'lesson', domain: existing.domain, topic: existing.topic })
-      return
-    }
-
-    const lesson = await generateLessonFromWikipedia(title)
-    const exploreDomainId = query("SELECT id FROM domains WHERE slug = 'explore'")[0]?.id
-    if (!exploreDomainId) throw new Error('Explore domain is missing — try reloading the app.')
-
-    const { topicId, slug } = await mutate(db =>
-      writeGeneratedTopic(db, {
-        domainId: exploreDomainId,
-        slug: slugify(lesson.title),
-        title: lesson.title,
-        description: lesson.description,
-        pageUrl: lesson.pageUrl,
-        cards: lesson.cards,
-        originCardId,
-      })
-    )
-
-    const found = findTopicWithDomain(slug)
-    if (!found) throw new Error('Saved, but could not reopen it — try again.')
-    setView({ screen: 'lesson', domain: found.domain, topic: { ...found.topic, id: topicId } })
-  }
 
   if (authLoading) {
     return (
@@ -97,17 +45,9 @@ function App() {
   } else if (view.screen === 'domains') {
     body = (
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wide opacity-60">
-            Domains
-          </h2>
-          <button
-            onClick={() => setView({ screen: 'search', returnTo: { screen: 'domains' } })}
-            className="text-xs rounded-full bg-[#6B4226]/10 hover:bg-[#6B4226]/20 px-3 py-1.5 font-medium"
-          >
-            + Explore a topic
-          </button>
-        </div>
+        <h2 className="text-sm font-semibold uppercase tracking-wide opacity-60 mb-2">
+          Domains
+        </h2>
         <ul className="space-y-1">
           {domains.map(d => (
             <li key={d.id}>
@@ -122,14 +62,6 @@ function App() {
         </ul>
       </div>
     )
-  } else if (view.screen === 'search') {
-    body = (
-      <AddTopicScreen
-        onSearch={q => searchWikipedia(q)}
-        onPick={title => createTopicFromWikipedia(title)}
-        onBack={() => setView(view.returnTo || { screen: 'domains' })}
-      />
-    )
   } else if (view.screen === 'topics') {
     const topics = query(
       "SELECT id, slug, title, one_line_summary FROM topics WHERE domain_id = ? AND status = 'ready' ORDER BY title",
@@ -141,16 +73,12 @@ function App() {
         topics={topics}
         onSelectTopic={topic => setView({ screen: 'lesson', domain: view.domain, topic })}
         onBack={() => setView({ screen: 'domains' })}
-        onAddTopic={() => setView({ screen: 'search', returnTo: { screen: 'topics', domain: view.domain } })}
       />
     )
   } else if (view.screen === 'lesson') {
-    // Re-fetch the full row (source_kind, origin_card_id aren't on the
-    // lighter list-view projection used by TopicList/createTopicFromWikipedia).
-    const topic = query('SELECT * FROM topics WHERE id = ?', [view.topic.id])[0] || view.topic
     const lesson = query(
       "SELECT id, title FROM lessons WHERE topic_id = ? AND kind = 'overview' LIMIT 1",
-      [topic.id]
+      [view.topic.id]
     )[0]
     const rawCards = lesson
       ? query(
@@ -172,28 +100,14 @@ function App() {
         [c.id]
       ),
     }))
-    const originInfo = topic.origin_card_id
-      ? query(
-          `SELECT t.title, t.slug
-           FROM cards c JOIN lessons l ON l.id = c.lesson_id JOIN topics t ON t.id = l.topic_id
-           WHERE c.id = ?`,
-          [topic.origin_card_id]
-        )[0]
-      : null
     body = (
       <LessonViewer
-        topic={topic}
+        topic={view.topic}
         domain={view.domain}
         lessonTitle={lesson?.title}
         cards={cards}
         accessToken={accessToken}
         onBack={() => setView({ screen: 'topics', domain: view.domain })}
-        originInfo={originInfo}
-        onOpenOrigin={info => {
-          const found = findTopicWithDomain(info.slug)
-          if (found) setView({ screen: 'lesson', domain: found.domain, topic: found.topic })
-        }}
-        onFollowThread={(wikiTitle, originCardId) => createTopicFromWikipedia(wikiTitle, { originCardId })}
       />
     )
   }
