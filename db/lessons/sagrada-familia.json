@@ -40,7 +40,7 @@
   "beats": [
     {
       "headline": "Not a cathedral",
-      "body": "Most people call it a cathedral. It isn't one — Barcelona's actual cathedral is a different building across town. And until 2026, after 144 years of construction, it wasn't even finished: the Sagrada Família's tallest tower only reached its full height that February, and was blessed by the pope that June, on the exact hundredth anniversary of the death of the man who designed it.",
+      "body": "Most people call it a cathedral. It isn't one — Barcelona's actual cathedral is a different building across town. And until February 2026, after 144 years of construction, it wasn't even finished: that's when the Sagrada Família's tallest tower finally reached its full height, and in June 2026 the pope blessed it, on the exact hundredth anniversary of the death of the man who designed it.",
       "source_ids": ["wp-sf"],
       "image_file": "File:Sagrada Familia - Exterior - 001.jpg"
     },
@@ -85,7 +85,7 @@
     },
     {
       "headline": "A century later, almost to the day",
-      "body": "The building finally caught up with him. Its central tower topped out in February 2026, and Pope Leo XIV blessed it that June — the exact hundredth anniversary of Gaudí's death — making Sagrada Família, at 172.5 meters, the tallest church in the world. Several of its façades are still unfinished. The not-quite-cathedral that was never supposed to be done in his lifetime still, in its way, isn't.",
+      "body": "The building finally caught up with him. Its central tower topped out in February 2026, and Pope Leo XIV blessed it in June 2026 — the exact hundredth anniversary of Gaudí's death — making Sagrada Família, at 172.5 meters, the tallest church in the world. Several of its façades are still unfinished. The not-quite-cathedral that was never supposed to be done in his lifetime still, in its way, isn't.",
       "source_ids": ["wp-sf"],
       "image_file": "File:Sagrada Familia - Exterior - 002.jpg"
     }
