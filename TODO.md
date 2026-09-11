@@ -424,14 +424,28 @@ Questions) — content breadth is no longer the blocker.
       to be accurate regardless of when it's played, not just at authoring
       time — fixed to "in 2026," reloaded, re-narrated. Swept the whole
       library for the same pattern (this/last/next year, recently, nowadays,
-      currently) — nothing else had it. **Standing rule for all future
-      authoring:** never write "this year," "recently," "now" (in a
-      date-relative sense), etc. for anything tied to a specific year —
-      always name the year explicitly.
+      currently) — nothing else had it.
+- [x] **Refined the date rule further (2026-09-11)** — user's follow-up: keep
+      month + year, but never a dangling back-reference either ("that June"
+      still relies on an antecedent named earlier in the sentence). Every
+      date mention now restates the full month + year on its own ("in June
+      2026," not "that June"). Fixed Sagrada Família's two remaining
+      instances, reloaded, re-narrated. **Standing rule for all future
+      authoring** (saved to the `keystone-content-build` memory too): no
+      "this year"/"recently"/"currently"/date-relative "now", and no bare
+      "that Month" trailing off an earlier year mention — always the full
+      month + year, restated each time.
 - [ ] **← NEXT:**
-      - Clean up the old, now fully-revoked wide-scope copies of
-        keystone.db/audio still sitting in Drive as orphaned leftovers from
-        the migration (harmless, just tidy — delete by hand whenever).
+      - **Check the real Drive folder for leftover duplicates from the
+        migration** (`drive.google.com/drive/folders/1EPLzDRDo9kf57X4l8uOQZlMU15g1I7Ut`)
+        — asked the user to look directly, since the now-properly-narrow-scoped
+        CLI tools can only see what they created themselves and are correctly
+        blind to anything else that might still be sitting in that folder
+        under the account's older broader permissions (the migration
+        downloaded/re-uploaded via that old wide token, so it's plausible,
+        not confirmed, that a duplicate `keystone.db` or duplicate audio
+        files are sitting alongside the current ones). If duplicates are
+        found: keep whatever's dated 2026-09-11, trash the rest.
       - More threads / deep dives as new lessons get authored — Sagrada
         Família was the proof; there's no reason the 24 existing lessons
         couldn't grow a few threads apiece over time.
