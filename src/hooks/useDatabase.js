@@ -18,7 +18,10 @@ function applySchema(db, isNewFile) {
   return isNewFile || migrated
 }
 
-export function useDatabase(accessToken, onAuthError) {
+// `folderId` is the keystone folder's Drive id — under the narrow drive.file
+// scope, it must already be known (granted via the one-time picker in
+// useDriveFolder) before this can do anything, so init waits for both.
+export function useDatabase(accessToken, folderId, onAuthError) {
   const [db, setDb] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -26,14 +29,14 @@ export function useDatabase(accessToken, onAuthError) {
   const driveRef = useRef({ folderId: null, fileId: null })
 
   useEffect(() => {
-    if (!accessToken) return
+    if (!accessToken || !folderId) return
     let cancelled = false
 
     async function init() {
       setLoading(true)
       try {
         const SQL = await initSqlJs({ locateFile: () => sqlWasm })
-        const { folderId, fileId, data } = await loadDatabase(accessToken)
+        const { fileId, data } = await loadDatabase(accessToken, folderId)
         if (cancelled) return
 
         driveRef.current = { folderId, fileId }
@@ -62,7 +65,7 @@ export function useDatabase(accessToken, onAuthError) {
 
     init()
     return () => { cancelled = true }
-  }, [accessToken])
+  }, [accessToken, folderId])
 
   const save = useCallback(async () => {
     if (!db || !accessToken) return

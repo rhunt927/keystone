@@ -43,7 +43,7 @@ function Equalizer({ active }) {
 }
 
 export function LessonViewer({
-  topic, domain, lessonTitle, audioSlug, cards, accessToken, onBack, backLabel, onOpenThread,
+  topic, domain, lessonTitle, audioSlug, cards, accessToken, folderId, onBack, backLabel, onOpenThread,
 }) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
@@ -54,7 +54,7 @@ export function LessonViewer({
     speak, resume, pause, stop, speaking, sentenceIndex, canResume, loadedText,
     supported, voices, voiceName, selectedVoiceURI, selectVoice, refreshVoices, rate, setRate,
   } = useSpeech()
-  const { ready: audioReady, engine: audio } = useAudioLesson(accessToken, audioSlug || topic.slug, cards.length, rate)
+  const { ready: audioReady, engine: audio } = useAudioLesson(accessToken, folderId, audioSlug || topic.slug, cards.length, rate)
   const touchStartX = useRef(null)
   const { accent } = narratorFor(domain?.slug)
 

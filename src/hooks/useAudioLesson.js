@@ -4,8 +4,9 @@ import { fetchAudioUrl } from './useGoogleDrive'
 // Plays a lesson's pre-generated narration MP3s through a single <audio>
 // element. It discovers them by convention — keystone/audio/<slug>/beat-N.mp3
 // in Drive — so nothing has to be recorded in keystone.db (no writer race).
+// `folderId` is the already-known keystone folder id (see useDriveFolder).
 // `ready` is true only once every beat's audio has resolved.
-export function useAudioLesson(accessToken, slug, beatCount, rate) {
+export function useAudioLesson(accessToken, folderId, slug, beatCount, rate) {
   const [resolved, setResolved] = useState({ sig: null, urls: [] })
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -24,14 +25,14 @@ export function useAudioLesson(accessToken, slug, beatCount, rate) {
   const sig = `${slug}:${beatCount}`
 
   useEffect(() => {
-    if (!accessToken || !slug || !beatCount) return
+    if (!accessToken || !folderId || !slug || !beatCount) return
     let cancelled = false
     const paths = Array.from({ length: beatCount }, (_, i) => `${slug}/beat-${i}.mp3`)
-    Promise.all(paths.map(p => fetchAudioUrl(accessToken, p).catch(() => null))).then(urls => {
+    Promise.all(paths.map(p => fetchAudioUrl(accessToken, folderId, p).catch(() => null))).then(urls => {
       if (!cancelled) setResolved({ sig, urls })
     })
     return () => { cancelled = true }
-  }, [accessToken, sig, slug, beatCount])
+  }, [accessToken, folderId, sig, slug, beatCount])
 
   const ready = resolved.sig === sig && resolved.urls.length > 0 && resolved.urls.every(Boolean)
   const urls = ready ? resolved.urls : []

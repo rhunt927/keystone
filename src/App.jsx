@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useDatabase } from './hooks/useDatabase'
+import { useDriveFolder } from './hooks/useDriveFolder'
 import { LoginScreen } from './components/LoginScreen'
 import { TopicList } from './components/TopicList'
 import { LessonViewer } from './components/LessonViewer'
@@ -15,7 +16,8 @@ function BuildFooter() {
 
 function App() {
   const { user, accessToken, loading: authLoading, gisReady, login, logout, clearAuth } = useAuth()
-  const { loading: dbLoading, error: dbError, query } = useDatabase(accessToken, clearAuth)
+  const { folderId, picking, error: folderError, pick } = useDriveFolder(accessToken)
+  const { loading: dbLoading, error: dbError, query } = useDatabase(accessToken, folderId, clearAuth)
   const [view, setView] = useState({ screen: 'domains' })
 
   if (authLoading) {
@@ -30,6 +32,34 @@ function App() {
     return (
       <>
         <LoginScreen onLogin={login} gisReady={gisReady} />
+        <BuildFooter />
+      </>
+    )
+  }
+
+  // One-time-per-device step: under the narrow drive.file scope the app has
+  // no way to discover the existing "keystone" folder on its own — you hand
+  // it over explicitly, once, through Google's own picker. Remembered in
+  // localStorage after that (see useDriveFolder).
+  if (!folderId) {
+    return (
+      <>
+        <div className="min-h-screen flex items-center justify-center bg-[#F1E4CF] text-[#3A2415] px-6">
+          <div className="max-w-sm text-center space-y-4">
+            <h1 className="text-2xl font-serif">One-time setup</h1>
+            <p className="text-sm opacity-70">
+              Point keystone at your "keystone" folder in Drive — just once on this device.
+            </p>
+            {folderError && <p className="text-sm text-red-700">{folderError}</p>}
+            <button
+              onClick={pick}
+              disabled={picking}
+              className="rounded-lg bg-[#6B4226] text-[#F1E4CF] px-4 py-2 text-sm font-medium disabled:opacity-50"
+            >
+              {picking ? 'Opening picker…' : 'Select your keystone folder'}
+            </button>
+          </div>
+        </div>
         <BuildFooter />
       </>
     )
@@ -153,6 +183,7 @@ function App() {
         audioSlug={lesson?.slug || view.topic.slug}
         cards={cards}
         accessToken={accessToken}
+        folderId={folderId}
         onBack={() => setView(view.backTo || { screen: 'topics', domain: view.domain })}
         backLabel={view.backTo ? (view.backTo.topic?.title || 'Back') : 'Topics'}
         onOpenThread={ref => {
