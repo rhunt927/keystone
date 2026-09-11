@@ -40,9 +40,13 @@ export async function findOrCreateFolder(token, name, parentId = null) {
   return (await res.json()).id
 }
 
-// Walks/creates a nested folder path, e.g. ['keystone', 'audio', 'black-death'].
-export async function ensureFolderPath(token, names) {
-  let parentId = null
+// Walks/creates a nested folder path under `rootId`, e.g. ['audio', slug]
+// under the known keystone folder id. `rootId` should always be an
+// explicitly-known id (never omitted to search-by-name for the top level —
+// under drive.file scope that can't see a picker-granted folder and will
+// silently create a duplicate; this happened once already).
+export async function ensureFolderPath(token, names, rootId) {
+  let parentId = rootId
   for (const name of names) {
     parentId = await findOrCreateFolder(token, name, parentId)
   }

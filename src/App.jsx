@@ -16,7 +16,7 @@ function BuildFooter() {
 
 function App() {
   const { user, accessToken, loading: authLoading, gisReady, login, logout, clearAuth } = useAuth()
-  const { folderId, picking, error: folderError, pick } = useDriveFolder(accessToken)
+  const { folderId, picking, error: folderError, pick, reset: resetFolder } = useDriveFolder(accessToken)
   const { loading: dbLoading, error: dbError, query } = useDatabase(accessToken, folderId, clearAuth)
   const [view, setView] = useState({ screen: 'domains' })
 
@@ -199,9 +199,16 @@ function App() {
       <div className="max-w-md mx-auto space-y-6">
         <header className="flex items-center justify-between">
           <h1 className="text-2xl font-serif">keystone</h1>
-          <button onClick={logout} className="text-xs opacity-60 hover:opacity-100">
-            Sign out
-          </button>
+          <div className="flex items-center gap-3">
+            {folderId && (
+              <button onClick={resetFolder} className="text-xs opacity-60 hover:opacity-100">
+                Change Drive folder
+              </button>
+            )}
+            <button onClick={logout} className="text-xs opacity-60 hover:opacity-100">
+              Sign out
+            </button>
+          </div>
         </header>
 
         {view.screen === 'domains' && user.name && (

@@ -73,9 +73,12 @@ async function main() {
     audioSlug = dd.slug
   }
 
+  const keystoneFolderId = readEnv('GOOGLE_DRIVE_FOLDER_ID')
+  if (!keystoneFolderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID not in .env — run `node scripts/drive-auth.mjs` first.')
+
   console.log('Connecting to Drive…')
   const token = await getAccessToken()
-  const audioFolderId = await ensureFolderPath(token, ['keystone', 'audio', audioSlug])
+  const audioFolderId = await ensureFolderPath(token, ['audio', audioSlug], keystoneFolderId)
 
   console.log(`Narrating "${title}" — ${beats.length} beat(s), voice ${voiceName}`)
 

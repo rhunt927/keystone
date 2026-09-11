@@ -44,5 +44,14 @@ export function useDriveFolder(accessToken) {
     }
   }, [accessToken])
 
-  return { folderId, picking, error, pick }
+  // Lets you redo the one-time grant — e.g. if the wrong folder was ever
+  // picked (as happened once: a name-search bug elsewhere briefly created a
+  // second, empty folder also named "keystone", now fixed and removed).
+  const reset = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY)
+    setFolderId(null)
+    setError(null)
+  }, [])
+
+  return { folderId, picking, error, pick, reset }
 }

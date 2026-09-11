@@ -17,8 +17,9 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import initSqlJs from 'sql.js'
 import { runMigrations } from '../src/lib/migrate.js'
+import { readEnv } from './lib/env.mjs'
 import { getAccessToken } from './lib/driveAuth.mjs'
-import { findOrCreateFolder, findFile, downloadFile, uploadFile } from './lib/drive.mjs'
+import { findFile, downloadFile, uploadFile } from './lib/drive.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..')
@@ -149,7 +150,13 @@ async function main() {
 
   console.log('Connecting to Drive…')
   const token = await getAccessToken()
-  const keystoneFolderId = await findOrCreateFolder(token, 'keystone')
+  // Under the narrow drive.file scope, the folder must be the one explicitly
+  // granted via the one-time scripts/drive-auth.mjs picker step — never
+  // discovered by a name search (that search can't see a picker-granted
+  // folder and would silently create a duplicate; this exact bug happened
+  // once already, see git history / TODO.md).
+  const keystoneFolderId = readEnv('GOOGLE_DRIVE_FOLDER_ID')
+  if (!keystoneFolderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID not in .env — run `node scripts/drive-auth.mjs` first.')
   const dbFileId = await findFile(token, DB_FILENAME, keystoneFolderId)
   const dbBytes = dbFileId ? await downloadFile(token, dbFileId) : null
 
