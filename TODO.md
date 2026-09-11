@@ -327,18 +327,30 @@ Questions) — content breadth is no longer the blocker.
       when auth starts failing. `generate-lesson.mjs` (the Wikipedia-verbatim
       fallback path, already de-emphasized) was **not** updated to match —
       still local-file-based — since it's not part of the real workflow.
+- [x] **Thread mechanism built + proved with a real lesson (2026-09-11)** —
+      `lessons.slug` (addressable deep dives) + `cards.thread_refs` (JSON,
+      same pattern as `visual_spec`) via `src/lib/migrate.js`; tap-to-open
+      chips + a "back to where you left off" label in `LessonViewer`;
+      `load-lesson.mjs` understands a doc's `deep_dives` array,
+      `narrate-lesson.mjs` can narrate one by slug. First lesson: **The
+      Sagrada Família** (8 beats) with a real thread into a 4-beat deep dive,
+      **The Hanging Chain Model** — Hooke's 1675 inverted-catenary principle,
+      Gaudí's rope-and-lead-shot model of the Colònia Güell crypt, why it
+      meant no flying buttresses. Verified against the real Drive DB: both
+      lessons load, narrate, and the thread's SQL resolution returns exactly
+      the right lesson. Also proved the phone-authoring loop for real this
+      session — Remote Control connects a phone directly to this same
+      Claude Code session (no new session/`.env` copy needed when it's
+      already running here), and `load-lesson.mjs black-death` was
+      triggered from an iPhone and completed successfully.
 - [ ] **← NEXT:**
-      - **Build the thread mechanism**: `lessons.slug`, a `thread_refs`-style
-        field on cards (JSON, same pattern as `visual_spec`), and the
-        tap-to-open + "back to the beat you left" UI in `LessonViewer`.
-      - **Author Sagrada Família** as the first lesson built with real
-        threads — the hanging-chain model, why no flying buttresses, plus
-        whatever else earns a spool — using the now-portable authoring
-        pipeline (provable from a non-Mac session).
-      - **Feed / continuous-scroll navigation** — the stated product goal
-        ("replace my doom scrolling"). Open app → content just plays, swipe
-        for the next lesson, like a feed. Bigger rework of `App.jsx`
-        navigation. 23 lessons ready to feed whenever this gets picked up.
+      - More threads / deep dives as new lessons get authored — Sagrada
+        Família was the proof; there's no reason the 24 existing lessons
+        couldn't grow a few threads apiece over time.
+      - **Feed / continuous-scroll navigation** — still the standing "replace
+        my doom scrolling" goal, untouched by this session's work. Open app →
+        content just plays, swipe for the next lesson, like a feed. Bigger
+        rework of `App.jsx` navigation. 24 lessons ready to feed.
       - Spot-check the 21-lesson batch on device (image fit, narration,
         visuals), note any beats whose `image_file` resolved to a weak match.
 - [ ] Within-beat scrubbing for audio lessons (the `<audio>` element supports
