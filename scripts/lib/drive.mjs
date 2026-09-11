@@ -49,6 +49,16 @@ export async function ensureFolderPath(token, names) {
   return parentId
 }
 
+// Lists all direct children of a folder (used by the one-off narrow-scope
+// migration to walk the existing keystone/audio/<slug>/ tree).
+export async function listChildren(token, parentId) {
+  const res = await driveRequest(
+    `files?q='${parentId}' in parents and trashed=false&fields=files(id,name,mimeType)&pageSize=1000`,
+    {}, token
+  )
+  return (await res.json()).files || []
+}
+
 export async function findFile(token, name, parentId) {
   const search = await driveRequest(
     `files?q=name='${name}' and '${parentId}' in parents and trashed=false&fields=files(id)`,

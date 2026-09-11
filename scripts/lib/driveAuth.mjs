@@ -14,10 +14,13 @@
 // drive-auth.mjs when it stops working.
 import { readEnv } from './env.mjs'
 
-export async function getAccessToken() {
+// `refreshTokenOverride` lets a one-off script (e.g. a migration that needs
+// to read under the OLD scope while writing under the new one) mint a token
+// from a refresh token that isn't the current one in .env.
+export async function getAccessToken(refreshTokenOverride) {
   const clientId = readEnv('GOOGLE_DRIVE_CLIENT_ID')
   const clientSecret = readEnv('GOOGLE_DRIVE_CLIENT_SECRET')
-  const refreshToken = readEnv('GOOGLE_DRIVE_REFRESH_TOKEN')
+  const refreshToken = refreshTokenOverride || readEnv('GOOGLE_DRIVE_REFRESH_TOKEN')
   if (!clientId || !clientSecret || !refreshToken) {
     throw new Error(
       'Missing GOOGLE_DRIVE_CLIENT_ID / GOOGLE_DRIVE_CLIENT_SECRET / GOOGLE_DRIVE_REFRESH_TOKEN in .env — run `node scripts/drive-auth.mjs` first.'

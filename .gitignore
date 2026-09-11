@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .env
+.env.*
 client_secret*.json
 
 # Editor directories and files
