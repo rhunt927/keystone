@@ -357,18 +357,35 @@ Questions) — content breadth is no longer the blocker.
       end-to-end. Also rotated the OAuth client secret's exposure risk by
       widening `.gitignore` from `.env` to `.env.*` (caught a temp token
       backup file the exact-match pattern didn't cover, before it was ever
-      staged). **Not done: the deployed browser app (`useAuth.js`) still
-      signs in with the full `drive` scope** — narrowing that would need the
-      same Picker flow built into the web login and a one-time re-consent
-      for every signed-in device; bigger, more user-facing change, left as a
-      deliberate follow-up rather than done reflexively here.
+      staged).
+- [x] **Narrowed the deployed browser app's scope too (2026-09-11)** — same
+      fix applied to the live app, not just the CLI. `useAuth.js` now
+      requests `drive.file` instead of full `drive`. Since drive.file can't
+      discover the pre-existing `keystone` folder by name (the exact bug
+      that caused the original duplicate-folder incident and the reason it
+      was widened to full `drive` in the first place), the app now does a
+      one-time picker step (`useDriveFolder.js` + `src/lib/googlePicker.js`,
+      Google's own Picker widget) instead — validated against the folder
+      actually containing `keystone.db` before accepting it, remembered in
+      localStorage per device. `useGoogleDrive.js`, `useDatabase.js`,
+      `useAudioLesson.js`, `LessonViewer.jsx` all take that folder id
+      explicitly now, never a name search. Added `VITE_GOOGLE_PICKER_API_KEY`
+      (public browser key, not a secret) as a GitHub Actions secret. Solo
+      user, one device (iPhone) — requires signing out/in once to pick up
+      the new scope, then the one-time folder picker; not yet confirmed
+      working on-device (built and deployed, lint/build clean, logic
+      verified by inspection — the interactive picker flow itself needs a
+      real phone + Google account to actually exercise).
       **Also flagged, not yet started:** same security review requested for
       the hunt-garcia-tracker (ExpenseTracker) project — separate repo, next
       up in a future session.
 - [ ] **← NEXT:**
-      - **Narrow the browser app's Drive scope too**, if wanted — same
-        Picker pattern, applied to `useAuth.js`/`useGoogleDrive.js`, with a
-        one-time re-consent screen for every device that's ever signed in.
+      - Confirm the sign-out/in + folder-picker flow actually works on the
+        iPhone (see above) — first real test of it.
+      - Once confirmed: revoke the now-unused wide-scope grant for the "keystone"
+        Web OAuth client at myaccount.google.com/permissions, and clean up the
+        old, now-orphaned wide-scope copies of keystone.db/audio in Drive
+        (harmless leftovers from the migration, delete by hand whenever).
       - More threads / deep dives as new lessons get authored — Sagrada
         Família was the proof; there's no reason the 24 existing lessons
         couldn't grow a few threads apiece over time.
