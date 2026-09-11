@@ -376,16 +376,62 @@ Questions) — content breadth is no longer the blocker.
       working on-device (built and deployed, lint/build clean, logic
       verified by inspection — the interactive picker flow itself needs a
       real phone + Google account to actually exercise).
+      **Confirmed working on-device (2026-09-11)** — narrow scope + one-time
+      folder picker tested for real on the iPhone; found and fixed a real bug
+      along the way (below).
+- [x] **Fixed a real bug the narrow-scope work introduced (2026-09-11)** —
+      `load-lesson.mjs`/`narrate-lesson.mjs` still searched for the keystone
+      folder **by name** (only `drive-auth.mjs` and the migration script had
+      been updated to use the explicitly-granted folder id). Under drive.file
+      scope that search can't see a picker-granted folder, so it silently
+      created a second, empty "keystone" folder and operated inside it — my
+      own post-migration verification run populated that duplicate with a
+      fresh single-topic (Black Death) database, which is what showed up when
+      the phone's own folder-picker got pointed at it. Fixed both scripts to
+      read `GOOGLE_DRIVE_FOLDER_ID` directly; verified against the real
+      25-topic folder; trashed the duplicate. Added a **"Change Drive
+      folder"** button in the app header so a wrong pick is self-service to
+      fix from now on.
+- [x] **Fully reset both OAuth grants via "Delete all" (2026-09-11)** — the
+      Google Account linked-apps page showed the *old* full-`drive` grant
+      still listed alongside the new narrow one for the same app entry
+      (Google groups multiple OAuth clients under one project as a single
+      linked app) — confirming the old broad grant was genuinely still live,
+      not just unused. Deleted all of it, then redid both flows from a clean
+      slate: CLI via `drive-auth.mjs`, browser via sign-out/sign-in. Both
+      confirmed working against the real 25-topic library afterward.
+- [x] **Auto-renew the CLI's Drive credential on expiry (2026-09-11)** —
+      `getValidAccessToken()` in `driveAuth.mjs` catches the specific
+      "refresh token is dead" error and automatically runs the interactive
+      re-auth flow (one click through Google's consent screen — the folder's
+      already known, so no picker needed again) before retrying, instead of
+      just failing with instructions to run a separate command. Verified the
+      detection path directly; the recovery path shares the exact code
+      already exercised for real during the "Delete all" reset above. Only
+      works where a browser is reachable (this Mac) — elsewhere it fails
+      clearly after a timeout rather than hanging. True zero-touch renewal
+      isn't possible while the app is in "Testing" status (an interactive
+      consent click is fundamentally required); publishing the app would
+      remove the need for renewal entirely but wasn't done — see the
+      unverified-app-warning tradeoff discussed with the user.
       **Also flagged, not yet started:** same security review requested for
       the hunt-garcia-tracker (ExpenseTracker) project — separate repo, next
       up in a future session.
+- [x] **Content-accuracy rule: no calendar-relative phrasing (2026-09-11)** —
+      caught by the user while listening to Sagrada Família: it said "this
+      year" for the tower's 2026 completion, which goes stale (and reads as
+      simply wrong) the moment it's heard in 2027 or later. Every lesson has
+      to be accurate regardless of when it's played, not just at authoring
+      time — fixed to "in 2026," reloaded, re-narrated. Swept the whole
+      library for the same pattern (this/last/next year, recently, nowadays,
+      currently) — nothing else had it. **Standing rule for all future
+      authoring:** never write "this year," "recently," "now" (in a
+      date-relative sense), etc. for anything tied to a specific year —
+      always name the year explicitly.
 - [ ] **← NEXT:**
-      - Confirm the sign-out/in + folder-picker flow actually works on the
-        iPhone (see above) — first real test of it.
-      - Once confirmed: revoke the now-unused wide-scope grant for the "keystone"
-        Web OAuth client at myaccount.google.com/permissions, and clean up the
-        old, now-orphaned wide-scope copies of keystone.db/audio in Drive
-        (harmless leftovers from the migration, delete by hand whenever).
+      - Clean up the old, now fully-revoked wide-scope copies of
+        keystone.db/audio still sitting in Drive as orphaned leftovers from
+        the migration (harmless, just tidy — delete by hand whenever).
       - More threads / deep dives as new lessons get authored — Sagrada
         Família was the proof; there's no reason the 24 existing lessons
         couldn't grow a few threads apiece over time.
