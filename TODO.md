@@ -343,7 +343,32 @@ Questions) — content breadth is no longer the blocker.
       Claude Code session (no new session/`.env` copy needed when it's
       already running here), and `load-lesson.mjs black-death` was
       triggered from an iPhone and completed successfully.
+- [x] **Locked down the CLI authoring scripts' Drive access (2026-09-11)** —
+      prompted by a user question ("what security hole did I just create?").
+      `scripts/drive-auth.mjs` now requests `drive.file` instead of the full
+      `drive` scope, plus a one-time Google Picker step so you explicitly
+      hand it the `keystone` folder — a leaked refresh token from this flow
+      can reach nothing else in your Drive, enforced by Google. Needed a
+      migration (`scripts/migrate-to-narrow-scope.mjs`): a folder grant
+      doesn't retroactively cover files created before it existed, so
+      `keystone.db` + all 205 audio files were re-uploaded once under the
+      new scope using the old wide-scope token, which was then discarded.
+      Verified `load-lesson.mjs`/`narrate-lesson.mjs` both still work
+      end-to-end. Also rotated the OAuth client secret's exposure risk by
+      widening `.gitignore` from `.env` to `.env.*` (caught a temp token
+      backup file the exact-match pattern didn't cover, before it was ever
+      staged). **Not done: the deployed browser app (`useAuth.js`) still
+      signs in with the full `drive` scope** — narrowing that would need the
+      same Picker flow built into the web login and a one-time re-consent
+      for every signed-in device; bigger, more user-facing change, left as a
+      deliberate follow-up rather than done reflexively here.
+      **Also flagged, not yet started:** same security review requested for
+      the hunt-garcia-tracker (ExpenseTracker) project — separate repo, next
+      up in a future session.
 - [ ] **← NEXT:**
+      - **Narrow the browser app's Drive scope too**, if wanted — same
+        Picker pattern, applied to `useAuth.js`/`useGoogleDrive.js`, with a
+        one-time re-consent screen for every device that's ever signed in.
       - More threads / deep dives as new lessons get authored — Sagrada
         Família was the proof; there's no reason the 24 existing lessons
         couldn't grow a few threads apiece over time.
